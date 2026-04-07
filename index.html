@@ -629,6 +629,15 @@
       font-size: 1.4rem; margin-bottom: 0.55rem;
     }
     .cc-body  { font-size: 0.875rem; color: var(--muted); line-height: 1.65; margin-bottom: 0.25rem; }
+
+    /* Back tooltip */
+    .back-tooltip {
+      margin-top: 0.65rem;
+      font-size: 0.8125rem;
+      color: var(--sage-pale);
+      line-height: 1.5;
+      animation: fadeUp 0.4s ease;
+    }
   </style>
 </head>
 <body>
@@ -787,7 +796,8 @@
       <div class="cc-icon">💚</div>
       <div class="cc-title">Well done.</div>
       <div class="cc-body">Take a moment to notice how you feel.<br>Ready to keep going? Head back to your Menty-B chat and let me know how that felt.</div>
-      <button class="btn btn-primary" onclick="if(document.referrer){window.history.back();}else{window.close();}">Back to Menty-B</button>
+      <button class="btn btn-primary" onclick="goBackToMentyB()">Back to Menty-B</button>
+      <div class="back-tooltip" id="back-tooltip-b" style="display:none">Switch back to your Menty-B tab to continue 💚</div>
       <button class="btn btn-ghost" onclick="anotherRound()">Do another round</button>
     </div>
   </div>
@@ -853,7 +863,8 @@
       <div class="cc-icon">🌙</div>
       <div class="cc-title">You're all set for rest.</div>
       <div class="cc-body">If you need anything else, Menty-B is always here.</div>
-      <button class="btn btn-primary" onclick="if(document.referrer){window.history.back();}else{window.close();}">Back to Menty-B</button>
+      <button class="btn btn-primary" onclick="goBackToMentyB()">Back to Menty-B</button>
+      <div class="back-tooltip" id="back-tooltip-s" style="display:none">Switch back to your Menty-B tab to continue 💚</div>
     </div>
   </div>
 
@@ -1336,12 +1347,32 @@ function haptic(pattern) {
 }
 
 /* ══════════════════════════════════════════════════════════
+   BACK TO MENTY-B
+══════════════════════════════════════════════════════════ */
+function goBackToMentyB() {
+  if (window.opener && !window.opener.closed) {
+    window.opener.focus();
+  } else if (document.referrer) {
+    window.location.href = document.referrer;
+  } else {
+    // Show whichever tooltip is visible on screen
+    const tb = document.getElementById('back-tooltip-b');
+    const ts = document.getElementById('back-tooltip-s');
+    if (tb && tb.closest('.completion-card').style.display !== 'none') tb.style.display = 'block';
+    if (ts && ts.closest('.completion-card').style.display !== 'none') ts.style.display = 'block';
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
    URL PARAMETER INIT
 ══════════════════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const mode   = params.get('mode');
+  const screen = params.get('screen');
+  const cat    = params.get('cat');
 
+  // ?mode= — breathing technique deep link (existing)
   if (mode && BREATHE[mode]) {
     goTo('breathe', document.getElementById('nav-breathe'));
     const card = document.getElementById('card-' + mode);
@@ -1349,6 +1380,37 @@ window.addEventListener('DOMContentLoaded', () => {
     const banner = document.getElementById('mode-banner');
     banner.textContent   = BANNERS[mode] || '';
     banner.style.display = 'block';
+  }
+
+  // ?screen= — deep links to any screen
+  if (screen) {
+    if (screen === 'mood' || screen === 'journal') {
+      goTo('mood', document.getElementById('nav-mood'));
+      if (screen === 'journal') {
+        document.getElementById('journal-sec').style.display = 'block';
+        setTimeout(() => document.getElementById('j-input').focus(), 350);
+      }
+    } else if (screen === 'affirm') {
+      const validCats = ['anxiety', 'confidence', 'calm', 'grief'];
+      if (cat && validCats.includes(cat)) {
+        affirmCat = cat;
+        document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+        const pill = Array.from(document.querySelectorAll('.cat-pill'))
+          .find(p => p.textContent.toLowerCase().trim() === cat);
+        if (pill) pill.classList.add('active');
+      }
+      goTo('affirm', document.getElementById('nav-affirm'));
+    } else if (screen === 'sleep') {
+      goTo('sleep', document.getElementById('nav-sleep'));
+    } else if (screen === 'crisis' || screen === 'ground') {
+      goTo('crisis', document.getElementById('nav-crisis'));
+      if (screen === 'ground') {
+        setTimeout(() => {
+          document.getElementById('ground-btn').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          doGround();
+        }, 350);
+      }
+    }
   }
 
   showAffirm();
