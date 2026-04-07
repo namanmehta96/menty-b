@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
     /* ═══════════════════════════════════════════════════════
        RESET & TOKENS
@@ -37,7 +37,7 @@
     html { height: 100%; }
 
     body {
-      font-family: 'DM Sans', system-ui, sans-serif;
+      font-family: 'Montserrat', sans-serif;
       background: var(--navy);
       color: var(--text);
       min-height: 100%;
@@ -177,11 +177,11 @@
     /* ═══════════════════════════════════════════════════════
        TYPOGRAPHY HELPERS
     ═══════════════════════════════════════════════════════ */
-    .serif { font-family: 'DM Serif Display', Georgia, serif; }
+    .serif { font-family: 'Montserrat', sans-serif; }
 
     .page-head { padding: 2rem 0 0.85rem; }
     .page-title {
-      font-family: 'DM Serif Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 1.75rem; line-height: 1.15;
       margin-bottom: 0.25rem;
     }
@@ -217,7 +217,7 @@
     }
 
     .welcome-title {
-      font-family: 'DM Serif Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 2.6rem; line-height: 1.12;
       margin-bottom: 0.65rem;
       background: linear-gradient(135deg, #e8ede8 20%, #74c69d 100%);
@@ -240,7 +240,7 @@
       background: var(--g-bg);
       backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
       display: flex; flex-direction: column; gap: 0.55rem;
-      text-align: left; font-family: 'DM Sans', sans-serif;
+      text-align: left; font-family: 'Montserrat', sans-serif;
       color: var(--text); transition: transform 0.32s ease, box-shadow 0.32s ease, border-color 0.32s ease;
     }
     .w-card:hover, .w-card:active { transform: translateY(-6px); }
@@ -296,7 +296,7 @@
       padding: 0.9rem 1rem; font-size: 0.875rem;
       border: 1px solid var(--g-border); border-radius: 16px;
       background: var(--g-bg); color: var(--text);
-      resize: none; font-family: 'DM Sans', sans-serif;
+      resize: none; font-family: 'Montserrat', sans-serif;
       backdrop-filter: blur(20px);
       transition: border-color 0.25s, box-shadow 0.25s;
     }
@@ -314,7 +314,7 @@
       display: block; width: 100%;
       padding: 0.8rem 1rem; border-radius: 16px; border: none;
       font-size: 0.875rem; font-weight: 500; line-height: 1;
-      font-family: 'DM Sans', sans-serif; cursor: pointer;
+      font-family: 'Montserrat', sans-serif; cursor: pointer;
       text-align: center; transition: all 0.26s ease;
     }
     .btn-primary {
@@ -421,14 +421,14 @@
       text-transform: uppercase; color: rgba(255,255,255,0.6);
     }
     .b-count {
-      font-family: 'DM Serif Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 3.75rem; line-height: 1; color: #fff;
     }
     .b-cycles { font-size: 0.75rem; color: var(--muted); }
 
     .breathe-ctrl { display: flex; gap: 0.65rem; }
     .breathe-ctrl .btn { flex: 1; margin-top: 0; }
-    .b-tip { font-size: 0.75rem; color: var(--muted); text-align: center; line-height: 1.55; margin-top: 0.6rem; }
+    .b-tip { font-size: 1rem; color: var(--muted); text-align: center; line-height: 1.6; margin-top: 0.6rem; }
 
     /* ═══════════════════════════════════════════════════════
        AFFIRMATIONS
@@ -442,7 +442,7 @@
       margin: 1rem 0;
     }
     .affirm-text {
-      font-family: 'DM Serif Display', serif; font-style: italic;
+      font-family: 'Montserrat', sans-serif; font-style: normal;
       font-size: 1.325rem; line-height: 1.65; color: var(--text);
       opacity: 0; transform: translateY(10px);
       transition: opacity 0.45s ease, transform 0.45s ease;
@@ -455,7 +455,7 @@
       font-size: 0.75rem; font-weight: 500;
       cursor: pointer; border: 1px solid var(--g-border);
       background: var(--g-bg); color: var(--muted);
-      transition: all 0.25s ease; font-family: 'DM Sans', sans-serif;
+      transition: all 0.25s ease; font-family: 'Montserrat', sans-serif;
     }
     .cat-pill:hover { color: var(--sage-pale); border-color: rgba(82,183,136,0.35); }
     .cat-pill.active {
@@ -571,7 +571,7 @@
       align-items: center; justify-content: center;
       gap: 3px; padding: 0.3rem 0;
       cursor: pointer; border: none; background: none;
-      color: var(--muted); font-family: 'DM Sans', sans-serif;
+      color: var(--muted); font-family: 'Montserrat', sans-serif;
       transition: all 0.25s ease;
     }
     .nav-btn:hover { color: rgba(232,237,232,0.78); }
@@ -594,7 +594,7 @@
       background: rgba(195,48,48,0.82);
       border: 1px solid rgba(255,110,110,0.48);
       color: #fff; font-size: 0.72rem; font-weight: 600;
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
+      cursor: pointer; font-family: 'Montserrat', sans-serif;
       backdrop-filter: blur(14px); letter-spacing: 0.02em;
       animation: panicGlow 3.8s ease-in-out infinite;
       transition: transform 0.2s ease;
@@ -625,7 +625,7 @@
     }
     .cc-icon  { font-size: 2rem; margin-bottom: 0.75rem; }
     .cc-title {
-      font-family: 'DM Serif Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 1.4rem; margin-bottom: 0.55rem;
     }
     .cc-body  { font-size: 0.875rem; color: var(--muted); line-height: 1.65; margin-bottom: 0.25rem; }
@@ -781,13 +781,13 @@
       <button class="btn btn-primary" id="b-btn" onclick="toggleBreathe()">Start</button>
       <button class="btn btn-ghost"              onclick="resetBreathe()">Reset</button>
     </div>
-    <div class="b-tip" id="b-tip">Breathe in through your nose, out through your mouth.</div>
+    <div class="b-tip" id="b-tip">Breathe in through your nose, out through your mouth.<br>Complete 3 cycles — then check back in with Menty-B.</div>
 
     <div class="completion-card" id="b-complete" style="display:none">
       <div class="cc-icon">💚</div>
       <div class="cc-title">Well done.</div>
       <div class="cc-body">Take a moment to notice how you feel.<br>Ready to keep going? Head back to your Menty-B chat and let me know how that felt.</div>
-      <a class="btn btn-primary" href="https://chat.openai.com" target="_blank" rel="noopener" style="text-decoration:none;display:block">Back to Menty-B</a>
+      <button class="btn btn-primary" onclick="if(document.referrer){window.history.back();}else{window.close();}">Back to Menty-B</button>
       <button class="btn btn-ghost" onclick="anotherRound()">Do another round</button>
     </div>
   </div>
@@ -853,7 +853,7 @@
       <div class="cc-icon">🌙</div>
       <div class="cc-title">You're all set for rest.</div>
       <div class="cc-body">If you need anything else, Menty-B is always here.</div>
-      <a class="btn btn-primary" href="https://chat.openai.com" target="_blank" rel="noopener" style="text-decoration:none;display:block">Back to Menty-B</a>
+      <button class="btn btn-primary" onclick="if(document.referrer){window.history.back();}else{window.close();}">Back to Menty-B</button>
     </div>
   </div>
 
@@ -1349,11 +1349,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const banner = document.getElementById('mode-banner');
     banner.textContent   = BANNERS[mode] || '';
     banner.style.display = 'block';
-    setTimeout(() => {
-      breathOn = true;
-      document.getElementById('b-btn').textContent = 'Pause';
-      runPhase(0);
-    }, 650);
   }
 
   showAffirm();
