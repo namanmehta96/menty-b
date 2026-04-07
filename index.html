@@ -716,6 +716,43 @@
     .wf-icon  { font-size: 2.75rem; margin-bottom: 1.25rem; }
     .wf-title { font-size: 1.5rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.9rem; }
     .wf-body  { font-size: 0.9375rem; color: var(--muted); line-height: 1.72; }
+
+    /* ═══════════════════════════════════════════════════════
+       GROUNDING SCREEN
+    ═══════════════════════════════════════════════════════ */
+    .gnd-intro {
+      text-align: center; padding: 1rem 0 0.5rem;
+    }
+    .gnd-intro-icon { font-size: 3.25rem; margin-bottom: 1rem; }
+    .gnd-intro-body {
+      font-size: 0.9375rem; color: var(--muted); line-height: 1.72;
+      margin-bottom: 1.5rem;
+    }
+    .gnd-step-card {
+      padding: 2.25rem 1.5rem; text-align: center;
+      margin: 0.5rem 0 1.1rem;
+      min-height: 195px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.85rem;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .gnd-step-num {
+      font-size: 3.5rem; line-height: 1; font-weight: 700;
+      background: linear-gradient(135deg, #74c69d 0%, #2d6a4f 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gnd-step-name {
+      font-size: 1.15rem; font-weight: 600; line-height: 1.35;
+    }
+    .gnd-step-body {
+      font-size: 0.9rem; color: var(--muted); line-height: 1.7;
+    }
+    .gnd-progress {
+      text-align: center; font-size: 0.75rem; color: var(--muted);
+      margin-bottom: 0.7rem; letter-spacing: 0.03em;
+    }
   </style>
 </head>
 <body>
@@ -736,7 +773,7 @@
   <!-- ══ WELCOME ════════════════════════════════════════════ -->
   <div id="screen-welcome" class="screen active">
     <div class="welcome-hero">
-      <div class="logo-orb"><div class="logo-orb-inner"></div></div>
+      <div class="logo-orb" onclick="goTo('welcome')" style="cursor:pointer"><div class="logo-orb-inner"></div></div>
       <h1 class="welcome-title">Hey, I'm Menty-B</h1>
       <p class="welcome-tag">A quiet space, just for you.<br>Breathe. Check in. Feel a little better.</p>
     </div>
@@ -894,7 +931,7 @@
           <span class="explore-icon">🌙</span>
           <span class="explore-label">Wind-down routine</span>
         </button>
-        <button class="explore-card" onclick="goTo('crisis'); setTimeout(()=>{document.getElementById('ground-btn').scrollIntoView({behavior:'smooth',block:'center'});doGround();},350)">
+        <button class="explore-card" onclick="goTo('ground')">
           <span class="explore-icon">🌿</span>
           <span class="explore-label">Grounding exercise</span>
         </button>
@@ -984,7 +1021,7 @@
           <span class="explore-icon">🌀</span>
           <span class="explore-label">Breathing exercise</span>
         </button>
-        <button class="explore-card" onclick="goTo('crisis'); setTimeout(()=>{document.getElementById('ground-btn').scrollIntoView({behavior:'smooth',block:'center'});doGround();},350)">
+        <button class="explore-card" onclick="goTo('ground')">
           <span class="explore-icon">🌿</span>
           <span class="explore-label">Grounding exercise</span>
         </button>
@@ -1043,9 +1080,62 @@
       </a>
     </div>
 
-    <div class="ground-lbl">Immediate grounding, try this now</div>
-    <div id="ground-list"></div>
-    <button class="btn btn-primary" id="ground-btn" onclick="doGround()">Start 5-4-3-2-1 grounding</button>
+    <div style="margin-top:1.25rem">
+      <button class="btn btn-ghost" onclick="goTo('ground',document.getElementById('nav-ground'))">Try the 5-4-3-2-1 grounding exercise →</button>
+    </div>
+  </div>
+
+  <!-- ══ GROUNDING ══════════════════════════════════════════ -->
+  <div id="screen-ground" class="screen">
+    <div class="page-head">
+      <div class="page-head-text">
+        <h2 class="page-title">Grounding</h2>
+        <p class="page-sub">Follow the steps one at a time</p>
+      </div>
+      <button class="page-back" onclick="focusMentyB('back-tooltip-global')">Back to Menty-B 💚</button>
+    </div>
+
+    <div class="gnd-intro" id="gnd-intro">
+      <div class="gnd-intro-icon">🌿</div>
+      <p class="gnd-intro-body">The 5-4-3-2-1 technique brings you back to<br>your senses and out of your head.</p>
+      <button class="btn btn-primary btn-pulse" id="gnd-start-btn" onclick="gndStart()">Begin grounding</button>
+    </div>
+
+    <div id="gnd-stepper" style="display:none">
+      <div class="gnd-step-card glass" id="gnd-card">
+        <div class="gnd-step-num" id="gnd-num"></div>
+        <div class="gnd-step-name" id="gnd-name"></div>
+        <div class="gnd-step-body" id="gnd-body"></div>
+      </div>
+      <div class="gnd-progress" id="gnd-prog">Step 1 of 5</div>
+      <button class="btn btn-primary" id="gnd-next-btn" onclick="gndNext()">Next step →</button>
+    </div>
+
+    <div class="completion-card" id="gnd-complete" style="display:none">
+      <div class="cc-icon">💚</div>
+      <div class="cc-title">Well done.</div>
+      <div class="cc-body">Notice how you feel right now.<br>Your body is here. You are safe. 💚</div>
+      <div class="explore-grid">
+        <button class="explore-card" onclick="goTo('mood')">
+          <span class="explore-icon">💚</span>
+          <span class="explore-label">Check my mood</span>
+        </button>
+        <button class="explore-card" onclick="goTo('affirm')">
+          <span class="explore-icon">✨</span>
+          <span class="explore-label">Read an affirmation</span>
+        </button>
+        <button class="explore-card" onclick="goTo('breathe')">
+          <span class="explore-icon">🌀</span>
+          <span class="explore-label">Breathing exercise</span>
+        </button>
+        <button class="explore-card" onclick="goTo('sleep')">
+          <span class="explore-icon">🌙</span>
+          <span class="explore-label">Wind-down routine</span>
+        </button>
+      </div>
+      <button class="back-link" onclick="focusMentyB('back-tooltip-gnd')">All done for now? Switch back to your Menty-B tab 💚</button>
+      <div class="back-tooltip" id="back-tooltip-gnd" style="display:none">Open your Menty-B tab to continue 💚</div>
+    </div>
   </div>
 
   <!-- Global back banner (shown when opener is unavailable) -->
@@ -1056,9 +1146,6 @@
 
 <!-- ── Bottom Navigation ─────────────────────────────────── -->
 <nav class="bottom-nav">
-  <button class="nav-btn active" id="nav-welcome" onclick="goTo('welcome',this)">
-    <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
-  </button>
   <button class="nav-btn" id="nav-mood" onclick="goTo('mood',this)">
     <span class="nav-icon">💚</span><span class="nav-label">Mood</span>
   </button>
@@ -1070,6 +1157,9 @@
   </button>
   <button class="nav-btn" id="nav-sleep" onclick="goTo('sleep',this)">
     <span class="nav-icon">🌙</span><span class="nav-label">Wind</span>
+  </button>
+  <button class="nav-btn" id="nav-ground" onclick="goTo('ground',this)">
+    <span class="nav-icon">🌿</span><span class="nav-label">Ground</span>
   </button>
   <button class="nav-btn" id="nav-crisis" onclick="goTo('crisis',this)">
     <span class="nav-icon">📞</span><span class="nav-label">Help</span>
@@ -1115,13 +1205,6 @@ const AFFIRMATIONS = {
   calm:       ['Peace is always available to me.','I release what I cannot control.','Right now, in this moment, I am okay.','I breathe in calm and breathe out tension.','Stillness is not emptiness — it is rest.'],
   grief:      ['It is okay to feel what I am feeling.','Grief is love with nowhere to go.','I give myself permission to heal at my own pace.','I am not alone in this.','Even in loss, I carry them with me.']
 };
-const GROUND = [
-  { n:'5 things you can SEE',   c:'Look around slowly. Name each one out loud or in your mind.' },
-  { n:'4 things you can TOUCH', c:'Feel the texture beneath your hands. Stay with the sensation.' },
-  { n:'3 things you can HEAR',  c:'Listen past the noise in your head. What is real right now?' },
-  { n:'2 things you can SMELL', c:'Even a faint or familiar scent counts. Take it in slowly.' },
-  { n:'1 thing you can TASTE',  c:'Notice what is already in your mouth. Be fully present.' }
-];
 
 const WF_COPY = {
   box:       { icon: '🌊', title: 'Box Breathing',      body: 'In for 4, hold for 4, out for 4, hold for 4. Slow and steady. Just follow the circle.' },
@@ -1136,7 +1219,7 @@ const WF_COPY = {
 let breathMode = 'box', breathOn = false, breathCycles = 0;
 let breathTimer = null, tickTimer = null, breathPhaseIdx = 0;
 let affirmCat = 'anxiety', affirmIdx = 0;
-let entries = [], groundIdx = -1;
+let entries = [];
 
 const CIRC = 2 * Math.PI * 96; // 603.19
 
@@ -1197,6 +1280,7 @@ function goTo(id, btnEl) {
   if (nb) nb.classList.add('active');
 
   if (id === 'affirm') showAffirm();
+  if (id === 'ground') resetGnd();
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -1483,31 +1567,63 @@ function resetSleep() {
 }
 
 /* ══════════════════════════════════════════════════════════
-   GROUNDING
+   GROUNDING SCREEN
 ══════════════════════════════════════════════════════════ */
-function renderGround() {
-  document.getElementById('ground-list').innerHTML = GROUND.map((s, i) => `
-    <div class="ground-card ${i === groundIdx ? 'ga' : i < groundIdx ? 'gp' : ''}">
-      <div class="g-title">${s.n}</div>
-      ${i === groundIdx ? `<div class="g-body">${s.c}</div>` : ''}
-    </div>`).join('');
+const GND_STEPS = [
+  { num: '5', name: '5 things you can SEE',   body: 'Look around slowly. Name each one.' },
+  { num: '4', name: '4 things you can TOUCH', body: 'Feel the texture. Stay with the sensation.' },
+  { num: '3', name: '3 things you can HEAR',  body: 'Listen past the noise in your head.' },
+  { num: '2', name: '2 things you can SMELL', body: 'Even a faint scent counts.' },
+  { num: '1', name: '1 thing you can TASTE',  body: 'Notice what is in your mouth right now.' }
+];
+let gndStep = -1;
+
+function gndStart() {
+  gndStep = 0;
+  document.getElementById('gnd-intro').style.display = 'none';
+  document.getElementById('gnd-stepper').style.display = 'block';
+  gndRender();
+  haptic(22);
 }
 
-function doGround() {
-  if (groundIdx === -1) {
-    groundIdx = 0;
-    document.getElementById('ground-btn').textContent = 'Next step';
-  } else {
-    groundIdx++;
-    if (groundIdx >= GROUND.length) {
-      groundIdx = -1;
-      document.getElementById('ground-btn').textContent = 'Start 5-4-3-2-1 grounding';
-      document.getElementById('ground-list').innerHTML  = '';
-      return;
-    }
+function gndNext() {
+  gndStep++;
+  if (gndStep >= GND_STEPS.length) {
+    document.getElementById('gnd-stepper').style.display = 'none';
+    document.getElementById('gnd-complete').style.display = 'block';
+    haptic([40, 30, 40, 30, 80]);
+    return;
   }
-  renderGround();
+  gndRender();
   haptic(22);
+}
+
+function gndRender() {
+  const s    = GND_STEPS[gndStep];
+  const card = document.getElementById('gnd-card');
+  card.style.transition = 'none';
+  card.style.opacity    = '0';
+  card.style.transform  = 'translateY(16px)';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    card.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+    card.style.opacity    = '1';
+    card.style.transform  = 'translateY(0)';
+  }));
+  document.getElementById('gnd-num').textContent  = s.num;
+  document.getElementById('gnd-name').textContent = s.name;
+  document.getElementById('gnd-body').textContent = s.body;
+  document.getElementById('gnd-prog').textContent = `Step ${gndStep + 1} of ${GND_STEPS.length}`;
+  document.getElementById('gnd-next-btn').textContent =
+    gndStep === GND_STEPS.length - 1 ? 'Complete ✓' : 'Next step →';
+}
+
+function resetGnd() {
+  gndStep = -1;
+  document.getElementById('gnd-intro').style.display    = '';
+  document.getElementById('gnd-stepper').style.display  = 'none';
+  document.getElementById('gnd-complete').style.display = 'none';
+  const startBtn = document.getElementById('gnd-start-btn');
+  startBtn.classList.add('btn-pulse');
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -1601,14 +1717,11 @@ window.addEventListener('DOMContentLoaded', () => {
       goTo('affirm', document.getElementById('nav-affirm'));
     } else if (screen === 'sleep') {
       goTo('sleep', document.getElementById('nav-sleep'));
-    } else if (screen === 'crisis' || screen === 'ground') {
+    } else if (screen === 'ground') {
+      goTo('ground', document.getElementById('nav-ground'));
+      setTimeout(() => gndStart(), 350);
+    } else if (screen === 'crisis') {
       goTo('crisis', document.getElementById('nav-crisis'));
-      if (screen === 'ground') {
-        setTimeout(() => {
-          document.getElementById('ground-btn').scrollIntoView({ behavior: 'smooth', block: 'center' });
-          doGround();
-        }, 350);
-      }
     }
   }
 
