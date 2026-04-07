@@ -179,13 +179,27 @@
     ═══════════════════════════════════════════════════════ */
     .serif { font-family: 'Montserrat', sans-serif; }
 
-    .page-head { padding: 2rem 0 0.85rem; }
+    .page-head {
+      padding: 2rem 0 0.85rem;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .page-head-text { flex: 1; min-width: 0; }
     .page-title {
       font-family: 'Montserrat', sans-serif;
       font-size: 1.75rem; line-height: 1.15;
       margin-bottom: 0.25rem;
     }
     .page-sub { font-size: 0.8375rem; color: var(--muted); line-height: 1.5; }
+    .page-back {
+      flex-shrink: 0; margin-top: 0.35rem;
+      font-size: 0.72rem; color: var(--muted);
+      background: none; border: none; cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      transition: color 0.2s ease; white-space: nowrap;
+      padding: 0; line-height: 1.4;
+    }
+    .page-back:hover { color: var(--sage-pale); }
 
     /* ═══════════════════════════════════════════════════════
        WELCOME SCREEN
@@ -700,8 +714,11 @@
   <!-- ══ MOOD CHECK-IN ═══════════════════════════════════════ -->
   <div id="screen-mood" class="screen">
     <div class="page-head">
-      <h2 class="page-title">How are you feeling?</h2>
-      <p class="page-sub">Tap your mood to get started</p>
+      <div class="page-head-text">
+        <h2 class="page-title">How are you feeling?</h2>
+        <p class="page-sub">Tap your mood to get started</p>
+      </div>
+      <button class="page-back" onclick="focusMentyB('back-tooltip-global')">Back to Menty-B 💚</button>
     </div>
     <div class="mood-grid">
       <div class="mood-card" onclick="pickMood(this,'calm','Calm')">
@@ -733,8 +750,11 @@
   <div id="screen-breathe" class="screen">
     <div class="mode-banner" id="mode-banner"></div>
     <div class="page-head">
-      <h2 class="page-title">Breathing</h2>
-      <p class="page-sub">Choose a technique and breathe with me</p>
+      <div class="page-head-text">
+        <h2 class="page-title">Breathing</h2>
+        <p class="page-sub">Choose a technique and breathe with me</p>
+      </div>
+      <button class="page-back" onclick="focusMentyB('back-tooltip-global')">Back to Menty-B 💚</button>
     </div>
 
     <div class="breathe-modes">
@@ -826,15 +846,18 @@
         </button>
       </div>
       <button class="back-link" onclick="focusMentyB('back-tooltip-b')">All done for now? Switch back to your Menty-B tab 💚</button>
-      <div class="back-tooltip" id="back-tooltip-b" style="display:none">Switch back to your Menty-B tab to continue 💚</div>
+      <div class="back-tooltip" id="back-tooltip-b" style="display:none">Open your Menty-B tab to continue 💚</div>
     </div>
   </div>
 
   <!-- ══ AFFIRMATIONS ════════════════════════════════════════ -->
   <div id="screen-affirm" class="screen">
     <div class="page-head">
-      <h2 class="page-title">Affirmations</h2>
-      <p class="page-sub">A gentle reminder just for you</p>
+      <div class="page-head-text">
+        <h2 class="page-title">Affirmations</h2>
+        <p class="page-sub">A gentle reminder just for you</p>
+      </div>
+      <button class="page-back" onclick="focusMentyB('back-tooltip-global')">Back to Menty-B 💚</button>
     </div>
     <div class="affirm-card">
       <div class="affirm-text" id="affirm-text"></div>
@@ -854,8 +877,11 @@
   <!-- ══ WIND-DOWN ═══════════════════════════════════════════ -->
   <div id="screen-sleep" class="screen">
     <div class="page-head">
-      <h2 class="page-title">Wind-down</h2>
-      <p class="page-sub">Work through these steps before bed</p>
+      <div class="page-head-text">
+        <h2 class="page-title">Wind-down</h2>
+        <p class="page-sub">Work through these steps before bed</p>
+      </div>
+      <button class="page-back" onclick="focusMentyB('back-tooltip-global')">Back to Menty-B 💚</button>
     </div>
     <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
     <div class="sleep-steps">
@@ -910,14 +936,17 @@
         </button>
       </div>
       <button class="back-link" onclick="focusMentyB('back-tooltip-s')">All done for now? Switch back to your Menty-B tab 💚</button>
-      <div class="back-tooltip" id="back-tooltip-s" style="display:none">Switch back to your Menty-B tab to continue 💚</div>
+      <div class="back-tooltip" id="back-tooltip-s" style="display:none">Open your Menty-B tab to continue 💚</div>
     </div>
   </div>
 
   <!-- ══ CRISIS HELP ════════════════════════════════════════ -->
   <div id="screen-crisis" class="screen">
     <div class="page-head">
-      <h2 class="page-title">Crisis Help</h2>
+      <div class="page-head-text">
+        <h2 class="page-title">Crisis Help</h2>
+      </div>
+      <button class="page-back" onclick="focusMentyB('back-tooltip-global')">Back to Menty-B 💚</button>
     </div>
 
     <div class="crisis-banner">
@@ -962,6 +991,10 @@
     <button class="btn btn-primary" id="ground-btn" onclick="doGround()">Start 5-4-3-2-1 grounding</button>
   </div>
 
+  <!-- Global back tooltip (shown when opener is unavailable) -->
+  <div class="back-tooltip" id="back-tooltip-global" style="display:none;position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:300;background:rgba(10,15,30,0.92);border:1px solid rgba(82,183,136,0.35);border-radius:12px;padding:0.65rem 1.1rem;white-space:nowrap;backdrop-filter:blur(16px)">
+    Open your Menty-B tab to continue 💚
+  </div>
 </div><!-- /.app -->
 
 <!-- ── Bottom Navigation ─────────────────────────────────── -->
@@ -1213,15 +1246,20 @@ function runPhase(idx) {
   syncBg(c.bg, ph.d);
   haptic(12);
 
-  // Per-second countdown
+  // Per-second countdown — full duration shown immediately, then counts down
   let rem = ph.d - 1;
   const tick = () => {
     if (!breathOn) return;
-    document.getElementById('b-count').textContent = rem;
-    haptic(8);
-    if (rem > 0) { rem--; tickTimer = setTimeout(tick, 1000); }
+    if (rem > 0) {
+      tickTimer = setTimeout(() => {
+        document.getElementById('b-count').textContent = rem;
+        haptic(8);
+        rem--;
+        tick();
+      }, 1000);
+    }
   };
-  if (ph.d > 1) tickTimer = setTimeout(tick, 1000);
+  tick();
 
   // Advance to next phase
   breathTimer = setTimeout(() => {
@@ -1379,7 +1417,8 @@ function focusMentyB(tooltipId) {
   if (window.opener && !window.opener.closed) {
     window.opener.focus();
   } else {
-    document.getElementById(tooltipId).style.display = 'block';
+    const el = document.getElementById(tooltipId || 'back-tooltip-global');
+    if (el) el.style.display = 'block';
   }
 }
 
