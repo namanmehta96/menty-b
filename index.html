@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menty-B — Breathing & Wellness</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f8faf9; color: #1a1a1a; }
+    .app { padding: 1.5rem 1rem; max-width: 480px; margin: 0 auto; }
+    .header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; }
+    .logo { width: 36px; height: 36px; border-radius: 50%; background: #1D9E75; display: flex; align-items: center; justify-content: center; }
+    .logo-inner { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; }
+    .app-name { font-size: 16px; font-weight: 600; }
+    .app-status { font-size: 12px; color: #1D9E75; }
+    nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; }
+    .nav-btn { font-size: 12px; padding: 5px 12px; border-radius: 99px; border: 1px solid #d1d5db; background: transparent; color: #6b7280; cursor: pointer; transition: all 0.2s; }
+    .nav-btn.active { background: #1D9E75; color: #fff; border-color: #1D9E75; font-weight: 500; }
+    .screen { display: none; } .screen.active { display: block; }
+    .section-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .section-label { font-size: 13px; color: #6b7280; margin-bottom: 8px; }
+    .mood-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin: 1rem 0; }
+    .mood-card { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; border-radius: 8px; border: 1px solid #e5e7eb; cursor: pointer; transition: all 0.2s; background: #fff; }
+    .mood-card:hover, .mood-card.selected { border-color: #1D9E75; background: #E1F5EE; }
+    .mood-icon { font-size: 22px; }
+    .mood-label { font-size: 11px; color: #6b7280; text-align: center; }
+    .mood-card.selected .mood-label { color: #0F6E56; }
+    textarea { width: 100%; min-height: 90px; padding: 10px; font-size: 14px; border: 1px solid #d1d5db; border-radius: 8px; background: #fff; resize: none; margin: 0.75rem 0; font-family: inherit; }
+    textarea:focus { outline: none; border-color: #1D9E75; }
+    .btn-primary { width: 100%; padding: 10px; background: #1D9E75; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; }
+    .btn-primary:hover { background: #0F6E56; }
+    .btn-secondary { width: 100%; padding: 10px; background: transparent; color: #6b7280; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; cursor: pointer; margin-top: 8px; }
+    .btn-secondary:hover { background: #f3f4f6; }
+    .breathe-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 1rem 0; }
+    .breathe-card { padding: 12px; border-radius: 8px; border: 1px solid #e5e7eb; cursor: pointer; background: #fff; transition: all 0.2s; }
+    .breathe-card:hover, .breathe-card.selected { border-color: #1D9E75; background: #E1F5EE; }
+    .bc-title { font-size: 13px; font-weight: 500; }
+    .bc-sub { font-size: 11px; color: #6b7280; margin-top: 2px; }
+    .circle-wrap { display: flex; flex-direction: column; align-items: center; margin: 1.5rem 0; gap: 1rem; }
+    .outer-ring { width: 180px; height: 180px; border-radius: 50%; border: 2px solid #9FE1CB; display: flex; align-items: center; justify-content: center; }
+    .inner-circle { width: 130px; height: 130px; border-radius: 50%; background: #1D9E75; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: transform 4s ease-in-out, background 0.5s; }
+    .phase-lbl { font-size: 14px; font-weight: 500; color: #fff; }
+    .phase-num { font-size: 30px; font-weight: 600; color: #fff; }
+    .prog-bar { width: 100%; height: 4px; background: #e5e7eb; border-radius: 99px; overflow: hidden; }
+    .prog-fill { height: 100%; width: 0%; background: #1D9E75; border-radius: 99px; }
+    .breathe-controls { display: flex; gap: 8px; }
+    .breathe-controls button { flex: 1; padding: 9px; border-radius: 8px; border: 1px solid #d1d5db; background: transparent; font-size: 13px; cursor: pointer; }
+    .start-btn { background: #1D9E75 !important; color: #fff !important; border-color: #1D9E75 !important; font-weight: 500; }
+    .affirmation-card { padding: 1.25rem; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; margin: 1rem 0; min-height: 90px; display: flex; align-items: center; justify-content: center; text-align: center; }
+    .affirmation-text { font-size: 16px; line-height: 1.6; font-style: italic; color: #1a1a1a; }
+    .sleep-steps { display: flex; flex-direction: column; gap: 8px; margin: 1rem 0; }
+    .sleep-step { padding: 12px 14px; border-radius: 8px; border: 1px solid #e5e7eb; background: #fff; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s; }
+    .sleep-step.done { border-color: #1D9E75; background: #E1F5EE; }
+    .step-dot { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #d1d5db; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #9ca3af; }
+    .sleep-step.done .step-dot { background: #1D9E75; border-color: #1D9E75; color: #fff; }
+    .step-text { font-size: 13px; font-weight: 500; }
+    .step-sub { font-size: 11px; color: #6b7280; margin-top: 2px; }
+    .crisis-section { margin-bottom: 1.25rem; }
+    .crisis-section-title { font-size: 12px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #e5e7eb; }
+    .crisis-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f3f4f6; }
+    .crisis-row:last-child { border-bottom: none; }
+    .crisis-name { font-size: 13px; font-weight: 500; }
+    .crisis-desc { font-size: 11px; color: #6b7280; margin-top: 2px; }
+    .crisis-num { font-size: 14px; font-weight: 600; color: #185FA5; white-space: nowrap; margin-left: 12px; }
+    .journal-entries { margin-top: 1rem; display: flex; flex-direction: column; gap: 8px; }
+    .entry-card { padding: 10px 12px; border-radius: 8px; border: 1px solid #e5e7eb; background: #f9fafb; }
+    .entry-meta { font-size: 11px; color: #9ca3af; margin-bottom: 4px; }
+    .entry-text { font-size: 13px; line-height: 1.5; }
+    .tag { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 500; }
+    .tag-calm { background: #E1F5EE; color: #0F6E56; }
+    .tag-anxious { background: #FAEEDA; color: #633806; }
+    .tag-sad { background: #E6F1FB; color: #0C447C; }
+    .tag-okay { background: #F1EFE8; color: #444441; }
+    .tag-panic { background: #FCEBEB; color: #791F1F; }
+    .ground-step { padding: 10px 14px; border-radius: 8px; border: 1px solid #e5e7eb; background: #fff; margin-bottom: 6px; transition: all 0.3s; }
+    .ground-step.active { border-color: #1D9E75; background: #E1F5EE; }
+    .ground-step.inactive { opacity: 0.4; }
+    .ground-title { font-size: 13px; font-weight: 500; }
+    .ground-sub { font-size: 12px; color: #0F6E56; margin-top: 3px; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="logo"><div class="logo-inner"></div></div>
+    <div><div class="app-name">Menty-B</div><div class="app-status">Here for you</div></div>
+  </div>
+
+  <nav>
+    <button class="nav-btn active" onclick="showScreen('mood',this)">Mood check-in</button>
+    <button class="nav-btn" onclick="showScreen('breathe',this)">Breathing</button>
+    <button class="nav-btn" onclick="showScreen('affirm',this)">Affirmations</button>
+    <button class="nav-btn" onclick="showScreen('sleep',this)">Wind-down</button>
+    <button class="nav-btn" onclick="showScreen('crisis',this)">Crisis help</button>
+  </nav>
+
+  <div id="screen-mood" class="screen active">
+    <div class="section-title">How are you feeling?</div>
+    <div class="section-label" style="margin-top:4px">Tap your mood to get started</div>
+    <div class="mood-grid">
+      <div class="mood-card" onclick="selectMood(this,'calm','Calm')"><div class="mood-icon">😌</div><div class="mood-label">Calm</div></div>
+      <div class="mood-card" onclick="selectMood(this,'okay','Okay')"><div class="mood-icon">😐</div><div class="mood-label">Okay</div></div>
+      <div class="mood-card" onclick="selectMood(this,'anxious','Anxious')"><div class="mood-icon">😰</div><div class="mood-label">Anxious</div></div>
+      <div class="mood-card" onclick="selectMood(this,'sad','Sad')"><div class="mood-icon">😔</div><div class="mood-label">Sad</div></div>
+      <div class="mood-card" onclick="selectMood(this,'panic','Panicking')"><div class="mood-icon">😨</div><div class="mood-label">Panicking</div></div>
+    </div>
+    <div id="mood-followup" style="display:none">
+      <div class="section-label">Want to write about it? (optional)</div>
+      <textarea id="journal-input" placeholder="What's on your mind right now..."></textarea>
+      <button class="btn-primary" onclick="saveEntry()">Save entry</button>
+      <button class="btn-secondary" onclick="showScreen('breathe', document.querySelectorAll('.nav-btn')[1])">Take me to breathing exercises</button>
+    </div>
+    <div id="journal-entries" class="journal-entries"></div>
+  </div>
+
+  <div id="screen-breathe" class="screen">
+    <div class="section-title">Breathing exercises</div>
+    <div class="section-label" style="margin-top:4px">Choose a technique</div>
+    <div class="breathe-modes">
+      <div class="breathe-card selected" onclick="setBreath(this,'box')"><div class="bc-title">Box breathing</div><div class="bc-sub">4-4-4-4 · stress relief</div></div>
+      <div class="breathe-card" onclick="setBreath(this,'478')"><div class="bc-title">4-7-8</div><div class="bc-sub">Calms panic fast</div></div>
+      <div class="breathe-card" onclick="setBreath(this,'calm')"><div class="bc-title">Calm breath</div><div class="bc-sub">5-7 · parasympathetic</div></div>
+      <div class="breathe-card" onclick="setBreath(this,'resonance')"><div class="bc-title">Resonance</div><div class="bc-sub">6-6 · HRV boost</div></div>
+    </div>
+    <div class="circle-wrap">
+      <div class="outer-ring">
+        <div class="inner-circle" id="breath-circle">
+          <div class="phase-lbl" id="b-phase">Ready</div>
+          <div class="phase-num" id="b-count">—</div>
+        </div>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="b-prog"></div></div>
+      <div style="font-size:12px;color:#9ca3af;margin-top:4px" id="b-cycles">Cycle 0</div>
+    </div>
+    <div class="breathe-controls">
+      <button class="start-btn" id="b-btn" onclick="toggleBreathe()">Start</button>
+      <button onclick="resetBreathe()">Reset</button>
+    </div>
+    <div style="font-size:12px;color:#6b7280;margin-top:12px;text-align:center" id="b-tip">Breathe in through your nose, out through your mouth.</div>
+  </div>
+
+  <div id="screen-affirm" class="screen">
+    <div class="section-title">Daily affirmations</div>
+    <div class="section-label" style="margin-top:4px">A gentle reminder just for you</div>
+    <div class="affirmation-card"><div class="affirmation-text" id="affirm-text"></div></div>
+    <button class="btn-primary" onclick="nextAffirmation()">Next affirmation</button>
+    <div style="margin-top:1.25rem">
+      <div class="section-label">Pick a category</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+        <button class="nav-btn active" onclick="setAffirmCat(this,'anxiety')">Anxiety</button>
+        <button class="nav-btn" onclick="setAffirmCat(this,'confidence')">Confidence</button>
+        <button class="nav-btn" onclick="setAffirmCat(this,'calm')">Calm</button>
+        <button class="nav-btn" onclick="setAffirmCat(this,'grief')">Grief</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-sleep" class="screen">
+    <div class="section-title">Wind-down routine</div>
+    <div class="section-label" style="margin-top:4px">Work through these steps before bed</div>
+    <div class="sleep-steps">
+      <div class="sleep-step" onclick="toggleStep(this,1)"><div class="step-dot" id="dot1">1</div><div><div class="step-text">Put your phone face-down</div><div class="step-sub">Reduce visual stimulation</div></div></div>
+      <div class="sleep-step" onclick="toggleStep(this,2)"><div class="step-dot" id="dot2">2</div><div><div class="step-text">3 minutes of 4-7-8 breathing</div><div class="step-sub">Slows heart rate naturally</div></div></div>
+      <div class="sleep-step" onclick="toggleStep(this,3)"><div class="step-dot" id="dot3">3</div><div><div class="step-text">Body scan — relax each muscle</div><div class="step-sub">Head to toe, one at a time</div></div></div>
+      <div class="sleep-step" onclick="toggleStep(this,4)"><div class="step-dot" id="dot4">4</div><div><div class="step-text">Name 3 things you're grateful for</div><div class="step-sub">Shifts focus to the positive</div></div></div>
+      <div class="sleep-step" onclick="toggleStep(this,5)"><div class="step-dot" id="dot5">5</div><div><div class="step-text">Visualise a safe, calm place</div><div class="step-sub">Eyes closed, breathe slowly</div></div></div>
+      <div class="sleep-step" onclick="toggleStep(this,6)"><div class="step-dot" id="dot6">6</div><div><div class="step-text">Set your alarm and close your eyes</div><div class="step-sub">You've done enough today</div></div></div>
+    </div>
+    <div style="font-size:12px;color:#9ca3af;margin-top:8px;text-align:center" id="sleep-progress">0 of 6 complete</div>
+    <button class="btn-secondary" style="margin-top:12px" onclick="resetSleep()">Reset routine</button>
+  </div>
+
+  <div id="screen-crisis" class="screen">
+    <div style="padding:12px 14px;border-radius:8px;background:#FAEEDA;border:1px solid #EF9F27;margin-bottom:1.25rem">
+      <div style="font-size:13px;font-weight:600;color:#633806;margin-bottom:4px">You are not alone</div>
+      <div style="font-size:12px;color:#854F0B;line-height:1.6">If you are in immediate danger, call <strong>15</strong> (SAMU), <strong>17</strong> (Police), <strong>18</strong> (Pompiers) or <strong>112</strong>.</div>
+    </div>
+    <div class="crisis-section">
+      <div class="crisis-section-title">🇫🇷 France — gratuit 24h/24</div>
+      <div class="crisis-row"><div><div class="crisis-name">Prévention du Suicide</div><div class="crisis-desc">Professionels de santé, confidentiel</div></div><div class="crisis-num">3114</div></div>
+      <div class="crisis-row"><div><div class="crisis-name">SOS Amitié</div><div class="crisis-desc">Écoute bienveillante, anonyme</div></div><div class="crisis-num">09 72 39 40 50</div></div>
+      <div class="crisis-row"><div><div class="crisis-name">Fil Santé Jeunes</div><div class="crisis-desc">Pour les moins de 25 ans</div></div><div class="crisis-num">0800 235 236</div></div>
+    </div>
+    <div class="crisis-section">
+      <div class="crisis-section-title">🌍 International</div>
+      <div class="crisis-row"><div><div class="crisis-name">988 Crisis Lifeline</div><div class="crisis-desc">United States — call or text</div></div><div class="crisis-num">988</div></div>
+      <div class="crisis-row"><div><div class="crisis-name">Crisis Text Line</div><div class="crisis-desc">Text HOME to reach a counsellor</div></div><div class="crisis-num">741741</div></div>
+      <div class="crisis-row"><div><div class="crisis-name">Find a helpline</div><div class="crisis-desc">findahelpline.com — worldwide</div></div><div class="crisis-num" style="font-size:12px">web</div></div>
+    </div>
+    <div class="section-label" style="margin-bottom:8px">Immediate grounding — try this now</div>
+    <div id="ground-steps"></div>
+    <button class="btn-primary" style="margin-top:1rem" id="ground-btn" onclick="handleGround()">Start 5-4-3-2-1 grounding</button>
+  </div>
+</div>
+
+<script>
+const breathModes={box:{phases:[{n:'Breathe in',d:4},{n:'Hold',d:4},{n:'Breathe out',d:4},{n:'Hold',d:4}],tip:'Equal parts in, hold, out, hold — great for acute stress.'},'478':{phases:[{n:'Breathe in',d:4},{n:'Hold',d:7},{n:'Breathe out',d:8}],tip:'Inhale 4, hold 7, exhale 8 — calms panic quickly.'},calm:{phases:[{n:'Breathe in',d:5},{n:'Breathe out',d:7}],tip:'Longer exhale activates your rest-and-digest system.'},resonance:{phases:[{n:'Breathe in',d:6},{n:'Breathe out',d:6}],tip:'Resonance breathing boosts heart rate variability.'}};
+const affirmations={anxiety:['This feeling is temporary. It will pass.','I am safe right now. My body is doing its best.','I have survived hard moments before. I will survive this.','Anxiety is not danger. I can breathe through this.','I choose to focus on what I can control.'],confidence:['I am enough, exactly as I am.','I trust myself to handle whatever comes.','My voice matters. My perspective is valid.','I grow stronger with every challenge I face.','I deserve good things.'],calm:['Peace is always available to me.','I release what I cannot control.','Right now, in this moment, I am okay.','I welcome stillness into my body and mind.','I breathe in calm and breathe out tension.'],grief:['It is okay to feel what I am feeling.','Grief is love with nowhere to go.','I give myself permission to heal at my own pace.','My pain is real and my healing is real.','I am not alone in this.']};
+const groundScript=[{n:'5 things you can SEE',c:'Look around slowly. Name each one.'},{n:'4 things you can TOUCH',c:'Feel the texture. Stay with the sensation.'},{n:'3 things you can HEAR',c:'Listen past the noise in your head.'},{n:'2 things you can SMELL',c:'Even a faint scent counts.'},{n:'1 thing you can TASTE',c:'Notice what is in your mouth right now.'}];
+let currentMode='box',breathRunning=false,breathCycles=0,breathTimer=null,breathPhaseIdx=0,affirmCat='anxiety',affirmIdx=0,entries=[],groundIdx=-1;
+function showScreen(id,btn){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');if(btn)btn.classList.add('active');if(id==='affirm')showAffirmation();}
+function selectMood(el,key,label){document.querySelectorAll('.mood-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');document.getElementById('mood-followup').style.display='block';}
+function saveEntry(){const mood=document.querySelector('.mood-card.selected');const text=document.getElementById('journal-input').value.trim();if(!mood)return;const label=mood.querySelector('.mood-label').textContent;entries.unshift({mood:label,key:label.toLowerCase(),text,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});document.getElementById('journal-input').value='';renderEntries();}
+function renderEntries(){document.getElementById('journal-entries').innerHTML=entries.slice(0,4).map(e=>`<div class="entry-card"><div class="entry-meta">${e.time} · <span class="tag tag-${e.key}">${e.mood}</span></div><div class="entry-text">${e.text||'<em style="color:#9ca3af">No note added</em>'}</div></div>`).join('');}
+function setBreath(el,mode){currentMode=mode;document.querySelectorAll('.breathe-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');document.getElementById('b-tip').textContent=breathModes[mode].tip;resetBreathe();}
+function toggleBreathe(){if(breathRunning){breathRunning=false;document.getElementById('b-btn').textContent='Resume';clearTimeout(breathTimer);}else{breathRunning=true;document.getElementById('b-btn').textContent='Pause';runPhase(breathPhaseIdx);}}
+function resetBreathe(){breathRunning=false;breathCycles=0;breathPhaseIdx=0;clearTimeout(breathTimer);document.getElementById('b-btn').textContent='Start';document.getElementById('b-phase').textContent='Ready';document.getElementById('b-count').textContent='—';document.getElementById('b-cycles').textContent='Cycle 0';const p=document.getElementById('b-prog');p.style.transition='none';p.style.width='0%';const c=document.getElementById('breath-circle');c.style.transform='scale(1)';c.style.background='#1D9E75';}
+function runPhase(idx){if(!breathRunning)return;breathPhaseIdx=idx;const m=breathModes[currentMode];const ph=m.phases[idx];document.getElementById('b-phase').textContent=ph.n;document.getElementById('b-count').textContent=ph.d;const colors={'Breathe in':'#1D9E75','Hold':'#0F6E56','Breathe out':'#085041'};const scales={'Breathe in':1.25,'Hold':1.25,'Breathe out':0.85};const c=document.getElementById('breath-circle');c.style.transition=`transform ${ph.d}s ease-in-out,background 0.4s`;c.style.transform=`scale(${scales[ph.n]||1})`;c.style.background=colors[ph.n]||'#1D9E75';const p=document.getElementById('b-prog');p.style.transition='none';p.style.width='0%';requestAnimationFrame(()=>requestAnimationFrame(()=>{p.style.transition=`width ${ph.d}s linear`;p.style.width='100%';}));let rem=ph.d;const tick=()=>{if(!breathRunning)return;document.getElementById('b-count').textContent=rem;if(rem>0){breathTimer=setTimeout(()=>{rem--;tick();},1000);}};tick();breathTimer=setTimeout(()=>{if(!breathRunning)return;const next=idx+1;if(next>=m.phases.length){breathCycles++;document.getElementById('b-cycles').textContent=`Cycle ${breathCycles}`;runPhase(0);}else runPhase(next);},ph.d*1000);}
+function setAffirmCat(el,cat){affirmCat=cat;affirmIdx=0;document.querySelectorAll('#screen-affirm .nav-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');showAffirmation();}
+function showAffirmation(){document.getElementById('affirm-text').textContent=affirmations[affirmCat][affirmIdx%affirmations[affirmCat].length];}
+function nextAffirmation(){affirmIdx++;showAffirmation();}
+function toggleStep(el,n){el.classList.toggle('done');document.getElementById('dot'+n).textContent=el.classList.contains('done')?'✓':n;document.getElementById('sleep-progress').textContent=`${document.querySelectorAll('.sleep-step.done').length} of 6 complete`;}
+function resetSleep(){document.querySelectorAll('.sleep-step').forEach(s=>s.classList.remove('done'));for(let i=1;i<=6;i++)document.getElementById('dot'+i).textContent=i;document.getElementById('sleep-progress').textContent='0 of 6 complete';}
+function renderGround(){document.getElementById('ground-steps').innerHTML=groundScript.map((s,i)=>`<div class="ground-step ${i===groundIdx?'active':i<groundIdx?'':'inactive'}"><div class="ground-title">${s.n}</div>${i===groundIdx?`<div class="ground-sub">${s.c}</div>`:''}</div>`).join('');}
+function handleGround(){if(groundIdx===-1){groundIdx=0;document.getElementById('ground-btn').textContent='Next step';renderGround();}else{groundIdx++;if(groundIdx>=groundScript.length){groundIdx=-1;document.getElementById('ground-btn').textContent='Start 5-4-3-2-1 grounding';document.getElementById('ground-steps').innerHTML='';}else renderGround();}}
+showAffirmation();
+</script>
+</body>
+</html>
