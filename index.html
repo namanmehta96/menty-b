@@ -30,8 +30,8 @@
       --g-bg2:       rgba(255,255,255,0.065);
       --g-border:    rgba(255,255,255,0.09);
       --g-hover:     rgba(255,255,255,0.08);
-      --circ-r:      96;
-      --circ-c:      603.19;  /* 2*pi*96 */
+      --circ-r:      105;
+      --circ-c:      659.73;  /* 2*pi*105 */
     }
 
     html { height: 100%; }
@@ -187,10 +187,10 @@
     .page-head-text { flex: 1; min-width: 0; }
     .page-title {
       font-family: 'Montserrat', sans-serif;
-      font-size: 1.75rem; line-height: 1.15;
+      font-size: 1.5rem; font-weight: 600; line-height: 1.15;
       margin-bottom: 0.25rem;
     }
-    .page-sub { font-size: 0.8375rem; color: var(--muted); line-height: 1.5; }
+    .page-sub { font-size: 0.875rem; color: var(--muted); line-height: 1.5; }
     .page-back {
       flex-shrink: 0; margin-top: 0.35rem;
       font-size: 0.72rem; color: var(--muted);
@@ -326,8 +326,8 @@
     ═══════════════════════════════════════════════════════ */
     .btn {
       display: block; width: 100%;
-      padding: 0.8rem 1rem; border-radius: 16px; border: none;
-      font-size: 0.875rem; font-weight: 500; line-height: 1;
+      height: 52px; padding: 0 1rem; border-radius: 16px; border: none;
+      font-size: 0.9375rem; font-weight: 500; line-height: 1;
       font-family: 'Montserrat', sans-serif; cursor: pointer;
       text-align: center; transition: all 0.26s ease;
     }
@@ -382,10 +382,11 @@
       gap: 0.65rem; margin: 0.75rem 0 1.35rem;
     }
     .b-card {
-      padding: 0.95rem 1rem; border-radius: 18px; cursor: pointer;
+      padding: 1.15rem 1.2rem; min-height: 72px; border-radius: 18px; cursor: pointer;
       border: 1px solid var(--g-border); background: var(--g-bg);
       backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
       transition: all 0.32s ease;
+      display: flex; flex-direction: column; justify-content: center;
     }
     .b-card:hover { transform: translateY(-2px); border-color: rgba(82,183,136,0.28); }
     .b-card.sel {
@@ -402,7 +403,7 @@
       margin: 0.5rem 0 1.1rem; gap: 0.7rem;
     }
     .svg-wrap {
-      position: relative; width: 240px; height: 240px;
+      position: relative; width: 260px; height: 260px;
     }
     .svg-wrap svg { width: 100%; height: 100%; overflow: visible; }
 
@@ -417,8 +418,8 @@
       opacity: 0.35;
     }
     #progress-ring {
-      stroke-dasharray: 603.19;
-      stroke-dashoffset: 603.19;
+      stroke-dasharray: 659.73;
+      stroke-dashoffset: 659.73;
       transition: stroke 0.55s ease;
     }
 
@@ -581,19 +582,19 @@
     ═══════════════════════════════════════════════════════ */
     .bottom-nav {
       position: fixed; bottom: 0; z-index: 100; display: flex;
-      background: rgba(7,11,22,0.9);
+      background: rgba(7,11,22,0.92);
       backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-      border-top: 1px solid rgba(255,255,255,0.07);
-      padding: 0.5rem 0;
-      padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
-      /* Center the nav on desktop */
+      border-top: 1px solid rgba(82,183,136,0.15);
+      min-height: 68px;
+      padding: 0.55rem 0;
+      padding-bottom: calc(0.55rem + env(safe-area-inset-bottom, 0px));
       left: 50%; transform: translateX(-50%);
       width: min(100vw, 480px);
     }
     .nav-btn {
       flex: 1; display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      gap: 3px; padding: 0.3rem 0;
+      gap: 3px; padding: 0.3rem 0; position: relative;
       cursor: pointer; border: none; background: none;
       color: var(--muted); font-family: 'Montserrat', sans-serif;
       transition: all 0.25s ease;
@@ -603,14 +604,27 @@
     .nav-btn.active .nav-icon {
       filter: drop-shadow(0 0 7px rgba(82,183,136,0.75));
     }
-    .nav-icon  { font-size: 1.15rem; line-height: 1; }
-    .nav-label { font-size: 0.545rem; font-weight: 500; letter-spacing: 0.01em; }
+    /* Active indicator dot above icon */
+    .nav-btn.active::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 16px; height: 2px; border-radius: 99px;
+      background: var(--sage-light);
+      box-shadow: 0 0 6px rgba(82,183,136,0.7);
+    }
+    .nav-icon  { font-size: 1.625rem; line-height: 1; }
+    .nav-label { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.01em; }
+    /* Ground symbol SVG inside nav/pill */
+    .gnd-sym {
+      width: 1em; height: 0.9em;
+      display: inline-block; vertical-align: middle; flex-shrink: 0;
+    }
 
     /* ═══════════════════════════════════════════════════════
        MISC UTILS
     ═══════════════════════════════════════════════════════ */
     .mt-sm  { margin-top: 0.65rem; }
-    .label-sm { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.6rem; }
+    .label-sm { font-size: 0.8125rem; color: var(--muted); margin-bottom: 0.6rem; letter-spacing: 0.04em; }
 
     /* Completion card */
     .completion-card {
@@ -749,10 +763,19 @@
       flex-shrink: 0;
     }
     .home-tagline {
-      font-size: 1.1rem; font-weight: 400; line-height: 1.78;
-      color: rgba(232,237,232,0.7); margin-bottom: 2rem;
-      max-width: 270px; min-height: 3.8rem;
-      letter-spacing: 0.01em;
+      margin-bottom: 1.5rem; /* 24px gap to orbit */
+      text-align: center; line-height: 1;
+    }
+    .tl-line1 {
+      display: block;
+      font-size: 1.75rem; font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+    .tl-line2 {
+      display: block;
+      font-size: 1.375rem; font-weight: 300;
+      color: var(--sage-pale);
     }
     .tl-word {
       display: inline-block; opacity: 0;
@@ -761,22 +784,22 @@
     }
     .tl-word.vis { opacity: 1; transform: translateY(0); }
 
-    /* Orbit container */
+    /* Orbit container — +30% radius */
     .home-orbit-wrap {
-      position: relative; width: 316px; height: 316px; flex-shrink: 0;
+      position: relative; width: 406px; height: 406px; flex-shrink: 0;
     }
     /* Visual orbit ring */
     .orbit-ring {
       position: absolute; left: 50%; top: 50%;
       transform: translate(-50%,-50%);
-      width: 254px; height: 254px; border-radius: 50%;
+      width: 330px; height: 330px; border-radius: 50%;
       border: 1px solid rgba(82,183,136,0.16);
       pointer-events: none;
     }
     .orbit-ring-outer {
       position: absolute; left: 50%; top: 50%;
       transform: translate(-50%,-50%);
-      width: 304px; height: 304px; border-radius: 50%;
+      width: 390px; height: 390px; border-radius: 50%;
       border: 1px dashed rgba(82,183,136,0.06);
       pointer-events: none;
     }
@@ -787,16 +810,16 @@
     }
     @keyframes orbitSpin { to { transform: rotate(360deg); } }
 
-    /* Each orbit pill */
+    /* Each orbit pill — 72px min, 28px icon, 13px label */
     .home-pill {
-      position: absolute; width: 64px;
-      left: calc(50% + 127px * sin(var(--a)) - 32px);
-      top:  calc(50% - 127px * cos(var(--a)) - 32px);
+      position: absolute; width: 72px;
+      left: calc(50% + 165px * sin(var(--a)) - 36px);
+      top:  calc(50% - 165px * cos(var(--a)) - 36px);
       display: flex; flex-direction: column;
-      align-items: center; gap: 5px;
-      background: rgba(255,255,255,0.055);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px; padding: 0.7rem 0.3rem 0.5rem;
+      align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.065);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 22px; padding: 0.8rem 0.3rem 0.6rem;
       cursor: pointer; font-family: 'Montserrat', sans-serif;
       color: var(--muted);
       transition: background 0.25s ease, border-color 0.25s ease,
@@ -808,44 +831,44 @@
     @keyframes orbitCounterSpin { to { transform: rotate(-360deg); } }
 
     .home-pill:hover, .home-pill:active { color: var(--text); }
-    .hp-mood:hover,    .hp-mood:active    { background: rgba(82,183,136,0.14);  border-color: rgba(82,183,136,0.55);  box-shadow: 0 0 24px rgba(82,183,136,0.32); }
-    .hp-breathe:hover, .hp-breathe:active { background: rgba(116,198,157,0.12); border-color: rgba(116,198,157,0.55); box-shadow: 0 0 24px rgba(116,198,157,0.28); }
-    .hp-affirm:hover,  .hp-affirm:active  { background: rgba(233,196,106,0.12); border-color: rgba(233,196,106,0.55); box-shadow: 0 0 24px rgba(233,196,106,0.28); }
-    .hp-sleep:hover,   .hp-sleep:active   { background: rgba(147,112,219,0.12); border-color: rgba(147,112,219,0.55); box-shadow: 0 0 24px rgba(147,112,219,0.25); }
-    .hp-ground:hover,  .hp-ground:active  { background: rgba(144,190,109,0.12); border-color: rgba(144,190,109,0.55); box-shadow: 0 0 24px rgba(144,190,109,0.28); }
-    .hp-crisis:hover,  .hp-crisis:active  { background: rgba(244,162,97,0.12);  border-color: rgba(244,162,97,0.55);  box-shadow: 0 0 24px rgba(244,162,97,0.28); }
+    .hp-mood:hover,    .hp-mood:active    { background: rgba(82,183,136,0.16);  border-color: rgba(82,183,136,0.6);  box-shadow: 0 0 28px rgba(82,183,136,0.38); }
+    .hp-breathe:hover, .hp-breathe:active { background: rgba(116,198,157,0.14); border-color: rgba(116,198,157,0.6); box-shadow: 0 0 28px rgba(116,198,157,0.32); }
+    .hp-affirm:hover,  .hp-affirm:active  { background: rgba(233,196,106,0.14); border-color: rgba(233,196,106,0.6); box-shadow: 0 0 28px rgba(233,196,106,0.32); }
+    .hp-sleep:hover,   .hp-sleep:active   { background: rgba(147,112,219,0.14); border-color: rgba(147,112,219,0.6); box-shadow: 0 0 28px rgba(147,112,219,0.28); }
+    .hp-ground:hover,  .hp-ground:active  { background: rgba(144,190,109,0.14); border-color: rgba(144,190,109,0.6); box-shadow: 0 0 28px rgba(144,190,109,0.32); }
+    .hp-crisis:hover,  .hp-crisis:active  { background: rgba(244,162,97,0.14);  border-color: rgba(244,162,97,0.6);  box-shadow: 0 0 28px rgba(244,162,97,0.32); }
 
-    .hp-icon { font-size: 1.35rem; line-height: 1; }
-    .hp-lbl  { font-size: 0.56rem; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+    .hp-icon { font-size: 1.75rem; line-height: 1; }
+    .hp-lbl  { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap; }
 
-    /* Central orb — 120px heartbeat pulse */
+    /* Central orb — 140px heartbeat pulse */
     .home-center-orb {
       position: absolute; left: 50%; top: 50%;
       transform: translate(-50%,-50%);
-      width: 120px; height: 120px; border-radius: 50%;
+      width: 140px; height: 140px; border-radius: 50%;
       background: radial-gradient(circle at 38% 32%, #74c69d 0%, #2d6a4f 55%, #1a4a38 100%);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       cursor: pointer; z-index: 2;
-      box-shadow: 0 0 48px rgba(45,106,79,0.5), inset 0 1px 0 rgba(255,255,255,0.14);
+      box-shadow: 0 0 56px rgba(45,106,79,0.5), inset 0 1px 0 rgba(255,255,255,0.14);
       animation: heartbeat 3.4s ease-in-out infinite;
     }
     @keyframes heartbeat {
-      0%,100% { box-shadow: 0 0 48px rgba(45,106,79,0.5),  0 0 0 0px  rgba(82,183,136,0),    inset 0 1px 0 rgba(255,255,255,0.14); }
-      15%     { box-shadow: 0 0 60px rgba(45,106,79,0.65), 0 0 0 10px rgba(82,183,136,0.15), inset 0 1px 0 rgba(255,255,255,0.14); }
-      30%     { box-shadow: 0 0 48px rgba(45,106,79,0.5),  0 0 0 5px  rgba(82,183,136,0.06), inset 0 1px 0 rgba(255,255,255,0.14); }
-      45%     { box-shadow: 0 0 55px rgba(45,106,79,0.58), 0 0 0 8px  rgba(233,196,106,0.12),inset 0 1px 0 rgba(255,255,255,0.14); }
-      70%     { box-shadow: 0 0 48px rgba(45,106,79,0.5),  0 0 0 0px  rgba(82,183,136,0),    inset 0 1px 0 rgba(255,255,255,0.14); }
+      0%,100% { box-shadow: 0 0 56px rgba(45,106,79,0.5),  0 0 0 0px  rgba(82,183,136,0),    inset 0 1px 0 rgba(255,255,255,0.14); }
+      15%     { box-shadow: 0 0 72px rgba(45,106,79,0.65), 0 0 0 12px rgba(82,183,136,0.15), inset 0 1px 0 rgba(255,255,255,0.14); }
+      30%     { box-shadow: 0 0 56px rgba(45,106,79,0.5),  0 0 0 6px  rgba(82,183,136,0.06), inset 0 1px 0 rgba(255,255,255,0.14); }
+      45%     { box-shadow: 0 0 64px rgba(45,106,79,0.58), 0 0 0 10px rgba(233,196,106,0.12),inset 0 1px 0 rgba(255,255,255,0.14); }
+      70%     { box-shadow: 0 0 56px rgba(45,106,79,0.5),  0 0 0 0px  rgba(82,183,136,0),    inset 0 1px 0 rgba(255,255,255,0.14); }
     }
     .home-center-inner {
-      width: 34px; height: 34px; border-radius: 50%;
+      width: 40px; height: 40px; border-radius: 50%;
       border: 2px solid rgba(255,255,255,0.42);
       animation: orbInner 3.4s ease-in-out infinite;
     }
     .home-center-label {
-      font-size: 0.5rem; font-weight: 600; text-align: center;
-      color: rgba(255,255,255,0.72); margin-top: 6px;
-      line-height: 1.35; max-width: 80px; letter-spacing: 0.01em;
+      font-size: 0.5625rem; font-weight: 600; text-align: center;
+      color: rgba(255,255,255,0.72); margin-top: 7px;
+      line-height: 1.35; max-width: 88px; letter-spacing: 0.01em;
     }
 
     /* Ink-drop flood overlay */
@@ -935,20 +958,24 @@
     }
 
     /* Ambient quotes in left column */
-    .dp-quote-wrap { max-width: 185px; text-align: center; }
+    .dp-quote-wrap {
+      max-width: 185px; text-align: center;
+      position: relative; padding-top: 1rem;
+    }
+    .dp-quote-mark-bg {
+      position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+      font-size: 3rem; line-height: 1;
+      color: rgba(82,183,136,0.15);
+      font-family: Georgia, serif;
+      pointer-events: none; user-select: none;
+    }
     .dp-quote-text {
-      font-size: 0.8rem; font-style: italic;
-      color: rgba(232,237,232,0.52); line-height: 1.85;
-      letter-spacing: 0.01em;
+      font-size: 1rem; font-style: italic;
+      color: rgba(232,237,232,0.55); line-height: 1.9;
+      letter-spacing: 0.01em; position: relative;
       transition: opacity 0.65s ease;
     }
     .dp-quote-fade  { opacity: 0 !important; }
-    .dp-quote-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: rgba(82,183,136,0.32); margin: 0.9rem auto 0;
-      box-shadow: 0 0 6px rgba(82,183,136,0.22);
-      animation: orbPulse 5s ease-in-out infinite;
-    }
 
     /* Desktop EN/FR toggle — sits at bottom of left column */
     .lang-toggle-desktop {
@@ -960,17 +987,50 @@
     }
 
     /* Right column — contextual tips */
-    .ctx-tip-wrap { text-align: center; max-width: 185px; }
+    .ctx-tip-wrap { text-align: left; max-width: 185px; }
     .ctx-tip-icon {
-      font-size: 2rem; line-height: 1; margin-bottom: 1.1rem;
-      transition: opacity 0.35s ease;
+      display: flex; justify-content: center;
+      margin-bottom: 1.25rem;
+      transition: opacity 0.4s ease;
+    }
+    .ctx-tip-icon-inner {
+      font-size: 2rem; line-height: 1;
+    }
+    /* Constellation SVG */
+    .constellation-svg { width: 72px; height: 54px; display: block; }
+    @keyframes cDotPulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+    .c-dot { animation: cDotPulse 3.2s ease-in-out infinite; }
+    .c-dot-1 { animation-delay: 0s; }
+    .c-dot-2 { animation-delay: 0.65s; }
+    .c-dot-3 { animation-delay: 1.3s; }
+    .c-dot-4 { animation-delay: 1.95s; }
+    .c-dot-5 { animation-delay: 1.0s; }
+    /* Label above tip */
+    .ctx-tip-label {
+      font-size: 0.625rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(232,237,232,0.28);
+      margin-bottom: 0.6rem;
+      transition: opacity 0.4s ease;
+    }
+    /* Blockquote-style tip */
+    .ctx-tip-body {
+      border-left: 2px solid rgba(82,183,136,0.45);
+      padding-left: 0.85rem;
+      transition: opacity 0.4s ease;
     }
     .ctx-tip-text {
-      font-size: 0.8rem; color: rgba(232,237,232,0.5);
+      font-size: 0.9375rem; font-weight: 400;
+      color: rgba(232,237,232,0.8);
       line-height: 1.8; letter-spacing: 0.01em;
-      transition: opacity 0.35s ease;
+      white-space: pre-line;
     }
-    .ctx-tip-fade { opacity: 0 !important; }
+    .ctx-tip-fade .ctx-tip-icon,
+    .ctx-tip-fade .ctx-tip-label,
+    .ctx-tip-fade .ctx-tip-body { opacity: 0; }
+    .ctx-tip-fade { opacity: 1 !important; } /* override old rule */
+    /* Smooth fade-in for right column on load */
+    .ctx-tip-wrap { animation: fadeUp 0.5s ease both; }
 
     /* Mobile home cards — 2x3 grid, replaces orbit on small screens */
     .home-cards {
@@ -1009,8 +1069,6 @@
       .col-right        { display: flex; }
       .app              { max-width: 480px; }
       .bottom-nav       { left: 240px; right: 240px; width: auto; transform: none; }
-      .page-title       { font-size: 1.375rem; }
-      .page-sub         { font-size: 1rem; }
       /* Home screen: show orbit, hide cards */
       .home-orbit-wrap  { display: block; }
       .home-cards       { display: none; }
@@ -1118,8 +1176,8 @@
   <div class="col-left-mid">
     <div class="dp-orb"><div class="dp-orb-inner"></div></div>
     <div class="dp-quote-wrap">
+      <div class="dp-quote-mark-bg">"</div>
       <div class="dp-quote-text" id="dp-quote-text"></div>
-      <div class="dp-quote-dot"></div>
     </div>
   </div>
   <!-- EN/FR toggle at the bottom of the left column -->
@@ -1132,8 +1190,13 @@
 <!-- ── Desktop right column — contextual tips ────────────── -->
 <div class="col-right" id="col-right">
   <div class="ctx-tip-wrap">
-    <div class="ctx-tip-icon" id="ctx-tip-icon">🌿</div>
-    <div class="ctx-tip-text"  id="ctx-tip-text">Tap any feature to begin</div>
+    <div class="ctx-tip-icon" id="ctx-tip-icon">
+      <span class="ctx-tip-icon-inner">🌿</span>
+    </div>
+    <div class="ctx-tip-label" id="ctx-tip-label">RIGHT NOW</div>
+    <div class="ctx-tip-body">
+      <div class="ctx-tip-text" id="ctx-tip-text">Tap any feature to begin</div>
+    </div>
   </div>
 </div>
 
@@ -1173,7 +1236,7 @@
             <span class="hp-icon">🌙</span><span class="hp-lbl" id="hi-lbl-sleep">Wind</span>
           </button>
           <button class="home-pill hp-ground"  style="--a:240deg" onclick="homeNav('ground', 'nav-ground')">
-            <span class="hp-icon">🌿</span><span class="hp-lbl" id="hi-lbl-ground">Ground</span>
+            <span class="hp-icon"><svg class="gnd-sym" viewBox="0 0 22 20" fill="currentColor"><path d="M11 12 L3.5 2.5 L18.5 2.5 Z"/><rect x="2" y="15" width="18" height="2.5" rx="1.25"/><rect x="7" y="12" width="8" height="1.5" rx="0.75"/></svg></span><span class="hp-lbl" id="hi-lbl-ground">Ground</span>
           </button>
           <button class="home-pill hp-crisis"  style="--a:300deg" onclick="homeNav('crisis', 'nav-crisis')">
             <span class="hp-icon">📞</span><span class="hp-lbl" id="hi-lbl-crisis">Help</span>
@@ -1202,7 +1265,7 @@
           <span class="hc-icon">🌙</span><span class="hc-lbl" id="hc-lbl-sleep">Wind</span>
         </button>
         <button class="hc-card hc-ground"  onclick="goTo('ground',  document.getElementById('nav-ground'))">
-          <span class="hc-icon">🌿</span><span class="hc-lbl" id="hc-lbl-ground">Ground</span>
+          <span class="hc-icon"><svg class="gnd-sym" viewBox="0 0 22 20" fill="currentColor"><path d="M11 12 L3.5 2.5 L18.5 2.5 Z"/><rect x="2" y="15" width="18" height="2.5" rx="1.25"/><rect x="7" y="12" width="8" height="1.5" rx="0.75"/></svg></span><span class="hc-lbl" id="hc-lbl-ground">Ground</span>
         </button>
         <button class="hc-card hc-crisis"  onclick="goTo('crisis',  document.getElementById('nav-crisis'))">
           <span class="hc-icon">📞</span><span class="hc-lbl" id="hc-lbl-crisis">Help</span>
@@ -1294,23 +1357,23 @@
             </filter>
           </defs>
           <!-- Outer ambient glow -->
-          <circle cx="115" cy="115" r="108" fill="none"
+          <circle cx="115" cy="115" r="110" fill="none"
             stroke="rgba(82,183,136,0.05)" stroke-width="22"/>
-          <!-- Track ring -->
-          <circle cx="115" cy="115" r="96" fill="none"
+          <!-- Track ring (r=105 → ~220px at 260px wrapper) -->
+          <circle cx="115" cy="115" r="105" fill="none"
             stroke="rgba(255,255,255,0.07)" stroke-width="3"
             transform="rotate(-90 115 115)"/>
           <!-- Progress ring -->
-          <circle id="progress-ring" cx="115" cy="115" r="96"
+          <circle id="progress-ring" cx="115" cy="115" r="105"
             fill="none" stroke="#52b788" stroke-width="3.5"
             stroke-linecap="round"
             filter="url(#ringGlow)"
             transform="rotate(-90 115 115)"/>
-          <!-- Orb halo -->
-          <circle id="orb-halo" cx="115" cy="115" r="68"
+          <!-- Orb halo (r=87, ~inner circle ~160px at 260px wrapper) -->
+          <circle id="orb-halo" cx="115" cy="115" r="87"
             fill="#52b788" opacity="0.18"/>
-          <!-- Main orb -->
-          <circle id="orb" cx="115" cy="115" r="60"
+          <!-- Main orb (r=77 → diameter ~160px rendered at 260px) -->
+          <circle id="orb" cx="115" cy="115" r="77"
             fill="#52b788"/>
         </svg>
         <div class="breath-lbl-wrap">
@@ -1576,7 +1639,7 @@
     <span class="nav-icon">🌙</span><span class="nav-label">Wind</span>
   </button>
   <button class="nav-btn" id="nav-ground" onclick="goTo('ground',this)">
-    <span class="nav-icon">🌿</span><span class="nav-label">Ground</span>
+    <span class="nav-icon"><svg class="gnd-sym" viewBox="0 0 22 20" fill="currentColor"><path d="M11 12 L3.5 2.5 L18.5 2.5 Z"/><rect x="2" y="15" width="18" height="2.5" rx="1.25"/><rect x="7" y="12" width="8" height="1.5" rx="0.75"/></svg></span><span class="nav-label">Ground</span>
   </button>
   <button class="nav-btn" id="nav-crisis" onclick="goTo('crisis',this)">
     <span class="nav-icon">📞</span><span class="nav-label">Help</span>
@@ -1651,22 +1714,22 @@ const AMBIENT_QUOTES_FR = [
 
 const TIPS = {
   en: {
-    welcome: { icon: '🌿', text: 'Tap any feature to begin' },
-    mood:    { icon: '🔒', text: 'Your entries are private and stay on this device' },
-    breathe: { icon: '〰️', text: 'Follow the circle.\nThree cycles is all it takes.' },
-    affirm:  { icon: '✨', text: 'Read slowly.\nLet it land.' },
-    sleep:   { icon: '🌙', text: 'Take your time\nwith each step' },
-    ground:  { icon: '🌱', text: 'Follow one sense\nat a time' },
-    crisis:  { icon: '💚', text: 'You are not alone.\nHelp is real.' },
+    welcome: { icon: '🌿', label: 'RIGHT NOW', text: 'Tap any feature to begin' },
+    mood:    { icon: '🔒', label: 'RIGHT NOW', text: 'Your entries are private and stay on this device' },
+    breathe: { icon: '〰️', label: 'RIGHT NOW', text: 'Follow the circle.\nThree cycles is all it takes.' },
+    affirm:  { icon: '✨', label: 'RIGHT NOW', text: 'Read slowly.\nLet it land.' },
+    sleep:   { icon: '🌙', label: 'RIGHT NOW', text: 'Take your time\nwith each step' },
+    ground:  { icon: '🌱', label: 'RIGHT NOW', text: 'Follow one sense\nat a time' },
+    crisis:  { icon: '💚', label: 'RIGHT NOW', text: 'You are not alone.\nHelp is real.' },
   },
   fr: {
-    welcome: { icon: '🌿', text: 'Appuyez sur une\nfonction pour commencer' },
-    mood:    { icon: '🔒', text: 'Vos entrées sont privées\net restent sur cet appareil' },
-    breathe: { icon: '〰️', text: 'Suivez le cercle.\nTrois cycles suffisent.' },
-    affirm:  { icon: '✨', text: 'Lisez lentement.\nLaissez résonner.' },
-    sleep:   { icon: '🌙', text: 'Prenez votre temps\nà chaque étape' },
-    ground:  { icon: '🌱', text: 'Suivez un sens\nà la fois' },
-    crisis:  { icon: '💚', text: 'Vous n\'êtes pas seul.\nL\'aide est réelle.' },
+    welcome: { icon: '🌿', label: 'EN CE MOMENT', text: 'Appuyez sur une\nfonction pour commencer' },
+    mood:    { icon: '🔒', label: 'EN CE MOMENT', text: 'Vos entrées sont privées\net restent sur cet appareil' },
+    breathe: { icon: '〰️', label: 'EN CE MOMENT', text: 'Suivez le cercle.\nTrois cycles suffisent.' },
+    affirm:  { icon: '✨', label: 'EN CE MOMENT', text: 'Lisez lentement.\nLaissez résonner.' },
+    sleep:   { icon: '🌙', label: 'EN CE MOMENT', text: 'Prenez votre temps\nà chaque étape' },
+    ground:  { icon: '🌱', label: 'EN CE MOMENT', text: 'Suivez un sens\nà la fois' },
+    crisis:  { icon: '💚', label: 'EN CE MOMENT', text: 'Vous n\'êtes pas seul.\nL\'aide est réelle.' },
   }
 };
 
@@ -1935,7 +1998,7 @@ let currentLang = 'en';
 let ambientQuoteIdx = 0;
 let ambientQuoteTimer = null;
 
-const CIRC = 2 * Math.PI * 96; // 603.19
+const CIRC = 2 * Math.PI * 105; // 659.73
 
 /* ══════════════════════════════════════════════════════════
    PARTICLES
@@ -1999,20 +2062,38 @@ function goTo(id, btnEl) {
   updateContextTip(id);
 }
 
+const CONSTELLATION_SVG = `<svg class="constellation-svg" viewBox="0 0 72 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <line x1="10" y1="42" x2="22" y2="14" stroke="rgba(82,183,136,0.35)" stroke-width="1"/>
+  <line x1="22" y1="14" x2="40" y2="36" stroke="rgba(82,183,136,0.35)" stroke-width="1"/>
+  <line x1="40" y1="36" x2="58" y2="10" stroke="rgba(82,183,136,0.35)" stroke-width="1"/>
+  <line x1="58" y1="10" x2="66" y2="30" stroke="rgba(82,183,136,0.35)" stroke-width="1"/>
+  <circle class="c-dot c-dot-1" cx="10" cy="42" r="3" fill="rgba(82,183,136,0.7)"/>
+  <circle class="c-dot c-dot-2" cx="22" cy="14" r="2.5" fill="rgba(82,183,136,0.7)"/>
+  <circle class="c-dot c-dot-3" cx="40" cy="36" r="3.5" fill="rgba(82,183,136,0.7)"/>
+  <circle class="c-dot c-dot-4" cx="58" cy="10" r="2" fill="rgba(82,183,136,0.7)"/>
+  <circle class="c-dot c-dot-5" cx="66" cy="30" r="2.5" fill="rgba(82,183,136,0.7)"/>
+</svg>`;
+
 function updateContextTip(screen) {
-  const iconEl = document.getElementById('ctx-tip-icon');
-  const textEl = document.getElementById('ctx-tip-text');
-  if (!iconEl || !textEl) return;
+  const wrapEl  = document.querySelector('.ctx-tip-wrap');
+  const iconEl  = document.getElementById('ctx-tip-icon');
+  const labelEl = document.getElementById('ctx-tip-label');
+  const textEl  = document.getElementById('ctx-tip-text');
+  if (!wrapEl || !iconEl || !textEl) return;
 
-  const tip = (TIPS[currentLang] || TIPS.en)[screen] || TIPS[currentLang].welcome;
+  const lang = TIPS[currentLang] || TIPS.en;
+  const tip  = lang[screen] || lang.welcome;
 
-  iconEl.classList.add('ctx-tip-fade');
-  textEl.classList.add('ctx-tip-fade');
+  wrapEl.classList.add('ctx-tip-fade');
   setTimeout(() => {
-    iconEl.textContent = tip.icon;
+    if (screen === 'welcome') {
+      iconEl.innerHTML = CONSTELLATION_SVG;
+    } else {
+      iconEl.innerHTML = `<span class="ctx-tip-icon-inner">${tip.icon}</span>`;
+    }
+    if (labelEl) labelEl.textContent = tip.label || 'RIGHT NOW';
     textEl.textContent = tip.text;
-    iconEl.classList.remove('ctx-tip-fade');
-    textEl.classList.remove('ctx-tip-fade');
+    wrapEl.classList.remove('ctx-tip-fade');
   }, 360);
 }
 
@@ -2464,16 +2545,42 @@ function animateTagline() {
   if (!el) return;
   const text = STRINGS[currentLang].homeTagline;
   el.innerHTML = '';
+
+  // Split at first ". " into two lines
+  const dotIdx = text.indexOf('. ');
+  const line1Text = dotIdx !== -1 ? text.slice(0, dotIdx + 1) : text;
+  const line2Text = dotIdx !== -1 ? text.slice(dotIdx + 2) : '';
+
+  const line1 = document.createElement('span');
+  line1.className = 'tl-line1';
+  const line2 = document.createElement('span');
+  line2.className = 'tl-line2';
+
   let delay = 320;
-  text.split(' ').forEach(word => {
+  line1Text.split(' ').forEach(word => {
     const span = document.createElement('span');
     span.className = 'tl-word';
-    span.textContent = word + '\u00a0'; // non-breaking space keeps words apart
-    el.appendChild(span);
+    span.textContent = word + '\u00a0';
+    line1.appendChild(span);
     setTimeout(() => span.classList.add('vis'), delay);
-    // Longer pause after sentence-ending punctuation
     delay += word.match(/[.!?]$/) ? 360 : 130;
   });
+
+  if (line2Text) {
+    let delay2 = delay + 800; // 0.8s after line1 words finish
+    line2Text.split(' ').forEach(word => {
+      const span = document.createElement('span');
+      span.className = 'tl-word';
+      span.textContent = word + '\u00a0';
+      line2.appendChild(span);
+      setTimeout(() => span.classList.add('vis'), delay2);
+      delay2 += word.match(/[.!?]$/) ? 360 : 130;
+    });
+    el.appendChild(line1);
+    el.appendChild(line2);
+  } else {
+    el.appendChild(line1);
+  }
 }
 
 function startAmbientQuotes() {
@@ -2637,6 +2744,8 @@ function applyLang(lang) {
   const pills = document.querySelectorAll('.cat-pill');
   [s.catAnxiety,s.catConfidence,s.catCalm,s.catGrief]
     .forEach((t,i) => { if (pills[i]) pills[i].textContent = t; });
+  // Immediately swap displayed affirmation to new language (same category + index)
+  showAffirm();
 
   // Wind-down
   document.querySelector('#screen-sleep .page-title').textContent = s.sleepTitle;
