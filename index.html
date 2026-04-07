@@ -583,29 +583,6 @@
     .nav-label { font-size: 0.585rem; font-weight: 500; letter-spacing: 0.01em; }
 
     /* ═══════════════════════════════════════════════════════
-       PANIC BUTTON
-    ═══════════════════════════════════════════════════════ */
-    .panic-btn {
-      position: fixed; z-index: 200;
-      bottom: calc(84px + 0.75rem);
-      right: max(1rem, calc(50vw - 240px + 1rem));
-      padding: 0.52rem 1rem;
-      border-radius: 99px;
-      background: rgba(195,48,48,0.82);
-      border: 1px solid rgba(255,110,110,0.48);
-      color: #fff; font-size: 0.72rem; font-weight: 600;
-      cursor: pointer; font-family: 'Montserrat', sans-serif;
-      backdrop-filter: blur(14px); letter-spacing: 0.02em;
-      animation: panicGlow 3.8s ease-in-out infinite;
-      transition: transform 0.2s ease;
-    }
-    .panic-btn:hover, .panic-btn:active { transform: scale(1.1); }
-    @keyframes panicGlow {
-      0%,100% { box-shadow: 0 0 14px rgba(200,50,50,0.42); }
-      50%      { box-shadow: 0 0 30px rgba(200,50,50,0.78), 0 0 55px rgba(200,50,50,0.32); }
-    }
-
-    /* ═══════════════════════════════════════════════════════
        MISC UTILS
     ═══════════════════════════════════════════════════════ */
     .mt-sm  { margin-top: 0.65rem; }
@@ -614,7 +591,7 @@
     /* Completion card */
     .completion-card {
       margin-top: 1.5rem;
-      padding: 1.75rem 1.5rem;
+      padding: 1.75rem 1.25rem 1.5rem;
       border-radius: 24px;
       background: var(--g-bg);
       border: 1px solid rgba(82,183,136,0.25);
@@ -624,11 +601,45 @@
       animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     .cc-icon  { font-size: 2rem; margin-bottom: 0.75rem; }
-    .cc-title {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1.4rem; margin-bottom: 0.55rem;
+    .cc-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .cc-body  { font-size: 0.875rem; color: var(--muted); line-height: 1.65; margin-bottom: 1.25rem; }
+
+    /* Exploration grid inside completion card */
+    .explore-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0.6rem; margin-bottom: 1.25rem;
     }
-    .cc-body  { font-size: 0.875rem; color: var(--muted); line-height: 1.65; margin-bottom: 0.25rem; }
+    .explore-card {
+      padding: 1rem 0.75rem;
+      border-radius: 18px; cursor: pointer;
+      border: 1px solid var(--g-border);
+      background: var(--g-bg);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.4rem; text-align: center;
+      font-family: 'Montserrat', sans-serif; color: var(--text);
+      transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+    }
+    .explore-card:hover, .explore-card:active {
+      transform: translateY(-4px);
+      border-color: rgba(82,183,136,0.5);
+      box-shadow: 0 8px 28px rgba(45,106,79,0.28);
+    }
+    .explore-icon  { font-size: 1.5rem; line-height: 1; }
+    .explore-label { font-size: 0.75rem; font-weight: 500; }
+
+    /* Subtle back link */
+    .back-link {
+      display: block; margin-top: 0.25rem;
+      font-size: 0.78rem; color: var(--muted);
+      cursor: pointer; line-height: 1.5;
+      background: none; border: none;
+      font-family: 'Montserrat', sans-serif;
+      transition: color 0.2s ease;
+      text-decoration: underline; text-underline-offset: 3px;
+      text-decoration-color: rgba(232,237,232,0.2);
+    }
+    .back-link:hover { color: var(--sage-pale); text-decoration-color: var(--sage-pale); }
 
     /* Back tooltip */
     .back-tooltip {
@@ -795,10 +806,27 @@
     <div class="completion-card" id="b-complete" style="display:none">
       <div class="cc-icon">💚</div>
       <div class="cc-title">Well done.</div>
-      <div class="cc-body">Take a moment to notice how you feel.<br>Ready to keep going? Head back to your Menty-B chat and let me know how that felt.</div>
-      <button class="btn btn-primary" onclick="goBackToMentyB()">Back to Menty-B</button>
+      <div class="cc-body">Take a moment to notice how you feel.<br>Want to keep going? Explore what else might help:</div>
+      <div class="explore-grid">
+        <button class="explore-card" onclick="goTo('mood')">
+          <span class="explore-icon">💚</span>
+          <span class="explore-label">Check my mood</span>
+        </button>
+        <button class="explore-card" onclick="goTo('affirm')">
+          <span class="explore-icon">✨</span>
+          <span class="explore-label">Read an affirmation</span>
+        </button>
+        <button class="explore-card" onclick="goTo('sleep')">
+          <span class="explore-icon">🌙</span>
+          <span class="explore-label">Wind-down routine</span>
+        </button>
+        <button class="explore-card" onclick="goTo('crisis'); setTimeout(()=>{document.getElementById('ground-btn').scrollIntoView({behavior:'smooth',block:'center'});doGround();},350)">
+          <span class="explore-icon">🌿</span>
+          <span class="explore-label">Grounding exercise</span>
+        </button>
+      </div>
+      <button class="back-link" onclick="focusMentyB('back-tooltip-b')">All done for now? Switch back to your Menty-B tab 💚</button>
       <div class="back-tooltip" id="back-tooltip-b" style="display:none">Switch back to your Menty-B tab to continue 💚</div>
-      <button class="btn btn-ghost" onclick="anotherRound()">Do another round</button>
     </div>
   </div>
 
@@ -862,8 +890,26 @@
     <div class="completion-card" id="sleep-complete" style="display:none">
       <div class="cc-icon">🌙</div>
       <div class="cc-title">You're all set for rest.</div>
-      <div class="cc-body">If you need anything else, Menty-B is always here.</div>
-      <button class="btn btn-primary" onclick="goBackToMentyB()">Back to Menty-B</button>
+      <div class="cc-body">Want to keep going? Explore what else might help:</div>
+      <div class="explore-grid">
+        <button class="explore-card" onclick="goTo('mood')">
+          <span class="explore-icon">💚</span>
+          <span class="explore-label">Check my mood</span>
+        </button>
+        <button class="explore-card" onclick="goTo('affirm')">
+          <span class="explore-icon">✨</span>
+          <span class="explore-label">Read an affirmation</span>
+        </button>
+        <button class="explore-card" onclick="goTo('breathe')">
+          <span class="explore-icon">🌀</span>
+          <span class="explore-label">Breathing exercise</span>
+        </button>
+        <button class="explore-card" onclick="goTo('crisis'); setTimeout(()=>{document.getElementById('ground-btn').scrollIntoView({behavior:'smooth',block:'center'});doGround();},350)">
+          <span class="explore-icon">🌿</span>
+          <span class="explore-label">Grounding exercise</span>
+        </button>
+      </div>
+      <button class="back-link" onclick="focusMentyB('back-tooltip-s')">All done for now? Switch back to your Menty-B tab 💚</button>
       <div class="back-tooltip" id="back-tooltip-s" style="display:none">Switch back to your Menty-B tab to continue 💚</div>
     </div>
   </div>
@@ -940,8 +986,6 @@
   </button>
 </nav>
 
-<!-- ── Panic Button ──────────────────────────────────────── -->
-<button class="panic-btn" onclick="panicMode()">⚡ Panic</button>
 
 <script>
 /* ══════════════════════════════════════════════════════════
@@ -1322,24 +1366,6 @@ function doGround() {
 }
 
 /* ══════════════════════════════════════════════════════════
-   PANIC BUTTON
-══════════════════════════════════════════════════════════ */
-function panicMode() {
-  goTo('breathe', document.getElementById('nav-breathe'));
-  const card = document.getElementById('card-478');
-  setBreathe(card, '478');
-  const banner = document.getElementById('mode-banner');
-  banner.textContent  = 'Slow, deep breaths will help. You are safe right now.';
-  banner.style.display = 'block';
-  setTimeout(() => {
-    breathOn = true;
-    document.getElementById('b-btn').textContent = 'Pause';
-    runPhase(0);
-  }, 420);
-  haptic([100, 60, 100]);
-}
-
-/* ══════════════════════════════════════════════════════════
    HAPTIC
 ══════════════════════════════════════════════════════════ */
 function haptic(pattern) {
@@ -1349,17 +1375,11 @@ function haptic(pattern) {
 /* ══════════════════════════════════════════════════════════
    BACK TO MENTY-B
 ══════════════════════════════════════════════════════════ */
-function goBackToMentyB() {
+function focusMentyB(tooltipId) {
   if (window.opener && !window.opener.closed) {
     window.opener.focus();
-  } else if (document.referrer) {
-    window.location.href = document.referrer;
   } else {
-    // Show whichever tooltip is visible on screen
-    const tb = document.getElementById('back-tooltip-b');
-    const ts = document.getElementById('back-tooltip-s');
-    if (tb && tb.closest('.completion-card').style.display !== 'none') tb.style.display = 'block';
-    if (ts && ts.closest('.completion-card').style.display !== 'none') ts.style.display = 'block';
+    document.getElementById(tooltipId).style.display = 'block';
   }
 }
 
