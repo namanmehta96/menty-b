@@ -67,16 +67,9 @@
     .entry-meta { font-size: 11px; color: #9ca3af; margin-bottom: 4px; }
     .entry-text { font-size: 13px; line-height: 1.5; }
     .tag { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 500; }
-    .tag-calm { background: #E1F5EE; color: #0F6E56; }
-    .tag-anxious { background: #FAEEDA; color: #633806; }
-    .tag-sad { background: #E6F1FB; color: #0C447C; }
-    .tag-okay { background: #F1EFE8; color: #444441; }
-    .tag-panic { background: #FCEBEB; color: #791F1F; }
-    .ground-step { padding: 10px 14px; border-radius: 8px; border: 1px solid #e5e7eb; background: #fff; margin-bottom: 6px; transition: all 0.3s; }
-    .ground-step.active { border-color: #1D9E75; background: #E1F5EE; }
-    .ground-step.inactive { opacity: 0.4; }
-    .ground-title { font-size: 13px; font-weight: 500; }
-    .ground-sub { font-size: 12px; color: #0F6E56; margin-top: 3px; }
+    .tag-calm{background:#E1F5EE;color:#0F6E56} .tag-anxious{background:#FAEEDA;color:#633806}
+    .tag-sad{background:#E6F1FB;color:#0C447C} .tag-okay{background:#F1EFE8;color:#444441} .tag-panic{background:#FCEBEB;color:#791F1F}
+    .mode-banner { padding: 10px 14px; border-radius: 8px; background: #E1F5EE; border: 1px solid #9FE1CB; margin-bottom: 1rem; font-size: 13px; color: #0F6E56; font-weight: 500; display: none; }
   </style>
 </head>
 <body>
@@ -85,10 +78,9 @@
     <div class="logo"><div class="logo-inner"></div></div>
     <div><div class="app-name">Menty-B</div><div class="app-status">Here for you</div></div>
   </div>
-
   <nav>
     <button class="nav-btn active" onclick="showScreen('mood',this)">Mood check-in</button>
-    <button class="nav-btn" onclick="showScreen('breathe',this)">Breathing</button>
+    <button class="nav-btn" onclick="showScreen('breathe',this)" id="breathe-nav">Breathing</button>
     <button class="nav-btn" onclick="showScreen('affirm',this)">Affirmations</button>
     <button class="nav-btn" onclick="showScreen('sleep',this)">Wind-down</button>
     <button class="nav-btn" onclick="showScreen('crisis',this)">Crisis help</button>
@@ -114,13 +106,14 @@
   </div>
 
   <div id="screen-breathe" class="screen">
+    <div class="mode-banner" id="mode-banner"></div>
     <div class="section-title">Breathing exercises</div>
     <div class="section-label" style="margin-top:4px">Choose a technique</div>
     <div class="breathe-modes">
-      <div class="breathe-card selected" onclick="setBreath(this,'box')"><div class="bc-title">Box breathing</div><div class="bc-sub">4-4-4-4 · stress relief</div></div>
-      <div class="breathe-card" onclick="setBreath(this,'478')"><div class="bc-title">4-7-8</div><div class="bc-sub">Calms panic fast</div></div>
-      <div class="breathe-card" onclick="setBreath(this,'calm')"><div class="bc-title">Calm breath</div><div class="bc-sub">5-7 · parasympathetic</div></div>
-      <div class="breathe-card" onclick="setBreath(this,'resonance')"><div class="bc-title">Resonance</div><div class="bc-sub">6-6 · HRV boost</div></div>
+      <div class="breathe-card selected" id="card-box" onclick="setBreath(this,'box')"><div class="bc-title">Box breathing</div><div class="bc-sub">4-4-4-4 · stress relief</div></div>
+      <div class="breathe-card" id="card-478" onclick="setBreath(this,'478')"><div class="bc-title">4-7-8</div><div class="bc-sub">Calms panic fast</div></div>
+      <div class="breathe-card" id="card-calm" onclick="setBreath(this,'calm')"><div class="bc-title">Calm breath</div><div class="bc-sub">5-7 · parasympathetic</div></div>
+      <div class="breathe-card" id="card-resonance" onclick="setBreath(this,'resonance')"><div class="bc-title">Resonance</div><div class="bc-sub">6-6 · HRV boost</div></div>
     </div>
     <div class="circle-wrap">
       <div class="outer-ring">
@@ -177,7 +170,7 @@
     </div>
     <div class="crisis-section">
       <div class="crisis-section-title">🇫🇷 France — gratuit 24h/24</div>
-      <div class="crisis-row"><div><div class="crisis-name">Prévention du Suicide</div><div class="crisis-desc">Professionels de santé, confidentiel</div></div><div class="crisis-num">3114</div></div>
+      <div class="crisis-row"><div><div class="crisis-name">Prévention du Suicide</div><div class="crisis-desc">Professionnels de santé, confidentiel</div></div><div class="crisis-num">3114</div></div>
       <div class="crisis-row"><div><div class="crisis-name">SOS Amitié</div><div class="crisis-desc">Écoute bienveillante, anonyme</div></div><div class="crisis-num">09 72 39 40 50</div></div>
       <div class="crisis-row"><div><div class="crisis-name">Fil Santé Jeunes</div><div class="crisis-desc">Pour les moins de 25 ans</div></div><div class="crisis-num">0800 235 236</div></div>
     </div>
@@ -194,26 +187,149 @@
 </div>
 
 <script>
-const breathModes={box:{phases:[{n:'Breathe in',d:4},{n:'Hold',d:4},{n:'Breathe out',d:4},{n:'Hold',d:4}],tip:'Equal parts in, hold, out, hold — great for acute stress.'},'478':{phases:[{n:'Breathe in',d:4},{n:'Hold',d:7},{n:'Breathe out',d:8}],tip:'Inhale 4, hold 7, exhale 8 — calms panic quickly.'},calm:{phases:[{n:'Breathe in',d:5},{n:'Breathe out',d:7}],tip:'Longer exhale activates your rest-and-digest system.'},resonance:{phases:[{n:'Breathe in',d:6},{n:'Breathe out',d:6}],tip:'Resonance breathing boosts heart rate variability.'}};
-const affirmations={anxiety:['This feeling is temporary. It will pass.','I am safe right now. My body is doing its best.','I have survived hard moments before. I will survive this.','Anxiety is not danger. I can breathe through this.','I choose to focus on what I can control.'],confidence:['I am enough, exactly as I am.','I trust myself to handle whatever comes.','My voice matters. My perspective is valid.','I grow stronger with every challenge I face.','I deserve good things.'],calm:['Peace is always available to me.','I release what I cannot control.','Right now, in this moment, I am okay.','I welcome stillness into my body and mind.','I breathe in calm and breathe out tension.'],grief:['It is okay to feel what I am feeling.','Grief is love with nowhere to go.','I give myself permission to heal at my own pace.','My pain is real and my healing is real.','I am not alone in this.']};
-const groundScript=[{n:'5 things you can SEE',c:'Look around slowly. Name each one.'},{n:'4 things you can TOUCH',c:'Feel the texture. Stay with the sensation.'},{n:'3 things you can HEAR',c:'Listen past the noise in your head.'},{n:'2 things you can SMELL',c:'Even a faint scent counts.'},{n:'1 thing you can TASTE',c:'Notice what is in your mouth right now.'}];
-let currentMode='box',breathRunning=false,breathCycles=0,breathTimer=null,breathPhaseIdx=0,affirmCat='anxiety',affirmIdx=0,entries=[],groundIdx=-1;
-function showScreen(id,btn){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');if(btn)btn.classList.add('active');if(id==='affirm')showAffirmation();}
-function selectMood(el,key,label){document.querySelectorAll('.mood-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');document.getElementById('mood-followup').style.display='block';}
-function saveEntry(){const mood=document.querySelector('.mood-card.selected');const text=document.getElementById('journal-input').value.trim();if(!mood)return;const label=mood.querySelector('.mood-label').textContent;entries.unshift({mood:label,key:label.toLowerCase(),text,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});document.getElementById('journal-input').value='';renderEntries();}
-function renderEntries(){document.getElementById('journal-entries').innerHTML=entries.slice(0,4).map(e=>`<div class="entry-card"><div class="entry-meta">${e.time} · <span class="tag tag-${e.key}">${e.mood}</span></div><div class="entry-text">${e.text||'<em style="color:#9ca3af">No note added</em>'}</div></div>`).join('');}
-function setBreath(el,mode){currentMode=mode;document.querySelectorAll('.breathe-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');document.getElementById('b-tip').textContent=breathModes[mode].tip;resetBreathe();}
-function toggleBreathe(){if(breathRunning){breathRunning=false;document.getElementById('b-btn').textContent='Resume';clearTimeout(breathTimer);}else{breathRunning=true;document.getElementById('b-btn').textContent='Pause';runPhase(breathPhaseIdx);}}
-function resetBreathe(){breathRunning=false;breathCycles=0;breathPhaseIdx=0;clearTimeout(breathTimer);document.getElementById('b-btn').textContent='Start';document.getElementById('b-phase').textContent='Ready';document.getElementById('b-count').textContent='—';document.getElementById('b-cycles').textContent='Cycle 0';const p=document.getElementById('b-prog');p.style.transition='none';p.style.width='0%';const c=document.getElementById('breath-circle');c.style.transform='scale(1)';c.style.background='#1D9E75';}
-function runPhase(idx){if(!breathRunning)return;breathPhaseIdx=idx;const m=breathModes[currentMode];const ph=m.phases[idx];document.getElementById('b-phase').textContent=ph.n;document.getElementById('b-count').textContent=ph.d;const colors={'Breathe in':'#1D9E75','Hold':'#0F6E56','Breathe out':'#085041'};const scales={'Breathe in':1.25,'Hold':1.25,'Breathe out':0.85};const c=document.getElementById('breath-circle');c.style.transition=`transform ${ph.d}s ease-in-out,background 0.4s`;c.style.transform=`scale(${scales[ph.n]||1})`;c.style.background=colors[ph.n]||'#1D9E75';const p=document.getElementById('b-prog');p.style.transition='none';p.style.width='0%';requestAnimationFrame(()=>requestAnimationFrame(()=>{p.style.transition=`width ${ph.d}s linear`;p.style.width='100%';}));let rem=ph.d;const tick=()=>{if(!breathRunning)return;document.getElementById('b-count').textContent=rem;if(rem>0){breathTimer=setTimeout(()=>{rem--;tick();},1000);}};tick();breathTimer=setTimeout(()=>{if(!breathRunning)return;const next=idx+1;if(next>=m.phases.length){breathCycles++;document.getElementById('b-cycles').textContent=`Cycle ${breathCycles}`;runPhase(0);}else runPhase(next);},ph.d*1000);}
-function setAffirmCat(el,cat){affirmCat=cat;affirmIdx=0;document.querySelectorAll('#screen-affirm .nav-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');showAffirmation();}
+const breathModes={
+  box:{phases:[{n:'Breathe in',d:4},{n:'Hold',d:4},{n:'Breathe out',d:4},{n:'Hold',d:4}],tip:'Equal parts in, hold, out, hold — great for stress.'},
+  '478':{phases:[{n:'Breathe in',d:4},{n:'Hold',d:7},{n:'Breathe out',d:8}],tip:'Inhale 4, hold 7, exhale 8 — calms panic quickly.'},
+  calm:{phases:[{n:'Breathe in',d:5},{n:'Breathe out',d:7}],tip:'Longer exhale activates your rest-and-digest system.'},
+  resonance:{phases:[{n:'Breathe in',d:6},{n:'Breathe out',d:6}],tip:'Resonance breathing boosts heart rate variability.'}
+};
+const bannerText={
+  box:'Menty-B recommends Box Breathing for your stress right now',
+  '478':'Menty-B recommends 4-7-8 Breathing for your panic right now',
+  calm:'Menty-B recommends Calm Breath for your anxiety right now',
+  resonance:'Menty-B recommends Resonance Breathing to help you sleep'
+};
+const affirmations={
+  anxiety:['This feeling is temporary. It will pass.','I am safe right now. My body is doing its best.','I have survived hard moments before. I will survive this.','Anxiety is not danger. I can breathe through this.'],
+  confidence:['I am enough, exactly as I am.','I trust myself to handle whatever comes.','My voice matters. My perspective is valid.','I deserve good things.'],
+  calm:['Peace is always available to me.','I release what I cannot control.','Right now, in this moment, I am okay.','I breathe in calm and breathe out tension.'],
+  grief:['It is okay to feel what I am feeling.','Grief is love with nowhere to go.','I give myself permission to heal at my own pace.','I am not alone in this.']
+};
+const groundScript=[
+  {n:'5 things you can SEE',c:'Look around slowly. Name each one.'},
+  {n:'4 things you can TOUCH',c:'Feel the texture. Stay with the sensation.'},
+  {n:'3 things you can HEAR',c:'Listen past the noise in your head.'},
+  {n:'2 things you can SMELL',c:'Even a faint scent counts.'},
+  {n:'1 thing you can TASTE',c:'Notice what is in your mouth right now.'}
+];
+
+let currentMode='box',breathRunning=false,breathCycles=0,breathTimer=null,breathPhaseIdx=0;
+let affirmCat='anxiety',affirmIdx=0,entries=[],groundIdx=-1;
+
+// ── URL parameter auto-select ──────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get('mode');
+  if (mode && breathModes[mode]) {
+    showScreen('breathe', document.getElementById('breathe-nav'));
+    const card = document.getElementById('card-' + mode);
+    if (card) setBreath(card, mode);
+    const banner = document.getElementById('mode-banner');
+    banner.textContent = bannerText[mode] || '';
+    banner.style.display = 'block';
+  }
+  showAffirmation();
+});
+
+function showScreen(id,btn){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id==='affirm') showAffirmation();
+}
+function selectMood(el,key,label){
+  document.querySelectorAll('.mood-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('mood-followup').style.display='block';
+}
+function saveEntry(){
+  const mood=document.querySelector('.mood-card.selected');
+  const text=document.getElementById('journal-input').value.trim();
+  if(!mood) return;
+  const label=mood.querySelector('.mood-label').textContent;
+  entries.unshift({mood:label,key:label.toLowerCase(),text,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
+  document.getElementById('journal-input').value='';
+  renderEntries();
+}
+function renderEntries(){
+  document.getElementById('journal-entries').innerHTML=entries.slice(0,4).map(e=>`
+    <div class="entry-card"><div class="entry-meta">${e.time} · <span class="tag tag-${e.key}">${e.mood}</span></div>
+    <div class="entry-text">${e.text||'<em style="color:#9ca3af">No note added</em>'}</div></div>`).join('');
+}
+function setBreath(el,mode){
+  currentMode=mode;
+  document.querySelectorAll('.breathe-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('b-tip').textContent=breathModes[mode].tip;
+  resetBreathe();
+}
+function toggleBreathe(){
+  if(breathRunning){breathRunning=false;document.getElementById('b-btn').textContent='Resume';clearTimeout(breathTimer);}
+  else{breathRunning=true;document.getElementById('b-btn').textContent='Pause';runPhase(breathPhaseIdx);}
+}
+function resetBreathe(){
+  breathRunning=false;breathCycles=0;breathPhaseIdx=0;clearTimeout(breathTimer);
+  document.getElementById('b-btn').textContent='Start';
+  document.getElementById('b-phase').textContent='Ready';
+  document.getElementById('b-count').textContent='—';
+  document.getElementById('b-cycles').textContent='Cycle 0';
+  const p=document.getElementById('b-prog');p.style.transition='none';p.style.width='0%';
+  const c=document.getElementById('breath-circle');c.style.transform='scale(1)';c.style.background='#1D9E75';
+}
+function runPhase(idx){
+  if(!breathRunning) return;
+  breathPhaseIdx=idx;
+  const m=breathModes[currentMode];
+  const ph=m.phases[idx];
+  document.getElementById('b-phase').textContent=ph.n;
+  document.getElementById('b-count').textContent=ph.d;
+  const colors={'Breathe in':'#1D9E75','Hold':'#0F6E56','Breathe out':'#085041'};
+  const scales={'Breathe in':1.25,'Hold':1.25,'Breathe out':0.85};
+  const c=document.getElementById('breath-circle');
+  c.style.transition=`transform ${ph.d}s ease-in-out,background 0.4s`;
+  c.style.transform=`scale(${scales[ph.n]||1})`;
+  c.style.background=colors[ph.n]||'#1D9E75';
+  const p=document.getElementById('b-prog');
+  p.style.transition='none';p.style.width='0%';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{p.style.transition=`width ${ph.d}s linear`;p.style.width='100%';}));
+  let rem=ph.d;
+  const tick=()=>{if(!breathRunning)return;document.getElementById('b-count').textContent=rem;if(rem>0){breathTimer=setTimeout(()=>{rem--;tick();},1000);}};
+  tick();
+  breathTimer=setTimeout(()=>{
+    if(!breathRunning)return;
+    const next=idx+1;
+    if(next>=m.phases.length){breathCycles++;document.getElementById('b-cycles').textContent=`Cycle ${breathCycles}`;runPhase(0);}
+    else runPhase(next);
+  },ph.d*1000);
+}
+function setAffirmCat(el,cat){
+  affirmCat=cat;affirmIdx=0;
+  document.querySelectorAll('#screen-affirm .nav-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');showAffirmation();
+}
 function showAffirmation(){document.getElementById('affirm-text').textContent=affirmations[affirmCat][affirmIdx%affirmations[affirmCat].length];}
 function nextAffirmation(){affirmIdx++;showAffirmation();}
-function toggleStep(el,n){el.classList.toggle('done');document.getElementById('dot'+n).textContent=el.classList.contains('done')?'✓':n;document.getElementById('sleep-progress').textContent=`${document.querySelectorAll('.sleep-step.done').length} of 6 complete`;}
-function resetSleep(){document.querySelectorAll('.sleep-step').forEach(s=>s.classList.remove('done'));for(let i=1;i<=6;i++)document.getElementById('dot'+i).textContent=i;document.getElementById('sleep-progress').textContent='0 of 6 complete';}
-function renderGround(){document.getElementById('ground-steps').innerHTML=groundScript.map((s,i)=>`<div class="ground-step ${i===groundIdx?'active':i<groundIdx?'':'inactive'}"><div class="ground-title">${s.n}</div>${i===groundIdx?`<div class="ground-sub">${s.c}</div>`:''}</div>`).join('');}
-function handleGround(){if(groundIdx===-1){groundIdx=0;document.getElementById('ground-btn').textContent='Next step';renderGround();}else{groundIdx++;if(groundIdx>=groundScript.length){groundIdx=-1;document.getElementById('ground-btn').textContent='Start 5-4-3-2-1 grounding';document.getElementById('ground-steps').innerHTML='';}else renderGround();}}
-showAffirmation();
+function toggleStep(el,n){
+  el.classList.toggle('done');
+  document.getElementById('dot'+n).textContent=el.classList.contains('done')?'✓':n;
+  document.getElementById('sleep-progress').textContent=`${document.querySelectorAll('.sleep-step.done').length} of 6 complete`;
+}
+function resetSleep(){
+  document.querySelectorAll('.sleep-step').forEach(s=>s.classList.remove('done'));
+  for(let i=1;i<=6;i++) document.getElementById('dot'+i).textContent=i;
+  document.getElementById('sleep-progress').textContent='0 of 6 complete';
+}
+function renderGround(){
+  document.getElementById('ground-steps').innerHTML=groundScript.map((s,i)=>`
+    <div style="padding:10px 14px;border-radius:8px;border:1px solid ${i===groundIdx?'#1D9E75':'#e5e7eb'};background:${i===groundIdx?'#E1F5EE':'#fff'};opacity:${i>groundIdx?0.4:1};margin-bottom:6px;transition:all 0.3s">
+      <div style="font-size:13px;font-weight:500;color:${i===groundIdx?'#085041':'#1a1a1a'}">${s.n}</div>
+      ${i===groundIdx?`<div style="font-size:12px;color:#0F6E56;margin-top:3px">${s.c}</div>`:''}</div>`).join('');
+}
+function handleGround(){
+  if(groundIdx===-1){groundIdx=0;document.getElementById('ground-btn').textContent='Next step';renderGround();}
+  else{groundIdx++;if(groundIdx>=groundScript.length){groundIdx=-1;document.getElementById('ground-btn').textContent='Start 5-4-3-2-1 grounding';document.getElementById('ground-steps').innerHTML='';}else renderGround();}
+}
 </script>
 </body>
 </html>
