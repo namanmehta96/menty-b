@@ -180,7 +180,7 @@
     .serif { font-family: 'Montserrat', sans-serif; }
 
     .page-head {
-      padding: 2rem 0 0.85rem;
+      padding: 3.25rem 0 0.85rem;
       display: flex; align-items: flex-start; justify-content: space-between;
       gap: 0.5rem;
     }
@@ -422,17 +422,27 @@
       transition: stroke 0.55s ease;
     }
 
+    .svg-wrap { cursor: pointer; }
     .breath-lbl-wrap {
       position: absolute; top: 50%; left: 50%;
       transform: translate(-50%,-50%);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       text-align: center; pointer-events: none;
-      gap: 2px;
+      gap: 1px;
+    }
+    .b-tap-hint {
+      font-size: 0.68rem; color: rgba(255,255,255,0.45);
+      letter-spacing: 0.04em; line-height: 1.3;
+      margin-bottom: 2px;
     }
     .b-phase {
-      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em;
-      text-transform: uppercase; color: rgba(255,255,255,0.6);
+      font-size: 1rem; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; color: rgba(255,255,255,0.82);
+    }
+    .b-phase.b-phase-active {
+      font-size: 0.7rem; letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.6);
     }
     .b-count {
       font-family: 'Montserrat', sans-serif;
@@ -593,8 +603,8 @@
     .nav-btn.active .nav-icon {
       filter: drop-shadow(0 0 7px rgba(82,183,136,0.75));
     }
-    .nav-icon  { font-size: 1.28rem; line-height: 1; }
-    .nav-label { font-size: 0.585rem; font-weight: 500; letter-spacing: 0.01em; }
+    .nav-icon  { font-size: 1.15rem; line-height: 1; }
+    .nav-label { font-size: 0.545rem; font-weight: 500; letter-spacing: 0.01em; }
 
     /* ═══════════════════════════════════════════════════════
        MISC UTILS
@@ -718,6 +728,134 @@
     .wf-body  { font-size: 0.9375rem; color: var(--muted); line-height: 1.72; }
 
     /* ═══════════════════════════════════════════════════════
+       HOME SCREEN (orbit layout)
+    ═══════════════════════════════════════════════════════ */
+    .home-hero {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 3.5rem 1rem 2rem;
+      min-height: calc(100dvh - 80px);
+      text-align: center;
+    }
+    .home-brand {
+      display: flex; align-items: center; gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .home-brand-dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--sage-light);
+      box-shadow: 0 0 10px rgba(82,183,136,0.65);
+    }
+    .home-brand-name {
+      font-size: 1.05rem; font-weight: 700; letter-spacing: 0.06em;
+      color: var(--sage-pale);
+    }
+    .home-tagline {
+      font-size: 1.3rem; font-weight: 600; line-height: 1.45;
+      color: var(--text); margin-bottom: 1.85rem; max-width: 260px;
+    }
+    .home-orbit {
+      position: relative; width: 290px; height: 290px; flex-shrink: 0;
+    }
+    /* Subtle dashed orbit ring */
+    .home-orbit::before {
+      content: ''; position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+      width: 232px; height: 232px; border-radius: 50%;
+      border: 1px dashed rgba(82,183,136,0.18);
+      pointer-events: none;
+    }
+    .home-center-orb {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+      width: 90px; height: 90px; border-radius: 50%;
+      background: radial-gradient(circle at 38% 35%, #74c69d, #2d6a4f);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      cursor: pointer; z-index: 2;
+      animation: orbPulse 4.5s ease-in-out infinite;
+    }
+    .home-center-inner {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.55);
+      animation: orbInner 4.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    .home-center-label {
+      font-size: 0.52rem; font-weight: 600; text-align: center;
+      color: rgba(255,255,255,0.82); margin-top: 5px;
+      line-height: 1.3; max-width: 72px; letter-spacing: 0.01em;
+    }
+    .home-icon {
+      position: absolute; width: 58px;
+      left: calc(50% + 116px * sin(var(--a)) - 29px);
+      top:  calc(50% - 116px * cos(var(--a)) - 29px);
+      display: flex; flex-direction: column;
+      align-items: center; gap: 4px;
+      background: var(--g-bg); border: 1px solid var(--g-border);
+      border-radius: 18px; padding: 0.6rem 0.2rem 0.42rem;
+      cursor: pointer; font-family: 'Montserrat', sans-serif;
+      color: var(--muted);
+      transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    }
+    .home-icon:hover, .home-icon:active {
+      background: rgba(82,183,136,0.12);
+      border-color: rgba(82,183,136,0.52);
+      color: var(--sage-pale); transform: scale(1.1);
+      box-shadow: 0 0 22px rgba(82,183,136,0.32);
+    }
+    .hi-icon { font-size: 1.3rem; line-height: 1; }
+    .hi-lbl  { font-size: 0.56rem; font-weight: 600; letter-spacing: 0.02em; }
+    /* Flying icon (click animation) */
+    .home-icon-fly {
+      position: fixed; z-index: 999; pointer-events: none;
+      font-size: 1.4rem; width: 42px; height: 42px;
+      display: flex; align-items: center; justify-content: center;
+      transition: left 0.38s cubic-bezier(0.22,1,0.36,1),
+                  top  0.38s cubic-bezier(0.22,1,0.36,1),
+                  opacity 0.38s ease, transform 0.38s ease;
+    }
+    .home-hint {
+      font-size: 0.7rem; color: var(--muted); margin-top: 1.5rem;
+      line-height: 1.55; max-width: 230px;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       DESKTOP SIDE PANEL (≥ 768px)
+    ═══════════════════════════════════════════════════════ */
+    .desktop-panel {
+      display: none;
+      position: fixed; top: 0; bottom: 0;
+      left: 0; right: calc(50% + 210px);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 1.35rem; padding: 2rem;
+      background: rgba(6,10,22,0.55);
+      border-right: 1px solid rgba(82,183,136,0.1);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      pointer-events: none;
+    }
+    .dp-orb {
+      width: 76px; height: 76px; border-radius: 50%;
+      background: radial-gradient(circle at 38% 35%, #74c69d, #2d6a4f);
+      display: flex; align-items: center; justify-content: center;
+      animation: orbPulse 6s ease-in-out infinite;
+      box-shadow: 0 0 50px rgba(45,106,79,0.4);
+    }
+    .dp-orb-inner {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.55);
+      animation: orbInner 6s ease-in-out infinite;
+    }
+    .dp-brand { font-size: 1.25rem; font-weight: 700; color: var(--sage-pale); letter-spacing: 0.05em; }
+    .dp-tagline { font-size: 0.875rem; color: var(--muted); text-align: center; line-height: 1.65; max-width: 200px; }
+    @media (min-width: 768px) {
+      .desktop-panel { display: flex; }
+      .app { max-width: 420px; }
+      .bottom-nav { width: 420px; }
+    }
+
+    /* ═══════════════════════════════════════════════════════
        LANGUAGE TOGGLE
     ═══════════════════════════════════════════════════════ */
     .lang-toggle {
@@ -808,36 +946,52 @@
   <div class="aurora"></div>
 </div>
 
+<!-- ── Desktop side panel (hidden on mobile) ─────────────── -->
+<div class="desktop-panel" id="desktop-panel">
+  <div class="dp-orb"><div class="dp-orb-inner"></div></div>
+  <div class="dp-brand">Menty-B</div>
+  <div class="dp-tagline" id="dp-tagline">Your companion for serenity</div>
+</div>
+
 <div class="app">
 
-  <!-- ══ WELCOME ════════════════════════════════════════════ -->
+  <!-- ══ HOME ══════════════════════════════════════════════ -->
   <div id="screen-welcome" class="screen active">
-    <div class="welcome-hero">
-      <div class="logo-orb" onclick="goTo('welcome')" style="cursor:pointer"><div class="logo-orb-inner"></div></div>
-      <h1 class="welcome-title">Hey, I'm Menty-B</h1>
-      <p class="welcome-tag">A quiet space, just for you.<br>Breathe. Check in. Feel a little better.</p>
-    </div>
-    <div class="welcome-grid">
-      <button class="w-card wc-g" onclick="goTo('mood')">
-        <div class="w-card-icon">💚</div>
-        <div class="w-card-title">Check In</div>
-        <div class="w-card-desc">How are you feeling right now?</div>
-      </button>
-      <button class="w-card wc-g" onclick="goTo('breathe')">
-        <div class="w-card-icon">🌀</div>
-        <div class="w-card-title">Breathe</div>
-        <div class="w-card-desc">Guided breathing exercises</div>
-      </button>
-      <button class="w-card wc-a" onclick="goTo('sleep')">
-        <div class="w-card-icon">🌙</div>
-        <div class="w-card-title">Wind Down</div>
-        <div class="w-card-desc">Evening routine for better sleep</div>
-      </button>
-      <button class="w-card wc-c" onclick="goTo('crisis')">
-        <div class="w-card-icon">📞</div>
-        <div class="w-card-title">Crisis Help</div>
-        <div class="w-card-desc">You are not alone. Reach out.</div>
-      </button>
+    <div class="home-hero">
+      <div class="home-brand">
+        <span class="home-brand-dot"></span>
+        <span class="home-brand-name">Menty-B</span>
+      </div>
+      <p class="home-tagline" id="home-tagline">You are not alone. I'm here.</p>
+
+      <div class="home-orbit">
+        <!-- Central orb — tapping goes to Mood -->
+        <div class="home-center-orb" onclick="homeNav('mood','nav-mood')">
+          <div class="home-center-inner"></div>
+          <div class="home-center-label" id="home-orb-label">How are you feeling?</div>
+        </div>
+        <!-- Orbital icons (clockwise from top) -->
+        <button class="home-icon" style="--a:0deg"   onclick="homeNav('mood',   'nav-mood')">
+          <span class="hi-icon">💚</span><span class="hi-lbl" id="hi-lbl-mood">Mood</span>
+        </button>
+        <button class="home-icon" style="--a:60deg"  onclick="homeNav('breathe','nav-breathe')">
+          <span class="hi-icon">🌀</span><span class="hi-lbl" id="hi-lbl-breathe">Breathe</span>
+        </button>
+        <button class="home-icon" style="--a:120deg" onclick="homeNav('affirm', 'nav-affirm')">
+          <span class="hi-icon">✨</span><span class="hi-lbl" id="hi-lbl-affirm">Affirm</span>
+        </button>
+        <button class="home-icon" style="--a:180deg" onclick="homeNav('sleep',  'nav-sleep')">
+          <span class="hi-icon">🌙</span><span class="hi-lbl" id="hi-lbl-sleep">Wind</span>
+        </button>
+        <button class="home-icon" style="--a:240deg" onclick="homeNav('ground', 'nav-ground')">
+          <span class="hi-icon">🌿</span><span class="hi-lbl" id="hi-lbl-ground">Ground</span>
+        </button>
+        <button class="home-icon" style="--a:300deg" onclick="homeNav('crisis', 'nav-crisis')">
+          <span class="hi-icon">📞</span><span class="hi-lbl" id="hi-lbl-crisis">Help</span>
+        </button>
+      </div>
+
+      <p class="home-hint" id="home-hint">Sent here by Menty-B? Check the link you received.</p>
     </div>
   </div>
 
@@ -909,7 +1063,7 @@
 
     <div class="b-prestart" id="b-prestart">Press Start and follow the circle</div>
     <div class="circle-area">
-      <div class="svg-wrap">
+      <div class="svg-wrap" onclick="toggleBreathe()">
         <svg viewBox="0 0 230 230" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <filter id="orbGlow" x="-40%" y="-40%" width="180%" height="180%">
@@ -942,8 +1096,9 @@
             fill="#52b788"/>
         </svg>
         <div class="breath-lbl-wrap">
-          <div class="b-phase" id="b-phase">Ready</div>
-          <div class="b-count" id="b-count">—</div>
+          <div class="b-tap-hint" id="b-tap-hint">tap to start</div>
+          <div class="b-phase" id="b-phase">READY</div>
+          <div class="b-count" id="b-count" style="display:none"></div>
         </div>
       </div>
       <div class="b-cycles" id="b-cycles"></div>
@@ -1187,6 +1342,9 @@
 
 <!-- ── Bottom Navigation ─────────────────────────────────── -->
 <nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-welcome" onclick="goTo('welcome',this)">
+    <span class="nav-icon">🏠</span><span class="nav-label" id="nav-lbl-home">Home</span>
+  </button>
   <button class="nav-btn" id="nav-mood" onclick="goTo('mood',this)">
     <span class="nav-icon">💚</span><span class="nav-label">Mood</span>
   </button>
@@ -1251,6 +1409,12 @@ const AFFIRMATIONS = {
   confidence: ['I am enough, exactly as I am.','I trust myself to handle whatever comes.','My voice matters. My perspective is valid.','I deserve good things.','I grow a little braver every single day.'],
   calm:       ['Peace is always available to me.','I release what I cannot control.','Right now, in this moment, I am okay.','I breathe in calm and breathe out tension.','Stillness is not emptiness — it is rest.'],
   grief:      ['It is okay to feel what I am feeling.','Grief is love with nowhere to go.','I give myself permission to heal at my own pace.','I am not alone in this.','Even in loss, I carry them with me.']
+};
+const AFFIRMATIONS_FR = {
+  anxiety:    ['N\'anticipez pas ce qui n\'arrivera peut-être pas. — Proverbe','Ça va passer. Ça passe toujours. — Dicton populaire','Respire. Tu es ici. Tu es en vie. — Anonyme','Un pas à la fois. — Proverbe français'],
+  confidence: ['Sois toi-même, tous les autres sont déjà pris. — Oscar Wilde','On peut toujours plus que ce que l\'on croit pouvoir. — Joseph Kessel','J\'ai commencé à être l\'ami de moi-même. — Sénèque','Ma force réside dans ma ténacité. — Louis Pasteur'],
+  calm:       ['La mer ne reflète la lumière que lorsqu\'elle est apaisée. — Proverbe','Un sourire coûte moins cher que l\'électricité, mais donne autant de lumière. — L\'Abbé Pierre','Cherche un arbre et laisse-le t\'apprendre le calme. — Proverbe','Rien ne presse. — Dicton français'],
+  grief:      ['Pleure si tu en as besoin. C\'est normal. — Anonyme','Le chagrin est le prix de l\'amour. — Proverbe','Tu n\'es pas seul dans ce que tu traverses. — Anonyme','Prends le temps qu\'il te faut. — Dicton populaire']
 };
 
 const WF_COPY = {
@@ -1366,7 +1530,24 @@ const STRINGS = {
     // Explore cards
     exploreMood:'Check my mood',   exploreAffirm:'Read an affirmation',
     exploreSleep:'Wind-down routine', exploreBreathe:'Breathing exercise',
-    exploreGround:'Grounding exercise'
+    exploreGround:'Grounding exercise',
+    // Breathing card subtitles
+    bcDescBox:'4-4-4-4 · stress relief', bcDesc478:'Calms panic fast',
+    bcDescCalm:'5-7 · parasympathetic',  bcDescResonance:'6-6 · HRV boost',
+    // Welcome flow
+    wfStep1Title:'You\'re in the right place.',
+    wfStep1Body:'Menty-B sent you here. Take a breath.<br>We\'ll do this together.',
+    wfStep1Btn:'I\'m ready', wfStep2Btn:'Let\'s begin',
+    wfCopy: null,
+    // Home screen
+    homeTagline:'You are not alone. I\'m here.',
+    homeOrbLabel:'How are you feeling?',
+    homeHint:'Sent here by Menty-B? Check the link you received.',
+    homeIconMood:'Mood', homeIconBreathe:'Breathe', homeIconAffirm:'Affirm',
+    homeIconSleep:'Wind', homeIconGround:'Ground',  homeIconCrisis:'Help',
+    navHome:'Home',
+    // Desktop panel
+    dpTagline:'Your companion for serenity'
   },
 
   fr: {
@@ -1464,7 +1645,29 @@ const STRINGS = {
     crisisGroundBtn:'Essayez l\'exercice d\'ancrage 5-4-3-2-1 →',
     exploreMood:'Vérifier mon humeur',   exploreAffirm:'Lire une affirmation',
     exploreSleep:'Routine du soir',      exploreBreathe:'Exercice de respiration',
-    exploreGround:'Exercice d\'ancrage'
+    exploreGround:'Exercice d\'ancrage',
+    // Breathing card subtitles
+    bcDescBox:'4-4-4-4 · soulagement du stress', bcDesc478:'Calme la panique rapidement',
+    bcDescCalm:'5-7 · système nerveux parasympathique', bcDescResonance:'6-6 · améliore la variabilité cardiaque',
+    // Welcome flow
+    wfStep1Title:'Vous êtes au bon endroit.',
+    wfStep1Body:'Menty-B vous a envoyé ici. Prenez une grande inspiration.<br>On est là ensemble.',
+    wfStep1Btn:'Je suis prêt', wfStep2Btn:'On y va',
+    wfCopy:{
+      box:      { icon:'🌊', title:'Respiration en Carré', body:'Inspirez 4, retenez 4, expirez 4, pause 4. Suivez simplement le cercle.' },
+      '478':    { icon:'🌿', title:'Respiration 4-7-8',    body:'C\'est la respiration 4-7-8. Inspirez 4, retenez 7, expirez 8. Suivez simplement le cercle.' },
+      calm:     { icon:'🍃', title:'Respiration Calme',    body:'Une expiration plus longue pour apaiser le corps.' },
+      resonance:{ icon:'〰️', title:'Résonance',           body:'Un rythme lent et régulier pour calmer le système nerveux.' }
+    },
+    // Home screen
+    homeTagline:'Vous n\'êtes pas seul. Je suis là.',
+    homeOrbLabel:'Comment vous sentez-vous ?',
+    homeHint:'Envoyé ici par Menty-B ? Consultez le lien reçu.',
+    homeIconMood:'Humeur', homeIconBreathe:'Respirer', homeIconAffirm:'Affirmer',
+    homeIconSleep:'Soir',  homeIconGround:'Ancrage',   homeIconCrisis:'Aide',
+    navHome:'Accueil',
+    // Desktop panel
+    dpTagline:'Votre compagnon de sérénité'
   }
 };
 
@@ -1615,6 +1818,9 @@ function toggleBreathe() {
     btn.textContent = tr('bBtnPause');
     btn.classList.remove('btn-pulse');
     document.getElementById('b-prestart').style.display = 'none';
+    document.getElementById('b-tap-hint').style.display = 'none';
+    document.getElementById('b-count').style.display = '';
+    document.getElementById('b-phase').classList.add('b-phase-active');
     runPhase(breathPhaseIdx);
   }
 }
@@ -1626,8 +1832,11 @@ function resetBreathe() {
   btn.textContent = tr('bBtnStart');
   btn.classList.add('btn-pulse');
   btn.style.display = '';
-  document.getElementById('b-phase').textContent  = tr('bPhaseReady');
-  document.getElementById('b-count').textContent  = '—';
+  const bPhase = document.getElementById('b-phase');
+  bPhase.textContent = tr('bPhaseReady').toUpperCase();
+  bPhase.classList.remove('b-phase-active');
+  document.getElementById('b-tap-hint').style.display = '';
+  document.getElementById('b-count').style.display = 'none';
   document.getElementById('b-cycles').textContent = '';
   document.getElementById('b-cycles').style.color = '';
   document.getElementById('b-complete').style.display = 'none';
@@ -1644,8 +1853,13 @@ function showBreathComplete() {
   clearTimers();
   setOrb(1, '#52b788', 1.5);
   syncBg('idle');
-  document.getElementById('b-phase').textContent = tr('bPhaseDone');
-  document.getElementById('b-count').textContent = '✓';
+  const bPhase = document.getElementById('b-phase');
+  bPhase.textContent = tr('bPhaseDone').toUpperCase();
+  bPhase.classList.add('b-phase-active');
+  document.getElementById('b-tap-hint').style.display = 'none';
+  const bCount = document.getElementById('b-count');
+  bCount.style.display = '';
+  bCount.textContent = '✓';
   // Hide controls, show completion card
   document.getElementById('b-btn').style.display  = 'none';
   document.querySelector('.breathe-ctrl .btn-ghost').style.display = 'none';
@@ -1675,8 +1889,13 @@ function runPhase(idx) {
   const phaseDisplayMap = {
     'Breathe in': tr('phaseIn'), 'Hold': tr('phaseHold'), 'Breathe out': tr('phaseOut')
   };
-  document.getElementById('b-phase').textContent = phaseDisplayMap[ph.n] || ph.n;
-  document.getElementById('b-count').textContent = ph.d;
+  const bPhaseEl = document.getElementById('b-phase');
+  bPhaseEl.textContent = phaseDisplayMap[ph.n] || ph.n;
+  bPhaseEl.classList.add('b-phase-active');
+  document.getElementById('b-tap-hint').style.display = 'none';
+  const bCountEl = document.getElementById('b-count');
+  bCountEl.style.display = '';
+  bCountEl.textContent = ph.d;
 
   // Phase visual config (keyed on English phase names — internal only)
   const cfg = {
@@ -1792,7 +2011,8 @@ function setCat(el, cat) {
 
 function showAffirm() {
   const el   = document.getElementById('affirm-text');
-  const list = AFFIRMATIONS[affirmCat];
+  const bank = currentLang === 'fr' ? AFFIRMATIONS_FR : AFFIRMATIONS;
+  const list = bank[affirmCat] || AFFIRMATIONS[affirmCat];
   el.classList.remove('show');
   setTimeout(() => {
     el.textContent = list[affirmIdx % list.length];
@@ -1891,6 +2111,40 @@ function resetGnd() {
 }
 
 /* ══════════════════════════════════════════════════════════
+   HOME NAV ANIMATION
+══════════════════════════════════════════════════════════ */
+function homeNav(screen, navId) {
+  const icon    = event.currentTarget;
+  const navBtn  = document.getElementById(navId);
+  if (!navBtn) { goTo(screen, navBtn); return; }
+
+  const iRect = icon.getBoundingClientRect();
+  const nRect = navBtn.getBoundingClientRect();
+  const emoji = icon.querySelector('.hi-icon');
+
+  // Create flying clone
+  const fly = document.createElement('div');
+  fly.className = 'home-icon-fly';
+  fly.textContent = emoji ? emoji.textContent : '';
+  fly.style.left = `${iRect.left + iRect.width  / 2 - 21}px`;
+  fly.style.top  = `${iRect.top  + iRect.height / 2 - 21}px`;
+  document.body.appendChild(fly);
+
+  // Animate to nav button
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    fly.style.left      = `${nRect.left + nRect.width  / 2 - 21}px`;
+    fly.style.top       = `${nRect.top  + nRect.height / 2 - 21}px`;
+    fly.style.opacity   = '0';
+    fly.style.transform = 'scale(0.45)';
+  }));
+
+  setTimeout(() => {
+    fly.remove();
+    goTo(screen, navBtn);
+  }, 400);
+}
+
+/* ══════════════════════════════════════════════════════════
    HAPTIC
 ══════════════════════════════════════════════════════════ */
 function haptic(pattern) {
@@ -1978,9 +2232,15 @@ function applyLang(lang) {
   // Phase label (if at a known static state)
   const bPhase = document.getElementById('b-phase');
   for (const k of ['bPhaseReady','bPhaseDone']) {
-    if (bPhase.textContent === STRINGS.en[k] || bPhase.textContent === STRINGS.fr[k]) {
-      bPhase.textContent = s[k]; break;
+    const enU = STRINGS.en[k].toUpperCase(), frU = STRINGS.fr[k].toUpperCase();
+    if (bPhase.textContent === enU || bPhase.textContent === frU) {
+      bPhase.textContent = s[k].toUpperCase(); break;
     }
+  }
+  // Also update tap hint
+  const tapHint = document.getElementById('b-tap-hint');
+  if (tapHint && tapHint.style.display !== 'none') {
+    tapHint.textContent = lang === 'fr' ? 'appuyer pour démarrer' : 'tap to start';
   }
   // Also translate if showing a phase name during active breathing
   if (breathOn) {
@@ -2071,18 +2331,57 @@ function applyLang(lang) {
    [slEx, [s.exploreMood,s.exploreAffirm,s.exploreBreathe,s.exploreGround ]],
    [gnEx, [s.exploreMood,s.exploreAffirm,s.exploreBreathe,s.exploreSleep  ]]]
     .forEach(([nl, vals]) => vals.forEach((v,i) => { if (nl[i]) nl[i].textContent = v; }));
+
+  // Breathing card subtitles
+  [['box',s.bcDescBox],['478',s.bcDesc478],['calm',s.bcDescCalm],['resonance',s.bcDescResonance]]
+    .forEach(([m, txt]) => {
+      const el = document.querySelector(`#card-${m} .bc-desc`);
+      if (el) el.textContent = txt;
+    });
+
+  // Home screen
+  const htEl = document.getElementById('home-tagline');
+  if (htEl) htEl.textContent = s.homeTagline;
+  const holEl = document.getElementById('home-orb-label');
+  if (holEl) holEl.textContent = s.homeOrbLabel;
+  const hhEl = document.getElementById('home-hint');
+  if (hhEl) hhEl.textContent = s.homeHint;
+  [['mood',s.homeIconMood],['breathe',s.homeIconBreathe],['affirm',s.homeIconAffirm],
+   ['sleep',s.homeIconSleep],['ground',s.homeIconGround],['crisis',s.homeIconCrisis]]
+    .forEach(([id, txt]) => {
+      const el = document.getElementById('hi-lbl-' + id);
+      if (el) el.textContent = txt;
+    });
+  const navHomeLbl = document.getElementById('nav-lbl-home');
+  if (navHomeLbl) navHomeLbl.textContent = s.navHome;
+
+  // Desktop panel tagline
+  const dpEl = document.getElementById('dp-tagline');
+  if (dpEl) dpEl.textContent = s.dpTagline;
 }
 
 /* ══════════════════════════════════════════════════════════
    WELCOME FLOW
 ══════════════════════════════════════════════════════════ */
 function wfShow(mode) {
-  const c = WF_COPY[mode];
+  const ls = STRINGS[currentLang];
+  const c  = (ls.wfCopy || WF_COPY)[mode];
   if (!c) return;
+  // Translate step 1
+  document.querySelector('#wf-step1 .wf-title').textContent = ls.wfStep1Title;
+  document.querySelector('#wf-step1 .wf-body').innerHTML   = ls.wfStep1Body;
+  document.querySelector('#wf-step1 .btn').textContent     = ls.wfStep1Btn;
+  document.querySelector('#wf-step2 .btn').textContent     = ls.wfStep2Btn;
+  // Step 2 content
   document.getElementById('wf2-icon').textContent  = c.icon;
   document.getElementById('wf2-title').textContent = c.title;
   document.getElementById('wf2-body').textContent  = c.body;
+  // Reset step 1 visibility
+  const s1 = document.getElementById('wf-step1');
+  s1.style.display = 'block'; s1.style.opacity = '1'; s1.style.transition = '';
+  document.getElementById('wf-step2').style.display = 'none';
   document.getElementById('welcome-flow').style.display = 'flex';
+  document.getElementById('welcome-flow').style.opacity  = '1';
 }
 
 function wfAdvance(step) {
