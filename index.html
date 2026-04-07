@@ -610,6 +610,25 @@
     ═══════════════════════════════════════════════════════ */
     .mt-sm  { margin-top: 0.65rem; }
     .label-sm { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.6rem; }
+
+    /* Completion card */
+    .completion-card {
+      margin-top: 1.5rem;
+      padding: 1.75rem 1.5rem;
+      border-radius: 24px;
+      background: var(--g-bg);
+      border: 1px solid rgba(82,183,136,0.25);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      text-align: center;
+      box-shadow: 0 0 40px rgba(45,106,79,0.18), inset 0 1px 0 rgba(255,255,255,0.06);
+      animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .cc-icon  { font-size: 2rem; margin-bottom: 0.75rem; }
+    .cc-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem; margin-bottom: 0.55rem;
+    }
+    .cc-body  { font-size: 0.875rem; color: var(--muted); line-height: 1.65; margin-bottom: 0.25rem; }
   </style>
 </head>
 <body>
@@ -763,6 +782,14 @@
       <button class="btn btn-ghost"              onclick="resetBreathe()">Reset</button>
     </div>
     <div class="b-tip" id="b-tip">Breathe in through your nose, out through your mouth.</div>
+
+    <div class="completion-card" id="b-complete" style="display:none">
+      <div class="cc-icon">💚</div>
+      <div class="cc-title">Well done.</div>
+      <div class="cc-body">Take a moment to notice how you feel.<br>Ready to keep going? Head back to your Menty-B chat and let me know how that felt.</div>
+      <a class="btn btn-primary" href="https://chat.openai.com" target="_blank" rel="noopener" style="text-decoration:none;display:block">Back to Menty-B</a>
+      <button class="btn btn-ghost" onclick="anotherRound()">Do another round</button>
+    </div>
   </div>
 
   <!-- ══ AFFIRMATIONS ════════════════════════════════════════ -->
@@ -796,31 +823,38 @@
     <div class="sleep-steps">
       <div class="step" onclick="tick(this,1)">
         <div class="s-dot" id="dot1">1</div>
-        <div><div class="s-title">Put your phone face-down</div><div class="s-sub">Reduce visual stimulation</div></div>
+        <div><div class="s-title">3 minutes of 4-7-8 breathing</div><div class="s-sub">Slows heart rate naturally</div></div>
       </div>
       <div class="step" onclick="tick(this,2)">
         <div class="s-dot" id="dot2">2</div>
-        <div><div class="s-title">3 minutes of 4-7-8 breathing</div><div class="s-sub">Slows heart rate naturally</div></div>
+        <div><div class="s-title">Body scan — relax each muscle</div><div class="s-sub">Head to toe, one at a time</div></div>
       </div>
       <div class="step" onclick="tick(this,3)">
         <div class="s-dot" id="dot3">3</div>
-        <div><div class="s-title">Body scan — relax each muscle</div><div class="s-sub">Head to toe, one at a time</div></div>
+        <div><div class="s-title">Name 3 things you're grateful for</div><div class="s-sub">Shifts focus to the positive</div></div>
       </div>
       <div class="step" onclick="tick(this,4)">
         <div class="s-dot" id="dot4">4</div>
-        <div><div class="s-title">Name 3 things you're grateful for</div><div class="s-sub">Shifts focus to the positive</div></div>
+        <div><div class="s-title">Visualise a safe, calm place</div><div class="s-sub">Eyes closed, breathe slowly</div></div>
       </div>
       <div class="step" onclick="tick(this,5)">
         <div class="s-dot" id="dot5">5</div>
-        <div><div class="s-title">Visualise a safe, calm place</div><div class="s-sub">Eyes closed, breathe slowly</div></div>
+        <div><div class="s-title">Set your alarm</div><div class="s-sub">You've done enough today</div></div>
       </div>
       <div class="step" onclick="tick(this,6)">
         <div class="s-dot" id="dot6">6</div>
-        <div><div class="s-title">Set your alarm and close your eyes</div><div class="s-sub">You've done enough today</div></div>
+        <div><div class="s-title">Put your phone face-down</div><div class="s-sub">Sweet dreams 🌙</div></div>
       </div>
     </div>
     <div class="prog-lbl" id="sleep-prog">0 of 6 complete</div>
     <button class="btn btn-ghost" style="margin-top:0.85rem" onclick="resetSleep()">Reset routine</button>
+
+    <div class="completion-card" id="sleep-complete" style="display:none">
+      <div class="cc-icon">🌙</div>
+      <div class="cc-title">You're all set for rest.</div>
+      <div class="cc-body">If you need anything else, Menty-B is always here.</div>
+      <a class="btn btn-primary" href="https://chat.openai.com" target="_blank" rel="noopener" style="text-decoration:none;display:block">Back to Menty-B</a>
+    </div>
   </div>
 
   <!-- ══ CRISIS HELP ════════════════════════════════════════ -->
@@ -1061,13 +1095,39 @@ function toggleBreathe() {
 function resetBreathe() {
   breathOn = false; breathCycles = 0; breathPhaseIdx = 0;
   clearTimers();
-  document.getElementById('b-btn').textContent  = 'Start';
+  document.getElementById('b-btn').textContent   = 'Start';
   document.getElementById('b-phase').textContent = 'Ready';
   document.getElementById('b-count').textContent = '—';
   document.getElementById('b-cycles').textContent = 'Cycle 0';
+  document.getElementById('b-complete').style.display = 'none';
+  document.getElementById('b-btn').style.display  = '';
+  document.querySelector('.breathe-ctrl .btn-ghost').style.display = '';
+  document.getElementById('b-tip').style.display  = '';
   setOrb(1, '#52b788', 0);
   setRing(CIRC, 0);
   syncBg('idle');
+}
+
+function showBreathComplete() {
+  breathOn = false;
+  clearTimers();
+  setOrb(1, '#52b788', 1.5);
+  syncBg('idle');
+  document.getElementById('b-phase').textContent = 'Done';
+  document.getElementById('b-count').textContent = '✓';
+  // Hide controls, show completion card
+  document.getElementById('b-btn').style.display  = 'none';
+  document.querySelector('.breathe-ctrl .btn-ghost').style.display = 'none';
+  document.getElementById('b-tip').style.display  = 'none';
+  document.getElementById('b-complete').style.display = 'block';
+  haptic([40, 30, 40, 30, 80]);
+}
+
+function anotherRound() {
+  resetBreathe();
+  breathOn = true;
+  document.getElementById('b-btn').textContent = 'Pause';
+  runPhase(0);
 }
 
 function clearTimers() {
@@ -1115,7 +1175,11 @@ function runPhase(idx) {
     if (next >= mode.phases.length) {
       breathCycles++;
       document.getElementById('b-cycles').textContent = `Cycle ${breathCycles}`;
-      runPhase(0);
+      if (breathCycles >= 3) {
+        showBreathComplete();
+      } else {
+        runPhase(0);
+      }
     } else {
       runPhase(next);
     }
@@ -1207,6 +1271,7 @@ function tick(el, n) {
   document.getElementById('sleep-prog').textContent = `${total} of 6 complete`;
   document.getElementById('prog-fill').style.width  = `${(total / 6) * 100}%`;
   haptic(total === 6 ? [40, 30, 80] : 22);
+  document.getElementById('sleep-complete').style.display = total === 6 ? 'block' : 'none';
 }
 
 function resetSleep() {
@@ -1214,6 +1279,7 @@ function resetSleep() {
   for (let i = 1; i <= 6; i++) document.getElementById('dot' + i).textContent = i;
   document.getElementById('sleep-prog').textContent = '0 of 6 complete';
   document.getElementById('prog-fill').style.width  = '0%';
+  document.getElementById('sleep-complete').style.display = 'none';
 }
 
 /* ══════════════════════════════════════════════════════════
