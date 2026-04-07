@@ -728,86 +728,139 @@
     .wf-body  { font-size: 0.9375rem; color: var(--muted); line-height: 1.72; }
 
     /* ═══════════════════════════════════════════════════════
-       HOME SCREEN (orbit layout)
+       HOME SCREEN — PREMIUM REDESIGN
     ═══════════════════════════════════════════════════════ */
     .home-hero {
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      padding: 3.5rem 1rem 2rem;
+      padding: 3rem 1rem 2rem;
       min-height: calc(100dvh - 80px);
       text-align: center;
     }
-    .home-brand {
-      display: flex; align-items: center; gap: 0.5rem;
-      margin-bottom: 0.5rem;
+    .home-wordmark {
+      font-size: 1.9rem; font-weight: 700; letter-spacing: 0.05em;
+      color: var(--sage-pale); margin-bottom: 0.7rem;
+      display: flex; align-items: center; gap: 0.45rem;
     }
-    .home-brand-dot {
-      width: 9px; height: 9px; border-radius: 50%;
+    .home-wordmark-dot {
+      width: 10px; height: 10px; border-radius: 50%;
       background: var(--sage-light);
-      box-shadow: 0 0 10px rgba(82,183,136,0.65);
-    }
-    .home-brand-name {
-      font-size: 1.05rem; font-weight: 700; letter-spacing: 0.06em;
-      color: var(--sage-pale);
+      box-shadow: 0 0 14px rgba(82,183,136,0.78);
+      flex-shrink: 0;
     }
     .home-tagline {
-      font-size: 1.3rem; font-weight: 600; line-height: 1.45;
-      color: var(--text); margin-bottom: 1.85rem; max-width: 260px;
+      font-size: 1.1rem; font-weight: 400; line-height: 1.78;
+      color: rgba(232,237,232,0.7); margin-bottom: 2rem;
+      max-width: 270px; min-height: 3.8rem;
+      letter-spacing: 0.01em;
     }
-    .home-orbit {
-      position: relative; width: 290px; height: 290px; flex-shrink: 0;
+    .tl-word {
+      display: inline-block; opacity: 0;
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      transform: translateY(6px);
     }
-    /* Subtle dashed orbit ring */
-    .home-orbit::before {
-      content: ''; position: absolute; left: 50%; top: 50%;
+    .tl-word.vis { opacity: 1; transform: translateY(0); }
+
+    /* Orbit container */
+    .home-orbit-wrap {
+      position: relative; width: 316px; height: 316px; flex-shrink: 0;
+    }
+    /* Visual orbit ring */
+    .orbit-ring {
+      position: absolute; left: 50%; top: 50%;
       transform: translate(-50%,-50%);
-      width: 232px; height: 232px; border-radius: 50%;
-      border: 1px dashed rgba(82,183,136,0.18);
+      width: 254px; height: 254px; border-radius: 50%;
+      border: 1px solid rgba(82,183,136,0.16);
       pointer-events: none;
     }
+    .orbit-ring-outer {
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%,-50%);
+      width: 304px; height: 304px; border-radius: 50%;
+      border: 1px dashed rgba(82,183,136,0.06);
+      pointer-events: none;
+    }
+    /* Spinning layer */
+    .orbit-spinner {
+      position: absolute; inset: 0;
+      animation: orbitSpin 60s linear infinite;
+    }
+    @keyframes orbitSpin { to { transform: rotate(360deg); } }
+
+    /* Each orbit pill */
+    .home-pill {
+      position: absolute; width: 64px;
+      left: calc(50% + 127px * sin(var(--a)) - 32px);
+      top:  calc(50% - 127px * cos(var(--a)) - 32px);
+      display: flex; flex-direction: column;
+      align-items: center; gap: 5px;
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px; padding: 0.7rem 0.3rem 0.5rem;
+      cursor: pointer; font-family: 'Montserrat', sans-serif;
+      color: var(--muted);
+      transition: background 0.25s ease, border-color 0.25s ease,
+                  box-shadow 0.25s ease, color 0.25s ease;
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      animation: orbitCounterSpin 60s linear infinite;
+      transform-origin: center center;
+    }
+    @keyframes orbitCounterSpin { to { transform: rotate(-360deg); } }
+
+    .home-pill:hover, .home-pill:active { color: var(--text); }
+    .hp-mood:hover,    .hp-mood:active    { background: rgba(82,183,136,0.14);  border-color: rgba(82,183,136,0.55);  box-shadow: 0 0 24px rgba(82,183,136,0.32); }
+    .hp-breathe:hover, .hp-breathe:active { background: rgba(116,198,157,0.12); border-color: rgba(116,198,157,0.55); box-shadow: 0 0 24px rgba(116,198,157,0.28); }
+    .hp-affirm:hover,  .hp-affirm:active  { background: rgba(233,196,106,0.12); border-color: rgba(233,196,106,0.55); box-shadow: 0 0 24px rgba(233,196,106,0.28); }
+    .hp-sleep:hover,   .hp-sleep:active   { background: rgba(147,112,219,0.12); border-color: rgba(147,112,219,0.55); box-shadow: 0 0 24px rgba(147,112,219,0.25); }
+    .hp-ground:hover,  .hp-ground:active  { background: rgba(144,190,109,0.12); border-color: rgba(144,190,109,0.55); box-shadow: 0 0 24px rgba(144,190,109,0.28); }
+    .hp-crisis:hover,  .hp-crisis:active  { background: rgba(244,162,97,0.12);  border-color: rgba(244,162,97,0.55);  box-shadow: 0 0 24px rgba(244,162,97,0.28); }
+
+    .hp-icon { font-size: 1.35rem; line-height: 1; }
+    .hp-lbl  { font-size: 0.56rem; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+
+    /* Central orb — 120px heartbeat pulse */
     .home-center-orb {
       position: absolute; left: 50%; top: 50%;
       transform: translate(-50%,-50%);
-      width: 90px; height: 90px; border-radius: 50%;
-      background: radial-gradient(circle at 38% 35%, #74c69d, #2d6a4f);
+      width: 120px; height: 120px; border-radius: 50%;
+      background: radial-gradient(circle at 38% 32%, #74c69d 0%, #2d6a4f 55%, #1a4a38 100%);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       cursor: pointer; z-index: 2;
-      animation: orbPulse 4.5s ease-in-out infinite;
+      box-shadow: 0 0 48px rgba(45,106,79,0.5), inset 0 1px 0 rgba(255,255,255,0.14);
+      animation: heartbeat 3.4s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%,100% { box-shadow: 0 0 48px rgba(45,106,79,0.5),  0 0 0 0px  rgba(82,183,136,0),    inset 0 1px 0 rgba(255,255,255,0.14); }
+      15%     { box-shadow: 0 0 60px rgba(45,106,79,0.65), 0 0 0 10px rgba(82,183,136,0.15), inset 0 1px 0 rgba(255,255,255,0.14); }
+      30%     { box-shadow: 0 0 48px rgba(45,106,79,0.5),  0 0 0 5px  rgba(82,183,136,0.06), inset 0 1px 0 rgba(255,255,255,0.14); }
+      45%     { box-shadow: 0 0 55px rgba(45,106,79,0.58), 0 0 0 8px  rgba(233,196,106,0.12),inset 0 1px 0 rgba(255,255,255,0.14); }
+      70%     { box-shadow: 0 0 48px rgba(45,106,79,0.5),  0 0 0 0px  rgba(82,183,136,0),    inset 0 1px 0 rgba(255,255,255,0.14); }
     }
     .home-center-inner {
-      width: 30px; height: 30px; border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.55);
-      animation: orbInner 4.5s ease-in-out infinite;
-      flex-shrink: 0;
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.42);
+      animation: orbInner 3.4s ease-in-out infinite;
     }
     .home-center-label {
-      font-size: 0.52rem; font-weight: 600; text-align: center;
-      color: rgba(255,255,255,0.82); margin-top: 5px;
-      line-height: 1.3; max-width: 72px; letter-spacing: 0.01em;
+      font-size: 0.5rem; font-weight: 600; text-align: center;
+      color: rgba(255,255,255,0.72); margin-top: 6px;
+      line-height: 1.35; max-width: 80px; letter-spacing: 0.01em;
     }
-    .home-icon {
-      position: absolute; width: 58px;
-      left: calc(50% + 116px * sin(var(--a)) - 29px);
-      top:  calc(50% - 116px * cos(var(--a)) - 29px);
-      display: flex; flex-direction: column;
-      align-items: center; gap: 4px;
-      background: var(--g-bg); border: 1px solid var(--g-border);
-      border-radius: 18px; padding: 0.6rem 0.2rem 0.42rem;
-      cursor: pointer; font-family: 'Montserrat', sans-serif;
-      color: var(--muted);
-      transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+
+    /* Ink-drop flood overlay */
+    .flood-overlay {
+      position: fixed; inset: 0; z-index: 990;
+      pointer-events: none;
+      background: var(--navy);
+      clip-path: circle(0% at var(--fx, 50%) var(--fy, 50%));
     }
-    .home-icon:hover, .home-icon:active {
-      background: rgba(82,183,136,0.12);
-      border-color: rgba(82,183,136,0.52);
-      color: var(--sage-pale); transform: scale(1.1);
-      box-shadow: 0 0 22px rgba(82,183,136,0.32);
+    .flood-overlay.flooding {
+      clip-path: circle(150% at var(--fx, 50%) var(--fy, 50%));
+      transition: clip-path 0.55s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .hi-icon { font-size: 1.3rem; line-height: 1; }
-    .hi-lbl  { font-size: 0.56rem; font-weight: 600; letter-spacing: 0.02em; }
-    /* Flying icon (click animation) */
+
+    /* Flying pill clone */
     .home-icon-fly {
       position: fixed; z-index: 999; pointer-events: none;
       font-size: 1.4rem; width: 42px; height: 42px;
@@ -822,37 +875,87 @@
     }
 
     /* ═══════════════════════════════════════════════════════
-       DESKTOP SIDE PANEL (≥ 768px)
+       DESKTOP 3-PANEL LAYOUT (≥ 768px)
     ═══════════════════════════════════════════════════════ */
-    .desktop-panel {
+    .desktop-panel-left,
+    .desktop-panel-right {
       display: none;
       position: fixed; top: 0; bottom: 0;
-      left: 0; right: calc(50% + 210px);
       flex-direction: column; align-items: center; justify-content: center;
-      gap: 1.35rem; padding: 2rem;
-      background: rgba(6,10,22,0.55);
-      border-right: 1px solid rgba(82,183,136,0.1);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      gap: 1.5rem; padding: 2.5rem 2rem;
+      background: rgba(6,10,22,0.5);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
       pointer-events: none;
     }
+    .desktop-panel-left {
+      left: 0; right: calc(50% + 220px);
+      border-right: 1px solid rgba(82,183,136,0.09);
+    }
+    .desktop-panel-right {
+      right: 0; left: calc(50% + 220px);
+      border-left: 1px solid rgba(82,183,136,0.09);
+    }
+
+    /* Left panel */
     .dp-orb {
-      width: 76px; height: 76px; border-radius: 50%;
-      background: radial-gradient(circle at 38% 35%, #74c69d, #2d6a4f);
+      width: 86px; height: 86px; border-radius: 50%;
+      background: radial-gradient(circle at 38% 32%, #74c69d 0%, #2d6a4f 55%, #1a4a38 100%);
       display: flex; align-items: center; justify-content: center;
-      animation: orbPulse 6s ease-in-out infinite;
-      box-shadow: 0 0 50px rgba(45,106,79,0.4);
+      animation: heartbeat 3.4s ease-in-out infinite;
+      box-shadow: 0 0 50px rgba(45,106,79,0.42);
     }
     .dp-orb-inner {
       width: 30px; height: 30px; border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.55);
-      animation: orbInner 6s ease-in-out infinite;
+      border: 2px solid rgba(255,255,255,0.5);
+      animation: orbInner 3.4s ease-in-out infinite;
     }
-    .dp-brand { font-size: 1.25rem; font-weight: 700; color: var(--sage-pale); letter-spacing: 0.05em; }
-    .dp-tagline { font-size: 0.875rem; color: var(--muted); text-align: center; line-height: 1.65; max-width: 200px; }
+    .dp-brand {
+      font-size: 1.35rem; font-weight: 700;
+      color: var(--sage-pale); letter-spacing: 0.06em;
+    }
+    .dp-tagline {
+      font-size: 0.88rem; color: var(--muted);
+      text-align: center; line-height: 1.72; max-width: 200px;
+    }
+
+    /* Right panel — ambient quotes */
+    .dp-quote-wrap  { max-width: 210px; text-align: center; }
+    .dp-quote-mark  {
+      font-size: 2.6rem; line-height: 1;
+      color: rgba(82,183,136,0.22);
+      font-family: Georgia, serif; margin-bottom: 0.4rem;
+    }
+    .dp-quote-text {
+      font-size: 0.875rem; font-style: italic;
+      color: rgba(232,237,232,0.58); line-height: 1.84;
+      letter-spacing: 0.01em;
+      transition: opacity 0.7s ease;
+    }
+    .dp-quote-author {
+      font-size: 0.7rem; color: rgba(232,237,232,0.3);
+      margin-top: 0.9rem; letter-spacing: 0.04em;
+      transition: opacity 0.7s ease;
+    }
+    .dp-quote-fade  { opacity: 0 !important; }
+    .dp-quote-divider {
+      width: 28px; height: 1px;
+      background: rgba(82,183,136,0.2);
+      margin: 0 auto;
+    }
+    .dp-quote-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(82,183,136,0.3);
+      box-shadow: 0 0 8px rgba(82,183,136,0.22);
+      animation: orbPulse 5s ease-in-out infinite;
+    }
+
     @media (min-width: 768px) {
-      .desktop-panel { display: flex; }
-      .app { max-width: 420px; }
-      .bottom-nav { width: 420px; }
+      .desktop-panel-left  { display: flex; }
+      .desktop-panel-right { display: flex; }
+      .app        { max-width: 440px; }
+      .bottom-nav { width: 440px; }
+      .page-title { font-size: 1.375rem; }
+      .page-sub   { font-size: 1rem; }
     }
 
     /* ═══════════════════════════════════════════════════════
@@ -946,49 +1049,73 @@
   <div class="aurora"></div>
 </div>
 
-<!-- ── Desktop side panel (hidden on mobile) ─────────────── -->
-<div class="desktop-panel" id="desktop-panel">
+<!-- ── Desktop left panel (hidden on mobile) ─────────────── -->
+<div class="desktop-panel-left" id="desktop-panel-left">
   <div class="dp-orb"><div class="dp-orb-inner"></div></div>
   <div class="dp-brand">Menty-B</div>
   <div class="dp-tagline" id="dp-tagline">Your companion for serenity</div>
 </div>
+
+<!-- ── Desktop right panel — ambient quotes ──────────────── -->
+<div class="desktop-panel-right" id="desktop-panel-right">
+  <div class="dp-quote-dot"></div>
+  <div class="dp-quote-divider"></div>
+  <div class="dp-quote-wrap">
+    <div class="dp-quote-mark">"</div>
+    <div class="dp-quote-text" id="dp-quote-text"></div>
+    <div class="dp-quote-author" id="dp-quote-author"></div>
+  </div>
+  <div class="dp-quote-divider"></div>
+</div>
+
+<!-- ── Ink-drop flood overlay ─────────────────────────────── -->
+<div class="flood-overlay" id="flood-overlay"></div>
 
 <div class="app">
 
   <!-- ══ HOME ══════════════════════════════════════════════ -->
   <div id="screen-welcome" class="screen active">
     <div class="home-hero">
-      <div class="home-brand">
-        <span class="home-brand-dot"></span>
-        <span class="home-brand-name">Menty-B</span>
-      </div>
-      <p class="home-tagline" id="home-tagline">You are not alone. I'm here.</p>
 
-      <div class="home-orbit">
-        <!-- Central orb — tapping goes to Mood -->
+      <div class="home-wordmark">
+        <span class="home-wordmark-dot"></span>
+        Menty-B
+      </div>
+
+      <p class="home-tagline" id="home-tagline"></p>
+
+      <div class="home-orbit-wrap">
+        <!-- Decorative rings -->
+        <div class="orbit-ring"></div>
+        <div class="orbit-ring-outer"></div>
+
+        <!-- Spinning layer — contains the 6 pills -->
+        <div class="orbit-spinner">
+          <button class="home-pill hp-mood"    style="--a:0deg"   onclick="homeNav('mood',   'nav-mood')">
+            <span class="hp-icon">💚</span><span class="hp-lbl" id="hi-lbl-mood">Mood</span>
+          </button>
+          <button class="home-pill hp-breathe" style="--a:60deg"  onclick="homeNav('breathe','nav-breathe')">
+            <span class="hp-icon">🌀</span><span class="hp-lbl" id="hi-lbl-breathe">Breathe</span>
+          </button>
+          <button class="home-pill hp-affirm"  style="--a:120deg" onclick="homeNav('affirm', 'nav-affirm')">
+            <span class="hp-icon">✨</span><span class="hp-lbl" id="hi-lbl-affirm">Affirm</span>
+          </button>
+          <button class="home-pill hp-sleep"   style="--a:180deg" onclick="homeNav('sleep',  'nav-sleep')">
+            <span class="hp-icon">🌙</span><span class="hp-lbl" id="hi-lbl-sleep">Wind</span>
+          </button>
+          <button class="home-pill hp-ground"  style="--a:240deg" onclick="homeNav('ground', 'nav-ground')">
+            <span class="hp-icon">🌿</span><span class="hp-lbl" id="hi-lbl-ground">Ground</span>
+          </button>
+          <button class="home-pill hp-crisis"  style="--a:300deg" onclick="homeNav('crisis', 'nav-crisis')">
+            <span class="hp-icon">📞</span><span class="hp-lbl" id="hi-lbl-crisis">Help</span>
+          </button>
+        </div>
+
+        <!-- Central orb — outside the spinner so it stays still -->
         <div class="home-center-orb" onclick="homeNav('mood','nav-mood')">
           <div class="home-center-inner"></div>
           <div class="home-center-label" id="home-orb-label">How are you feeling?</div>
         </div>
-        <!-- Orbital icons (clockwise from top) -->
-        <button class="home-icon" style="--a:0deg"   onclick="homeNav('mood',   'nav-mood')">
-          <span class="hi-icon">💚</span><span class="hi-lbl" id="hi-lbl-mood">Mood</span>
-        </button>
-        <button class="home-icon" style="--a:60deg"  onclick="homeNav('breathe','nav-breathe')">
-          <span class="hi-icon">🌀</span><span class="hi-lbl" id="hi-lbl-breathe">Breathe</span>
-        </button>
-        <button class="home-icon" style="--a:120deg" onclick="homeNav('affirm', 'nav-affirm')">
-          <span class="hi-icon">✨</span><span class="hi-lbl" id="hi-lbl-affirm">Affirm</span>
-        </button>
-        <button class="home-icon" style="--a:180deg" onclick="homeNav('sleep',  'nav-sleep')">
-          <span class="hi-icon">🌙</span><span class="hi-lbl" id="hi-lbl-sleep">Wind</span>
-        </button>
-        <button class="home-icon" style="--a:240deg" onclick="homeNav('ground', 'nav-ground')">
-          <span class="hi-icon">🌿</span><span class="hi-lbl" id="hi-lbl-ground">Ground</span>
-        </button>
-        <button class="home-icon" style="--a:300deg" onclick="homeNav('crisis', 'nav-crisis')">
-          <span class="hi-icon">📞</span><span class="hi-lbl" id="hi-lbl-crisis">Help</span>
-        </button>
       </div>
 
       <p class="home-hint" id="home-hint">Sent here by Menty-B? Check the link you received.</p>
@@ -1417,6 +1544,30 @@ const AFFIRMATIONS_FR = {
   grief:      ['Pleure si tu en as besoin. C\'est normal. — Anonyme','Le chagrin est le prix de l\'amour. — Proverbe','Tu n\'es pas seul dans ce que tu traverses. — Anonyme','Prends le temps qu\'il te faut. — Dicton populaire']
 };
 
+const AMBIENT_QUOTES_EN = [
+  { text: 'The present moment is the only moment available to us.',       author: 'Thich Nhat Hanh' },
+  { text: 'Within you there is a stillness and a sanctuary to retreat to.', author: 'Hermann Hesse' },
+  { text: 'You yourself, as much as anybody, deserve your love.',          author: 'Buddha' },
+  { text: 'Be gentle with yourself. You are a child of the universe.',     author: 'Desiderata' },
+  { text: 'Feelings are just visitors. Let them come and go.',             author: 'Mooji' },
+  { text: 'You are allowed to be both a masterpiece and a work in progress.', author: 'Sophia Bush' },
+  { text: 'Peace begins with a smile.',                                    author: 'Mother Teresa' },
+  { text: 'Even the darkest night will end and the sun will rise.',        author: 'Victor Hugo' },
+  { text: 'You are braver than you believe, and stronger than you seem.',  author: 'A.A. Milne' },
+];
+
+const AMBIENT_QUOTES_FR = [
+  { text: 'L\'instant présent est le seul moment qui nous soit accessible.', author: 'Thich Nhat Hanh' },
+  { text: 'En toi il y a un silence et un sanctuaire où tu peux te retirer.', author: 'Hermann Hesse' },
+  { text: 'Vous méritez votre propre amour autant que quiconque.',          author: 'Bouddha' },
+  { text: 'Sois doux envers toi-même. Tu es un enfant de l\'univers.',      author: 'Desiderata' },
+  { text: 'Les émotions sont des visiteurs. Laisse-les venir et partir.',   author: 'Mooji' },
+  { text: 'Tu as le droit d\'être à la fois un chef-d\'œuvre et un travail en cours.', author: 'Sophia Bush' },
+  { text: 'La paix commence par un sourire.',                               author: 'Mère Teresa' },
+  { text: 'Même la nuit la plus sombre prendra fin et le soleil se lèvera.', author: 'Victor Hugo' },
+  { text: 'Tu es plus courageux que tu ne le crois, et plus fort qu\'il n\'y paraît.', author: 'A.A. Milne' },
+];
+
 const WF_COPY = {
   box:       { icon: '🌊', title: 'Box Breathing',      body: 'In for 4, hold for 4, out for 4, hold for 4. Slow and steady. Just follow the circle.' },
   '478':     { icon: '🌿', title: '4-7-8 Breathing',    body: 'Breathe in for 4, hold for 7, breathe out for 8. Just follow the circle.' },
@@ -1679,6 +1830,8 @@ let breathTimer = null, tickTimer = null, breathPhaseIdx = 0;
 let affirmCat = 'anxiety', affirmIdx = 0;
 let entries = [];
 let currentLang = 'en';
+let ambientQuoteIdx = 0;
+let ambientQuoteTimer = null;
 
 const CIRC = 2 * Math.PI * 96; // 603.19
 
@@ -2111,37 +2264,102 @@ function resetGnd() {
 }
 
 /* ══════════════════════════════════════════════════════════
-   HOME NAV ANIMATION
+   HOME NAV ANIMATION — FLOOD TRANSITION
 ══════════════════════════════════════════════════════════ */
 function homeNav(screen, navId) {
-  const icon    = event.currentTarget;
-  const navBtn  = document.getElementById(navId);
-  if (!navBtn) { goTo(screen, navBtn); return; }
+  const pill   = event.currentTarget;
+  const navBtn = document.getElementById(navId);
 
-  const iRect = icon.getBoundingClientRect();
-  const nRect = navBtn.getBoundingClientRect();
-  const emoji = icon.querySelector('.hi-icon');
+  // Determine flood origin from pill center
+  const rect = pill.getBoundingClientRect();
+  const fx = ((rect.left + rect.width  / 2) / window.innerWidth  * 100).toFixed(1) + '%';
+  const fy = ((rect.top  + rect.height / 2) / window.innerHeight * 100).toFixed(1) + '%';
 
-  // Create flying clone
-  const fly = document.createElement('div');
-  fly.className = 'home-icon-fly';
-  fly.textContent = emoji ? emoji.textContent : '';
-  fly.style.left = `${iRect.left + iRect.width  / 2 - 21}px`;
-  fly.style.top  = `${iRect.top  + iRect.height / 2 - 21}px`;
-  document.body.appendChild(fly);
+  // Flying emoji clone toward nav
+  const emoji = pill.querySelector('.hp-icon') || pill.querySelector('.hi-icon');
+  if (emoji && navBtn) {
+    const nRect = navBtn.getBoundingClientRect();
+    const fly = document.createElement('div');
+    fly.className = 'home-icon-fly';
+    fly.textContent = emoji.textContent;
+    fly.style.cssText = `left:${rect.left + rect.width/2 - 21}px;top:${rect.top + rect.height/2 - 21}px;`;
+    document.body.appendChild(fly);
+    setTimeout(() => {
+      fly.style.left      = `${nRect.left + nRect.width/2  - 21}px`;
+      fly.style.top       = `${nRect.top  + nRect.height/2 - 21}px`;
+      fly.style.opacity   = '0';
+      fly.style.transform = 'scale(0.4)';
+    }, 80);
+    setTimeout(() => fly.remove(), 500);
+  }
 
-  // Animate to nav button
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    fly.style.left      = `${nRect.left + nRect.width  / 2 - 21}px`;
-    fly.style.top       = `${nRect.top  + nRect.height / 2 - 21}px`;
-    fly.style.opacity   = '0';
-    fly.style.transform = 'scale(0.45)';
-  }));
+  // Ink-drop flood from pill position
+  const overlay = document.getElementById('flood-overlay');
+  overlay.style.setProperty('--fx', fx);
+  overlay.style.setProperty('--fy', fy);
+  // Force reflow to reset clip-path before adding class
+  overlay.getBoundingClientRect();
+  overlay.classList.add('flooding');
 
   setTimeout(() => {
-    fly.remove();
     goTo(screen, navBtn);
-  }, 400);
+    // Instantly reset overlay behind the new screen
+    overlay.style.transition = 'none';
+    overlay.classList.remove('flooding');
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      overlay.style.transition = '';
+    }));
+  }, 600);
+}
+
+/* ══════════════════════════════════════════════════════════
+   HOME SCREEN — TAGLINE & AMBIENT QUOTES
+══════════════════════════════════════════════════════════ */
+function animateTagline() {
+  const el = document.getElementById('home-tagline');
+  if (!el) return;
+  const text = STRINGS[currentLang].homeTagline;
+  el.innerHTML = '';
+  let delay = 320;
+  text.split(' ').forEach(word => {
+    const span = document.createElement('span');
+    span.className = 'tl-word';
+    span.textContent = word + '\u00a0'; // non-breaking space keeps words apart
+    el.appendChild(span);
+    setTimeout(() => span.classList.add('vis'), delay);
+    // Longer pause after sentence-ending punctuation
+    delay += word.match(/[.!?]$/) ? 360 : 130;
+  });
+}
+
+function startAmbientQuotes() {
+  clearInterval(ambientQuoteTimer);
+  showAmbientQuote();
+  ambientQuoteTimer = setInterval(rotateAmbientQuote, 10000);
+}
+
+function showAmbientQuote() {
+  const quotes = currentLang === 'fr' ? AMBIENT_QUOTES_FR : AMBIENT_QUOTES_EN;
+  const q = quotes[ambientQuoteIdx % quotes.length];
+  const tEl = document.getElementById('dp-quote-text');
+  const aEl = document.getElementById('dp-quote-author');
+  if (tEl) tEl.textContent = q.text;
+  if (aEl) aEl.textContent = '— ' + q.author;
+}
+
+function rotateAmbientQuote() {
+  const tEl = document.getElementById('dp-quote-text');
+  const aEl = document.getElementById('dp-quote-author');
+  if (!tEl) return;
+  tEl.classList.add('dp-quote-fade');
+  aEl.classList.add('dp-quote-fade');
+  setTimeout(() => {
+    const quotes = currentLang === 'fr' ? AMBIENT_QUOTES_FR : AMBIENT_QUOTES_EN;
+    ambientQuoteIdx = (ambientQuoteIdx + 1) % quotes.length;
+    showAmbientQuote();
+    tEl.classList.remove('dp-quote-fade');
+    aEl.classList.remove('dp-quote-fade');
+  }, 720);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -2340,8 +2558,7 @@ function applyLang(lang) {
     });
 
   // Home screen
-  const htEl = document.getElementById('home-tagline');
-  if (htEl) htEl.textContent = s.homeTagline;
+  animateTagline();
   const holEl = document.getElementById('home-orb-label');
   if (holEl) holEl.textContent = s.homeOrbLabel;
   const hhEl = document.getElementById('home-hint');
@@ -2355,9 +2572,11 @@ function applyLang(lang) {
   const navHomeLbl = document.getElementById('nav-lbl-home');
   if (navHomeLbl) navHomeLbl.textContent = s.navHome;
 
-  // Desktop panel tagline
+  // Desktop panels
   const dpEl = document.getElementById('dp-tagline');
   if (dpEl) dpEl.textContent = s.dpTagline;
+  // Refresh ambient quote immediately on lang change
+  showAmbientQuote();
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -2476,6 +2695,8 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   showAffirm();
+  animateTagline();
+  startAmbientQuotes();
 });
 </script>
 </body>
