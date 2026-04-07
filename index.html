@@ -875,87 +875,147 @@
     }
 
     /* ═══════════════════════════════════════════════════════
-       DESKTOP 3-PANEL LAYOUT (≥ 768px)
+       DESKTOP 3-COLUMN LAYOUT (≥ 768px)
     ═══════════════════════════════════════════════════════ */
-    .desktop-panel-left,
-    .desktop-panel-right {
+    .col-left,
+    .col-right {
       display: none;
-      position: fixed; top: 0; bottom: 0;
-      flex-direction: column; align-items: center; justify-content: center;
-      gap: 1.5rem; padding: 2.5rem 2rem;
-      background: rgba(6,10,22,0.5);
-      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      position: fixed; top: 0; bottom: 0; width: 240px;
+      flex-direction: column;
+      background: rgba(7,11,22,0.68);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      z-index: 50;
+    }
+    .col-left {
+      left: 0;
+      border-right: 1px solid rgba(82,183,136,0.1);
+      align-items: center; justify-content: space-between;
+      padding: 2rem 1.5rem 1.75rem;
+      pointer-events: auto;
+    }
+    .col-right {
+      right: 0;
+      border-left: 1px solid rgba(82,183,136,0.1);
+      align-items: center; justify-content: center;
+      padding: 2.5rem 1.75rem;
       pointer-events: none;
     }
-    .desktop-panel-left {
-      left: 0; right: calc(50% + 220px);
-      border-right: 1px solid rgba(82,183,136,0.09);
+
+    /* Left column sections */
+    .col-left-top {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.7rem; text-align: center;
     }
-    .desktop-panel-right {
-      right: 0; left: calc(50% + 220px);
-      border-left: 1px solid rgba(82,183,136,0.09);
+    .col-left-mid {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 1rem; text-align: center; flex: 1;
+      justify-content: center; padding: 1.5rem 0;
     }
 
-    /* Left panel */
+    /* Large ambient orb for left column */
     .dp-orb {
-      width: 86px; height: 86px; border-radius: 50%;
+      width: 160px; height: 160px; border-radius: 50%;
       background: radial-gradient(circle at 38% 32%, #74c69d 0%, #2d6a4f 55%, #1a4a38 100%);
       display: flex; align-items: center; justify-content: center;
-      animation: heartbeat 3.4s ease-in-out infinite;
-      box-shadow: 0 0 50px rgba(45,106,79,0.42);
+      animation: orbPulse 6s ease-in-out infinite;
+      box-shadow: 0 0 70px rgba(45,106,79,0.42);
     }
     .dp-orb-inner {
-      width: 30px; height: 30px; border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.5);
-      animation: orbInner 3.4s ease-in-out infinite;
+      width: 52px; height: 52px; border-radius: 50%;
+      border: 2.5px solid rgba(255,255,255,0.45);
+      animation: orbInner 6s ease-in-out infinite;
     }
     .dp-brand {
-      font-size: 1.35rem; font-weight: 700;
+      font-size: 1.1rem; font-weight: 700;
       color: var(--sage-pale); letter-spacing: 0.06em;
     }
     .dp-tagline {
-      font-size: 0.88rem; color: var(--muted);
-      text-align: center; line-height: 1.72; max-width: 200px;
+      font-size: 0.78rem; color: var(--muted);
+      text-align: center; line-height: 1.72; max-width: 175px;
     }
 
-    /* Right panel — ambient quotes */
-    .dp-quote-wrap  { max-width: 210px; text-align: center; }
-    .dp-quote-mark  {
-      font-size: 2.6rem; line-height: 1;
-      color: rgba(82,183,136,0.22);
-      font-family: Georgia, serif; margin-bottom: 0.4rem;
-    }
+    /* Ambient quotes in left column */
+    .dp-quote-wrap { max-width: 185px; text-align: center; }
     .dp-quote-text {
-      font-size: 0.875rem; font-style: italic;
-      color: rgba(232,237,232,0.58); line-height: 1.84;
+      font-size: 0.8rem; font-style: italic;
+      color: rgba(232,237,232,0.52); line-height: 1.85;
       letter-spacing: 0.01em;
-      transition: opacity 0.7s ease;
-    }
-    .dp-quote-author {
-      font-size: 0.7rem; color: rgba(232,237,232,0.3);
-      margin-top: 0.9rem; letter-spacing: 0.04em;
-      transition: opacity 0.7s ease;
+      transition: opacity 0.65s ease;
     }
     .dp-quote-fade  { opacity: 0 !important; }
-    .dp-quote-divider {
-      width: 28px; height: 1px;
-      background: rgba(82,183,136,0.2);
-      margin: 0 auto;
-    }
     .dp-quote-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: rgba(82,183,136,0.3);
-      box-shadow: 0 0 8px rgba(82,183,136,0.22);
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(82,183,136,0.32); margin: 0.9rem auto 0;
+      box-shadow: 0 0 6px rgba(82,183,136,0.22);
       animation: orbPulse 5s ease-in-out infinite;
     }
 
+    /* Desktop EN/FR toggle — sits at bottom of left column */
+    .lang-toggle-desktop {
+      display: flex;
+      background: rgba(10,15,30,0.65);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 99px; padding: 3px; gap: 2px;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    }
+
+    /* Right column — contextual tips */
+    .ctx-tip-wrap { text-align: center; max-width: 185px; }
+    .ctx-tip-icon {
+      font-size: 2rem; line-height: 1; margin-bottom: 1.1rem;
+      transition: opacity 0.35s ease;
+    }
+    .ctx-tip-text {
+      font-size: 0.8rem; color: rgba(232,237,232,0.5);
+      line-height: 1.8; letter-spacing: 0.01em;
+      transition: opacity 0.35s ease;
+    }
+    .ctx-tip-fade { opacity: 0 !important; }
+
+    /* Mobile home cards — 2x3 grid, replaces orbit on small screens */
+    .home-cards {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0.7rem; margin: 0.75rem 0;
+    }
+    .hc-card {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0.5rem; padding: 1.3rem 0.5rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 22px; cursor: pointer;
+      font-family: 'Montserrat', sans-serif; color: var(--muted);
+      transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    }
+    .hc-card:hover, .hc-card:active { transform: translateY(-4px); color: var(--text); }
+    .hc-mood:hover,.hc-mood:active      { background: rgba(82,183,136,0.13); border-color: rgba(82,183,136,0.5); }
+    .hc-breathe:hover,.hc-breathe:active{ background: rgba(116,198,157,0.11); border-color: rgba(116,198,157,0.5); }
+    .hc-affirm:hover,.hc-affirm:active  { background: rgba(233,196,106,0.11); border-color: rgba(233,196,106,0.5); }
+    .hc-sleep:hover,.hc-sleep:active    { background: rgba(147,112,219,0.11); border-color: rgba(147,112,219,0.5); }
+    .hc-ground:hover,.hc-ground:active  { background: rgba(144,190,109,0.11); border-color: rgba(144,190,109,0.5); }
+    .hc-crisis:hover,.hc-crisis:active  { background: rgba(244,162,97,0.11);  border-color: rgba(244,162,97,0.5); }
+    .hc-icon { font-size: 1.75rem; line-height: 1; }
+    .hc-lbl  { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.01em; }
+
+    /* Orbit: hidden on mobile, shown on desktop */
+    .home-orbit-wrap { display: none; }
+
+    /* Orbit pause on pill hover */
+    .orbit-spinner:has(.home-pill:hover) { animation-play-state: paused; }
+    .orbit-spinner:has(.home-pill:hover) .home-pill { animation-play-state: paused; }
+
     @media (min-width: 768px) {
-      .desktop-panel-left  { display: flex; }
-      .desktop-panel-right { display: flex; }
-      .app        { max-width: 440px; }
-      .bottom-nav { width: 440px; }
-      .page-title { font-size: 1.375rem; }
-      .page-sub   { font-size: 1rem; }
+      .col-left         { display: flex; }
+      .col-right        { display: flex; }
+      .app              { max-width: 480px; }
+      .bottom-nav       { left: 240px; right: 240px; width: auto; transform: none; }
+      .page-title       { font-size: 1.375rem; }
+      .page-sub         { font-size: 1rem; }
+      /* Home screen: show orbit, hide cards */
+      .home-orbit-wrap  { display: block; }
+      .home-cards       { display: none; }
+      /* Hide mobile lang toggle on desktop */
+      .lang-toggle      { display: none !important; }
     }
 
     /* ═══════════════════════════════════════════════════════
@@ -1049,23 +1109,32 @@
   <div class="aurora"></div>
 </div>
 
-<!-- ── Desktop left panel (hidden on mobile) ─────────────── -->
-<div class="desktop-panel-left" id="desktop-panel-left">
-  <div class="dp-orb"><div class="dp-orb-inner"></div></div>
-  <div class="dp-brand">Menty-B</div>
-  <div class="dp-tagline" id="dp-tagline">Your companion for serenity</div>
+<!-- ── Desktop left column ───────────────────────────────── -->
+<div class="col-left" id="col-left">
+  <div class="col-left-top">
+    <div class="dp-brand">Menty-B</div>
+    <div class="dp-tagline" id="dp-tagline">Your companion for serenity</div>
+  </div>
+  <div class="col-left-mid">
+    <div class="dp-orb"><div class="dp-orb-inner"></div></div>
+    <div class="dp-quote-wrap">
+      <div class="dp-quote-text" id="dp-quote-text"></div>
+      <div class="dp-quote-dot"></div>
+    </div>
+  </div>
+  <!-- EN/FR toggle at the bottom of the left column -->
+  <div class="lang-toggle-desktop">
+    <button class="lang-btn active" id="lang-en-d" onclick="setLang('en')">EN</button>
+    <button class="lang-btn"        id="lang-fr-d" onclick="setLang('fr')">FR</button>
+  </div>
 </div>
 
-<!-- ── Desktop right panel — ambient quotes ──────────────── -->
-<div class="desktop-panel-right" id="desktop-panel-right">
-  <div class="dp-quote-dot"></div>
-  <div class="dp-quote-divider"></div>
-  <div class="dp-quote-wrap">
-    <div class="dp-quote-mark">"</div>
-    <div class="dp-quote-text" id="dp-quote-text"></div>
-    <div class="dp-quote-author" id="dp-quote-author"></div>
+<!-- ── Desktop right column — contextual tips ────────────── -->
+<div class="col-right" id="col-right">
+  <div class="ctx-tip-wrap">
+    <div class="ctx-tip-icon" id="ctx-tip-icon">🌿</div>
+    <div class="ctx-tip-text"  id="ctx-tip-text">Tap any feature to begin</div>
   </div>
-  <div class="dp-quote-divider"></div>
 </div>
 
 <!-- ── Ink-drop flood overlay ─────────────────────────────── -->
@@ -1116,6 +1185,28 @@
           <div class="home-center-inner"></div>
           <div class="home-center-label" id="home-orb-label">How are you feeling?</div>
         </div>
+      </div>
+
+      <!-- Mobile-only feature cards (2×3 grid) -->
+      <div class="home-cards">
+        <button class="hc-card hc-mood"    onclick="goTo('mood',    document.getElementById('nav-mood'))">
+          <span class="hc-icon">💚</span><span class="hc-lbl" id="hc-lbl-mood">Mood</span>
+        </button>
+        <button class="hc-card hc-breathe" onclick="goTo('breathe', document.getElementById('nav-breathe'))">
+          <span class="hc-icon">🌀</span><span class="hc-lbl" id="hc-lbl-breathe">Breathe</span>
+        </button>
+        <button class="hc-card hc-affirm"  onclick="goTo('affirm',  document.getElementById('nav-affirm'))">
+          <span class="hc-icon">✨</span><span class="hc-lbl" id="hc-lbl-affirm">Affirm</span>
+        </button>
+        <button class="hc-card hc-sleep"   onclick="goTo('sleep',   document.getElementById('nav-sleep'))">
+          <span class="hc-icon">🌙</span><span class="hc-lbl" id="hc-lbl-sleep">Wind</span>
+        </button>
+        <button class="hc-card hc-ground"  onclick="goTo('ground',  document.getElementById('nav-ground'))">
+          <span class="hc-icon">🌿</span><span class="hc-lbl" id="hc-lbl-ground">Ground</span>
+        </button>
+        <button class="hc-card hc-crisis"  onclick="goTo('crisis',  document.getElementById('nav-crisis'))">
+          <span class="hc-icon">📞</span><span class="hc-lbl" id="hc-lbl-crisis">Help</span>
+        </button>
       </div>
 
       <p class="home-hint" id="home-hint">Sent here by Menty-B? Check the link you received.</p>
@@ -1545,28 +1636,39 @@ const AFFIRMATIONS_FR = {
 };
 
 const AMBIENT_QUOTES_EN = [
-  { text: 'The present moment is the only moment available to us.',       author: 'Thich Nhat Hanh' },
-  { text: 'Within you there is a stillness and a sanctuary to retreat to.', author: 'Hermann Hesse' },
-  { text: 'You yourself, as much as anybody, deserve your love.',          author: 'Buddha' },
-  { text: 'Be gentle with yourself. You are a child of the universe.',     author: 'Desiderata' },
-  { text: 'Feelings are just visitors. Let them come and go.',             author: 'Mooji' },
-  { text: 'You are allowed to be both a masterpiece and a work in progress.', author: 'Sophia Bush' },
-  { text: 'Peace begins with a smile.',                                    author: 'Mother Teresa' },
-  { text: 'Even the darkest night will end and the sun will rise.',        author: 'Victor Hugo' },
-  { text: 'You are braver than you believe, and stronger than you seem.',  author: 'A.A. Milne' },
+  'Breathe. You are safe.',
+  'One moment at a time.',
+  'You don\'t have to solve everything right now.',
+  'Your body is doing its best.',
 ];
 
 const AMBIENT_QUOTES_FR = [
-  { text: 'L\'instant présent est le seul moment qui nous soit accessible.', author: 'Thich Nhat Hanh' },
-  { text: 'En toi il y a un silence et un sanctuaire où tu peux te retirer.', author: 'Hermann Hesse' },
-  { text: 'Vous méritez votre propre amour autant que quiconque.',          author: 'Bouddha' },
-  { text: 'Sois doux envers toi-même. Tu es un enfant de l\'univers.',      author: 'Desiderata' },
-  { text: 'Les émotions sont des visiteurs. Laisse-les venir et partir.',   author: 'Mooji' },
-  { text: 'Tu as le droit d\'être à la fois un chef-d\'œuvre et un travail en cours.', author: 'Sophia Bush' },
-  { text: 'La paix commence par un sourire.',                               author: 'Mère Teresa' },
-  { text: 'Même la nuit la plus sombre prendra fin et le soleil se lèvera.', author: 'Victor Hugo' },
-  { text: 'Tu es plus courageux que tu ne le crois, et plus fort qu\'il n\'y paraît.', author: 'A.A. Milne' },
+  'Respirez. Vous êtes en sécurité.',
+  'Un instant à la fois.',
+  'Vous n\'avez pas à tout résoudre maintenant.',
+  'Votre corps fait de son mieux.',
 ];
+
+const TIPS = {
+  en: {
+    welcome: { icon: '🌿', text: 'Tap any feature to begin' },
+    mood:    { icon: '🔒', text: 'Your entries are private and stay on this device' },
+    breathe: { icon: '〰️', text: 'Follow the circle.\nThree cycles is all it takes.' },
+    affirm:  { icon: '✨', text: 'Read slowly.\nLet it land.' },
+    sleep:   { icon: '🌙', text: 'Take your time\nwith each step' },
+    ground:  { icon: '🌱', text: 'Follow one sense\nat a time' },
+    crisis:  { icon: '💚', text: 'You are not alone.\nHelp is real.' },
+  },
+  fr: {
+    welcome: { icon: '🌿', text: 'Appuyez sur une\nfonction pour commencer' },
+    mood:    { icon: '🔒', text: 'Vos entrées sont privées\net restent sur cet appareil' },
+    breathe: { icon: '〰️', text: 'Suivez le cercle.\nTrois cycles suffisent.' },
+    affirm:  { icon: '✨', text: 'Lisez lentement.\nLaissez résonner.' },
+    sleep:   { icon: '🌙', text: 'Prenez votre temps\nà chaque étape' },
+    ground:  { icon: '🌱', text: 'Suivez un sens\nà la fois' },
+    crisis:  { icon: '💚', text: 'Vous n\'êtes pas seul.\nL\'aide est réelle.' },
+  }
+};
 
 const WF_COPY = {
   box:       { icon: '🌊', title: 'Box Breathing',      body: 'In for 4, hold for 4, out for 4, hold for 4. Slow and steady. Just follow the circle.' },
@@ -1893,6 +1995,25 @@ function goTo(id, btnEl) {
 
   if (id === 'affirm') showAffirm();
   if (id === 'ground') resetGnd();
+
+  updateContextTip(id);
+}
+
+function updateContextTip(screen) {
+  const iconEl = document.getElementById('ctx-tip-icon');
+  const textEl = document.getElementById('ctx-tip-text');
+  if (!iconEl || !textEl) return;
+
+  const tip = (TIPS[currentLang] || TIPS.en)[screen] || TIPS[currentLang].welcome;
+
+  iconEl.classList.add('ctx-tip-fade');
+  textEl.classList.add('ctx-tip-fade');
+  setTimeout(() => {
+    iconEl.textContent = tip.icon;
+    textEl.textContent = tip.text;
+    iconEl.classList.remove('ctx-tip-fade');
+    textEl.classList.remove('ctx-tip-fade');
+  }, 360);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -2264,52 +2385,75 @@ function resetGnd() {
 }
 
 /* ══════════════════════════════════════════════════════════
-   HOME NAV ANIMATION — FLOOD TRANSITION
+   HOME NAV ANIMATION — 4-STEP TRANSITION
 ══════════════════════════════════════════════════════════ */
 function homeNav(screen, navId) {
   const pill   = event.currentTarget;
   const navBtn = document.getElementById(navId);
+  const rect   = pill.getBoundingClientRect();
 
-  // Determine flood origin from pill center
-  const rect = pill.getBoundingClientRect();
+  // Pause orbit animation so pills hold their positions
+  const spinner = document.querySelector('.orbit-spinner');
+  if (spinner) spinner.style.animationPlayState = 'paused';
+
+  // STEP 1 (0–150ms): clicked pill scales up + brightens
+  pill.style.transition = 'transform 0.15s ease, filter 0.15s ease';
+  pill.style.animationPlayState = 'paused';
+  pill.style.transform  = 'rotate(0deg) scale(1.1)';
+  pill.style.filter     = 'brightness(1.25)';
+
+  // STEP 2 (150–500ms): other pills arc toward their nav positions
+  setTimeout(() => {
+    const allPills = document.querySelectorAll('.home-pill');
+    allPills.forEach(p => {
+      if (p === pill) return;
+      const oc = p.getAttribute('onclick') || '';
+      const m  = oc.match(/'nav-([\w-]+)'/);
+      if (!m) return;
+      const pNav = document.getElementById('nav-' + m[1]);
+      if (!pNav) return;
+      const pRect = p.getBoundingClientRect();
+      const nRect = pNav.getBoundingClientRect();
+      const dx = (nRect.left + nRect.width  / 2) - (pRect.left + pRect.width  / 2);
+      const dy = (nRect.top  + nRect.height / 2) - (pRect.top  + pRect.height / 2);
+      p.style.animationPlayState = 'paused';
+      p.style.transition = 'transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease';
+      p.style.transform  = `rotate(0deg) translate(${dx}px,${dy}px) scale(0.5)`;
+      p.style.opacity    = '0';
+    });
+  }, 150);
+
+  // STEP 3 (200ms): ink-drop flood from pill center
   const fx = ((rect.left + rect.width  / 2) / window.innerWidth  * 100).toFixed(1) + '%';
   const fy = ((rect.top  + rect.height / 2) / window.innerHeight * 100).toFixed(1) + '%';
+  setTimeout(() => {
+    const overlay = document.getElementById('flood-overlay');
+    overlay.style.setProperty('--fx', fx);
+    overlay.style.setProperty('--fy', fy);
+    overlay.getBoundingClientRect();
+    overlay.classList.add('flooding');
+  }, 200);
 
-  // Flying emoji clone toward nav
-  const emoji = pill.querySelector('.hp-icon') || pill.querySelector('.hi-icon');
-  if (emoji && navBtn) {
-    const nRect = navBtn.getBoundingClientRect();
-    const fly = document.createElement('div');
-    fly.className = 'home-icon-fly';
-    fly.textContent = emoji.textContent;
-    fly.style.cssText = `left:${rect.left + rect.width/2 - 21}px;top:${rect.top + rect.height/2 - 21}px;`;
-    document.body.appendChild(fly);
-    setTimeout(() => {
-      fly.style.left      = `${nRect.left + nRect.width/2  - 21}px`;
-      fly.style.top       = `${nRect.top  + nRect.height/2 - 21}px`;
-      fly.style.opacity   = '0';
-      fly.style.transform = 'scale(0.4)';
-    }, 80);
-    setTimeout(() => fly.remove(), 500);
-  }
-
-  // Ink-drop flood from pill position
-  const overlay = document.getElementById('flood-overlay');
-  overlay.style.setProperty('--fx', fx);
-  overlay.style.setProperty('--fy', fy);
-  // Force reflow to reset clip-path before adding class
-  overlay.getBoundingClientRect();
-  overlay.classList.add('flooding');
-
+  // STEP 4 (800ms): navigate, reset everything
   setTimeout(() => {
     goTo(screen, navBtn);
-    // Instantly reset overlay behind the new screen
+    // Reset flood overlay
+    const overlay = document.getElementById('flood-overlay');
     overlay.style.transition = 'none';
     overlay.classList.remove('flooding');
     requestAnimationFrame(() => requestAnimationFrame(() => {
       overlay.style.transition = '';
     }));
-  }, 600);
+    // Reset pill styles so orbit can resume
+    document.querySelectorAll('.home-pill').forEach(p => {
+      p.style.transition         = '';
+      p.style.transform          = '';
+      p.style.opacity            = '';
+      p.style.filter             = '';
+      p.style.animationPlayState = '';
+    });
+    if (spinner) spinner.style.animationPlayState = '';
+  }, 800);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -2335,31 +2479,25 @@ function animateTagline() {
 function startAmbientQuotes() {
   clearInterval(ambientQuoteTimer);
   showAmbientQuote();
-  ambientQuoteTimer = setInterval(rotateAmbientQuote, 10000);
+  ambientQuoteTimer = setInterval(rotateAmbientQuote, 12000);
 }
 
 function showAmbientQuote() {
   const quotes = currentLang === 'fr' ? AMBIENT_QUOTES_FR : AMBIENT_QUOTES_EN;
-  const q = quotes[ambientQuoteIdx % quotes.length];
   const tEl = document.getElementById('dp-quote-text');
-  const aEl = document.getElementById('dp-quote-author');
-  if (tEl) tEl.textContent = q.text;
-  if (aEl) aEl.textContent = '— ' + q.author;
+  if (tEl) tEl.textContent = quotes[ambientQuoteIdx % quotes.length];
 }
 
 function rotateAmbientQuote() {
   const tEl = document.getElementById('dp-quote-text');
-  const aEl = document.getElementById('dp-quote-author');
   if (!tEl) return;
   tEl.classList.add('dp-quote-fade');
-  aEl.classList.add('dp-quote-fade');
   setTimeout(() => {
     const quotes = currentLang === 'fr' ? AMBIENT_QUOTES_FR : AMBIENT_QUOTES_EN;
     ambientQuoteIdx = (ambientQuoteIdx + 1) % quotes.length;
     showAmbientQuote();
     tEl.classList.remove('dp-quote-fade');
-    aEl.classList.remove('dp-quote-fade');
-  }, 720);
+  }, 680);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -2394,8 +2532,17 @@ function setLang(lang) {
 
 function applyLang(lang) {
   const s = STRINGS[lang];
-  document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-  document.getElementById('lang-fr').classList.toggle('active', lang === 'fr');
+
+  // Mobile lang toggle
+  const enBtn = document.getElementById('lang-en');
+  const frBtn = document.getElementById('lang-fr');
+  if (enBtn) enBtn.classList.toggle('active', lang === 'en');
+  if (frBtn) frBtn.classList.toggle('active', lang === 'fr');
+  // Desktop lang toggle
+  const enBtnD = document.getElementById('lang-en-d');
+  const frBtnD = document.getElementById('lang-fr-d');
+  if (enBtnD) enBtnD.classList.toggle('active', lang === 'en');
+  if (frBtnD) frBtnD.classList.toggle('active', lang === 'fr');
 
   // Nav labels
   document.querySelector('#nav-mood .nav-label').textContent    = s.navMood;
@@ -2409,15 +2556,8 @@ function applyLang(lang) {
   document.querySelectorAll('.page-back').forEach(el => el.textContent = s.backBtn);
   document.querySelectorAll('.back-link').forEach(el => el.textContent = s.backLink);
   document.querySelectorAll('.back-tooltip:not(#back-tooltip-global)').forEach(el => el.textContent = s.backTooltip);
-  document.getElementById('back-tooltip-global').textContent = s.backTooltipGlobal;
-
-  // Welcome
-  document.querySelector('.welcome-tag').innerHTML = s.welcomeTag;
-  const wcT = document.querySelectorAll('.w-card-title');
-  const wcD = document.querySelectorAll('.w-card-desc');
-  [[wcT,0,s.wcCheckinTitle],[wcT,1,s.wcBreatheTitle],[wcT,2,s.wcSleepTitle],[wcT,3,s.wcCrisisTitle],
-   [wcD,0,s.wcCheckinDesc], [wcD,1,s.wcBreatheDesc], [wcD,2,s.wcSleepDesc], [wcD,3,s.wcCrisisDesc]]
-    .forEach(([nl,i,v]) => { if (nl[i]) nl[i].textContent = v; });
+  const btg = document.getElementById('back-tooltip-global');
+  if (btg) btg.textContent = s.backTooltipGlobal;
 
   // Mood
   document.querySelector('#screen-mood .page-title').textContent = s.moodTitle;
@@ -2557,26 +2697,38 @@ function applyLang(lang) {
       if (el) el.textContent = txt;
     });
 
-  // Home screen
+  // Home screen — orbit pill labels + mobile card labels
   animateTagline();
+  const iconLabels = [
+    ['mood', s.homeIconMood], ['breathe', s.homeIconBreathe], ['affirm', s.homeIconAffirm],
+    ['sleep', s.homeIconSleep], ['ground', s.homeIconGround], ['crisis', s.homeIconCrisis]
+  ];
+  iconLabels.forEach(([id, txt]) => {
+    // Orbit pills
+    const hp = document.getElementById('hi-lbl-' + id);
+    if (hp) hp.textContent = txt;
+    // Mobile cards
+    const hc = document.getElementById('hc-lbl-' + id);
+    if (hc) hc.textContent = txt;
+  });
   const holEl = document.getElementById('home-orb-label');
   if (holEl) holEl.textContent = s.homeOrbLabel;
   const hhEl = document.getElementById('home-hint');
   if (hhEl) hhEl.textContent = s.homeHint;
-  [['mood',s.homeIconMood],['breathe',s.homeIconBreathe],['affirm',s.homeIconAffirm],
-   ['sleep',s.homeIconSleep],['ground',s.homeIconGround],['crisis',s.homeIconCrisis]]
-    .forEach(([id, txt]) => {
-      const el = document.getElementById('hi-lbl-' + id);
-      if (el) el.textContent = txt;
-    });
   const navHomeLbl = document.getElementById('nav-lbl-home');
   if (navHomeLbl) navHomeLbl.textContent = s.navHome;
 
-  // Desktop panels
+  // Left column
   const dpEl = document.getElementById('dp-tagline');
   if (dpEl) dpEl.textContent = s.dpTagline;
-  // Refresh ambient quote immediately on lang change
   showAmbientQuote();
+
+  // Right column — update current tip in new language
+  const activeScreen = document.querySelector('.screen.active');
+  if (activeScreen) {
+    const sid = activeScreen.id.replace('screen-', '');
+    updateContextTip(sid);
+  }
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -2697,6 +2849,7 @@ window.addEventListener('DOMContentLoaded', () => {
   showAffirm();
   animateTagline();
   startAmbientQuotes();
+  updateContextTip('welcome');
 });
 </script>
 </body>
