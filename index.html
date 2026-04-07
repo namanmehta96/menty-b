@@ -7,6 +7,8 @@
   <meta name="theme-color" content="#0a0f1e"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
@@ -596,21 +598,31 @@
     .nav-btn {
       flex: 1; display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      gap: 3px; padding: 0.3rem 0; position: relative;
+      gap: 4px; padding: 0.3rem 0; position: relative;
       cursor: pointer; border: none; background: none;
-      color: var(--muted); font-family: 'Montserrat', sans-serif;
-      transition: all 0.25s ease;
+      color: rgba(255,255,255,0.4); font-family: 'Montserrat', sans-serif;
+      transition: color 0.3s ease;
     }
-    .nav-btn:hover { color: rgba(232,237,232,0.78); }
-    .nav-btn.active { color: var(--sage-pale); }
+    .nav-btn:hover { color: #1D9E75; }
+    .nav-btn:hover .nav-icon i {
+      color: #1D9E75;
+      filter: drop-shadow(0 0 14px rgba(29,158,117,0.8));
+    }
+    .nav-btn.active { color: #1D9E75; }
     .nav-btn.active .nav-icon {
-      color: var(--sage-pale);
-      filter: drop-shadow(0 0 6px rgba(29,158,117,0.8));
-      text-shadow: 0 0 14px rgba(29,158,117,0.65);
+      position: relative;
+      background: rgba(29,158,117,0.1);
+      border-radius: 50%; padding: 5px;
+      box-shadow: 0 0 16px 4px rgba(29,158,117,0.45);
     }
-    .nav-icon  { font-size: 1.625rem; line-height: 1; }
+    .nav-btn.active .nav-icon i {
+      color: #1D9E75;
+      filter: drop-shadow(0 0 8px rgba(29,158,117,0.7));
+    }
+    .nav-icon { font-size: 24px; line-height: 1; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+    .nav-icon i { transition: color 0.3s ease, filter 0.3s ease; }
     .nav-label { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.01em; }
-    /* Ground symbol SVG inside nav/pill */
+    /* Legacy ground symbol SVG */
     .gnd-sym {
       width: 1em; height: 0.9em;
       display: inline-block; vertical-align: middle; flex-shrink: 0;
@@ -619,52 +631,64 @@
     /* ═══════════════════════════════════════════════════════
        NAVBAR & PILL HOVER ANIMATIONS
     ═══════════════════════════════════════════════════════ */
-    @keyframes navBounce  { 0%,100%{transform:translateY(0)} 45%{transform:translateY(-3px)} }
-    @keyframes navPulse   { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
-    @keyframes navSpin    { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-    @keyframes navGlitter { 0%{transform:scale(1);opacity:1} 15%{transform:scale(1.3);opacity:0.8} 30%{transform:scale(0.7);opacity:0.6} 45%{transform:scale(1.3);opacity:0.9} 60%{transform:scale(0.8);opacity:0.7} 80%{transform:scale(1.2);opacity:1} 100%{transform:scale(1);opacity:1} }
-    @keyframes navFloat   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
-    @keyframes navShake   { 0%,100%{transform:rotate(0deg)} 20%{transform:rotate(-8deg)} 40%{transform:rotate(8deg)} 60%{transform:rotate(-8deg)} 80%{transform:rotate(8deg)} }
-    @keyframes navRing    { 0%,100%{transform:translateX(0)} 10%,30%,50%{transform:translateX(-3px)} 20%,40%,60%{transform:translateX(3px)} 70%{transform:translateX(0)} }
+    @keyframes navHouseBounce { 0%,100%{transform:translateY(0)} 45%{transform:translateY(-4px)} }
+    @keyframes navSmileyPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
+    @keyframes navWaveShift   { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-3px)} 50%{transform:translateX(3px)} 80%{transform:translateX(-3px)} }
+    @keyframes navStarGlitter { 0%,100%{transform:scale(1)} 25%{transform:scale(1.4)} 60%{transform:scale(0.8)} 85%{transform:scale(1.15)} }
+    @keyframes navMoonRock    { 0%,100%{transform:rotate(0deg)} 30%{transform:rotate(-8deg)} 70%{transform:rotate(8deg)} }
+    @keyframes navAnchorDrop  { 0%,100%{transform:translateY(0)} 35%{transform:translateY(4px)} 65%{transform:translateY(1px)} }
+    @keyframes navPhoneRing   { 0%,100%{transform:rotate(0deg)} 10%{transform:rotate(-12deg)} 25%{transform:rotate(12deg)} 40%{transform:rotate(-12deg)} 55%{transform:rotate(12deg)} 70%{transform:rotate(-12deg)} 85%{transform:rotate(12deg)} }
 
-    /* Navbar hover — animate the icon */
-    #nav-welcome:hover .nav-icon { animation: navBounce 0.35s ease both; }
-    #nav-mood:hover    .nav-icon { animation: navPulse  0.35s ease both; }
-    #nav-breathe:hover .nav-icon { animation: navSpin   0.6s ease both; }
-    #nav-affirm:hover  .nav-icon { animation: navGlitter 0.65s ease both; }
-    #nav-sleep:hover   .nav-icon { animation: navFloat  0.45s ease-in-out both; }
-    #nav-ground:hover  .nav-icon { animation: navShake  0.45s ease both; }
-    #nav-crisis:hover  .nav-icon { animation: navRing   0.65s ease both; }
+    /* Navbar hover — animate the <i> inside .nav-icon */
+    .nav-btn:hover .nav-icon i { color: #1D9E75; filter: drop-shadow(0 0 14px rgba(29,158,117,0.8)); }
+    #nav-welcome:hover .nav-icon i { animation: navHouseBounce 0.35s ease both; }
+    #nav-mood:hover    .nav-icon i { animation: navSmileyPulse 0.35s ease both; }
+    #nav-breathe:hover .nav-icon i { animation: navWaveShift   0.5s ease-in-out both; }
+    #nav-affirm:hover  .nav-icon i { animation: navStarGlitter 1.2s ease both; }
+    #nav-sleep:hover   .nav-icon i { animation: navMoonRock    0.45s ease both; }
+    #nav-ground:hover  .nav-icon i { animation: navAnchorDrop  0.4s ease both; }
+    #nav-crisis:hover  .nav-icon i { animation: navPhoneRing   0.65s ease both; }
 
-    /* Orbit pill hover — animate icon inside pill */
-    .hp-mood:hover    .hp-icon { animation: navPulse   0.35s ease both; }
-    .hp-breathe:hover .hp-icon { animation: navSpin    0.6s ease both; }
-    .hp-affirm:hover  .hp-icon { animation: navGlitter 0.65s ease both; }
-    .hp-sleep:hover   .hp-icon { animation: navFloat   0.45s ease-in-out both; }
-    .hp-ground:hover  .hp-icon { animation: navShake   0.45s ease both; }
-    .hp-crisis:hover  .hp-icon { animation: navRing    0.65s ease both; }
+    /* Orbit pill hover — scale pill + animate icon */
+    .home-pill:hover, .home-pill:active { transform: scale(1.05) !important; }
+    .hp-mood:hover    .hp-icon i { animation: navSmileyPulse 0.35s ease both; }
+    .hp-breathe:hover .hp-icon i { animation: navWaveShift   0.5s ease-in-out both; }
+    .hp-affirm:hover  .hp-icon i { animation: navStarGlitter 1.2s ease both; }
+    .hp-sleep:hover   .hp-icon i { animation: navMoonRock    0.45s ease both; }
+    .hp-ground:hover  .hp-icon i { animation: navAnchorDrop  0.4s ease both; }
+    .hp-crisis:hover  .hp-icon i { animation: navPhoneRing   0.65s ease both; }
+    .home-pill:hover .hp-icon i  { filter: drop-shadow(0 0 8px rgba(29,158,117,0.7)); color: #74c69d; }
 
-    /* Right column SVG icon animations */
-    .tip-svg { display: block; width: 52px; height: 52px; }
-    @keyframes lockShackle { 0%,55%,100%{transform:rotate(0deg)} 25%{transform:rotate(-30deg)} }
-    @keyframes playPulseA  { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
-    @keyframes bookTurnA   { 0%,100%{transform:skewX(0deg);opacity:1} 35%,65%{transform:skewX(-10deg);opacity:0.7} }
-    @keyframes sandFallA   { 0%{transform:translateY(0);opacity:1} 60%{transform:translateY(11px);opacity:0.6} 80%,100%{transform:translateY(11px);opacity:0} }
-    @keyframes dotPulse    { 0%,80%,100%{opacity:0.28} 15%,35%{opacity:1} }
-    @keyframes handsRightA { 0%,100%{transform:translateX(0)} 50%{transform:translateX(2px)} }
-    @keyframes handsLeftA  { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-2px)} }
-
-    .tip-lock-shackle { transform-box: fill-box; transform-origin: 100% 100%; animation: lockShackle 4s ease-in-out infinite; }
-    .tip-play-circle  { transform-box: fill-box; transform-origin: center; animation: playPulseA 3s ease-in-out infinite; }
-    .tip-book-page    { transform-box: fill-box; transform-origin: right center; animation: bookTurnA 6s ease-in-out infinite; }
-    .tip-sand         { transform-box: fill-box; transform-origin: center top; animation: sandFallA 2.4s ease-in infinite; }
-    .tip-dot-1 { animation: dotPulse 3s ease-in-out infinite 0s; }
-    .tip-dot-2 { animation: dotPulse 3s ease-in-out infinite 0.3s; }
-    .tip-dot-3 { animation: dotPulse 3s ease-in-out infinite 0.6s; }
-    .tip-dot-4 { animation: dotPulse 3s ease-in-out infinite 0.9s; }
-    .tip-dot-5 { animation: dotPulse 3s ease-in-out infinite 1.2s; }
-    .tip-hands-right { transform-box: fill-box; transform-origin: left center; animation: handsRightA 3s ease-in-out infinite; }
-    .tip-hands-left  { transform-box: fill-box; transform-origin: right center; animation: handsLeftA  3s ease-in-out infinite; }
+    /* ═══════════════════════════════════════════════════════
+       RIGHT COLUMN PHOSPHOR ICON WRAPPER
+    ═══════════════════════════════════════════════════════ */
+    .tip-icon-wrap {
+      width: 72px; height: 72px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(circle, rgba(29,158,117,0.2) 0%, transparent 70%);
+      animation: tipWrapPulse 3s ease-in-out infinite;
+      margin-bottom: 1.25rem; flex-shrink: 0;
+    }
+    @keyframes tipWrapPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+    .tip-icon-wrap i {
+      font-size: 40px; color: #1D9E75;
+      filter: drop-shadow(0 0 10px rgba(29,158,117,0.6));
+      display: block; line-height: 1;
+    }
+    @keyframes tipTapAnim       { 0%,70%,100%{transform:translateY(0) scale(1)} 15%{transform:translateY(2px) scale(0.92)} }
+    @keyframes tipShieldAnim    { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+    @keyframes tipSpinAnim      { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    @keyframes tipFloatAnim     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+    @keyframes tipFlipAnim      { 0%,35%{transform:rotate(0deg)} 50%,85%{transform:rotate(180deg)} 100%{transform:rotate(360deg)} }
+    @keyframes tipBobAnim       { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+    @keyframes tipHeartbeatAnim { 0%,100%{transform:scale(1)} 25%{transform:scale(1.1)} 50%{transform:scale(1)} 75%{transform:scale(1.1)} }
+    .tip-anim-tap       i { animation: tipTapAnim       2s ease-in-out infinite; }
+    .tip-anim-shield    i { animation: tipShieldAnim    3s ease-in-out infinite; }
+    .tip-anim-spin      i { animation: tipSpinAnim      8s linear infinite; }
+    .tip-anim-float     i { animation: tipFloatAnim     4s ease-in-out infinite; }
+    .tip-anim-flip      i { animation: tipFlipAnim      3s ease-in-out infinite; }
+    .tip-anim-bob       i { animation: tipBobAnim       2s ease-in-out infinite; }
+    .tip-anim-heartbeat i { animation: tipHeartbeatAnim 2.5s ease-in-out infinite; }
 
     /* ═══════════════════════════════════════════════════════
        MISC UTILS
@@ -797,17 +821,16 @@
       min-height: calc(100dvh - 80px);
       text-align: center;
     }
+    @keyframes wordmarkGlow {
+      0%,100% { text-shadow: 0 0 40px rgba(29,158,117,0.4), 0 0 80px rgba(29,158,117,0.15); }
+      50%     { text-shadow: 0 0 40px rgba(29,158,117,1.0), 0 0 80px rgba(29,158,117,0.4); }
+    }
     .home-wordmark {
       font-size: 1.9rem; font-weight: 700; letter-spacing: 0.05em;
       color: var(--sage-pale); margin-bottom: 0.7rem;
-      display: flex; align-items: center; gap: 0.45rem;
+      animation: wordmarkGlow 4s ease-in-out infinite;
     }
-    .home-wordmark-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--sage-light);
-      box-shadow: 0 0 14px rgba(82,183,136,0.78);
-      flex-shrink: 0;
-    }
+    .home-wordmark-dot { display: none; }
     .home-tagline {
       margin-bottom: 1.5rem; /* 24px gap to orbit */
       text-align: center; line-height: 1;
@@ -856,11 +879,11 @@
     }
     @keyframes orbitSpin { to { transform: rotate(360deg); } }
 
-    /* Each orbit pill — 72px min, 28px icon, 13px label */
+    /* Each orbit pill — 80px, Phosphor icon 28px */
     .home-pill {
-      position: absolute; width: 72px;
-      left: calc(50% + 165px * sin(var(--a)) - 36px);
-      top:  calc(50% - 165px * cos(var(--a)) - 36px);
+      position: absolute; width: 80px;
+      left: calc(50% + 165px * sin(var(--a)) - 40px);
+      top:  calc(50% - 165px * cos(var(--a)) - 40px);
       display: flex; flex-direction: column;
       align-items: center; gap: 6px;
       background: rgba(255,255,255,0.09);
@@ -884,8 +907,9 @@
     .hp-ground:hover,  .hp-ground:active  { background: rgba(144,190,109,0.14); border-color: rgba(144,190,109,0.6); box-shadow: 0 0 28px rgba(144,190,109,0.32); }
     .hp-crisis:hover,  .hp-crisis:active  { background: rgba(244,162,97,0.14);  border-color: rgba(244,162,97,0.6);  box-shadow: 0 0 28px rgba(244,162,97,0.32); }
 
-    .hp-icon { font-size: 1.75rem; line-height: 1; }
-    .hp-lbl  { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap; }
+    .hp-icon { font-size: 28px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+    .hp-icon i { color: #1D9E75; filter: drop-shadow(0 0 6px rgba(29,158,117,0.5)); transition: filter 0.25s ease, color 0.25s ease; }
+    .hp-lbl  { font-size: 13px; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap; color: rgba(255,255,255,0.85); }
 
     /* Central orb — 140px heartbeat pulse */
     .home-center-orb {
@@ -1008,7 +1032,7 @@
       max-width: 185px; text-align: center;
       border-top: 1px solid rgba(255,255,255,0.12);
       border-bottom: 1px solid rgba(255,255,255,0.12);
-      padding: 16px 0;
+      padding: 16px 0; margin-top: 32px;
     }
     .dp-quote-text {
       font-size: 1rem; font-style: italic;
@@ -1086,7 +1110,8 @@
     .hc-sleep:hover,.hc-sleep:active    { background: rgba(147,112,219,0.11); border-color: rgba(147,112,219,0.5); }
     .hc-ground:hover,.hc-ground:active  { background: rgba(144,190,109,0.11); border-color: rgba(144,190,109,0.5); }
     .hc-crisis:hover,.hc-crisis:active  { background: rgba(244,162,97,0.11);  border-color: rgba(244,162,97,0.5); }
-    .hc-icon { font-size: 1.75rem; line-height: 1; }
+    .hc-icon { font-size: 28px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+    .hc-icon i { color: #1D9E75; filter: drop-shadow(0 0 6px rgba(29,158,117,0.4)); }
     .hc-lbl  { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.01em; }
 
     /* Orbit: hidden on mobile, shown on desktop */
@@ -1241,10 +1266,7 @@
   <div id="screen-welcome" class="screen active">
     <div class="home-hero">
 
-      <div class="home-wordmark">
-        <span class="home-wordmark-dot"></span>
-        Menty-B
-      </div>
+      <div class="home-wordmark">Menty-B</div>
 
       <p class="home-tagline" id="home-tagline"></p>
 
@@ -1256,22 +1278,22 @@
         <!-- Spinning layer — contains the 6 pills -->
         <div class="orbit-spinner">
           <button class="home-pill hp-mood"    style="--a:0deg"   onclick="homeNav('mood',   'nav-mood')">
-            <span class="hp-icon">💚</span><span class="hp-lbl" id="hi-lbl-mood">Mood</span>
+            <span class="hp-icon"><i class="ph-duotone ph-smiley"></i></span><span class="hp-lbl" id="hi-lbl-mood">Mood</span>
           </button>
           <button class="home-pill hp-breathe" style="--a:60deg"  onclick="homeNav('breathe','nav-breathe')">
-            <span class="hp-icon">🌀</span><span class="hp-lbl" id="hi-lbl-breathe">Breathe</span>
+            <span class="hp-icon"><i class="ph-duotone ph-waves"></i></span><span class="hp-lbl" id="hi-lbl-breathe">Breathe</span>
           </button>
           <button class="home-pill hp-affirm"  style="--a:120deg" onclick="homeNav('affirm', 'nav-affirm')">
-            <span class="hp-icon">✨</span><span class="hp-lbl" id="hi-lbl-affirm">Affirm</span>
+            <span class="hp-icon"><i class="ph-duotone ph-sparkle"></i></span><span class="hp-lbl" id="hi-lbl-affirm">Affirm</span>
           </button>
           <button class="home-pill hp-sleep"   style="--a:180deg" onclick="homeNav('sleep',  'nav-sleep')">
-            <span class="hp-icon">🌙</span><span class="hp-lbl" id="hi-lbl-sleep">Wind</span>
+            <span class="hp-icon"><i class="ph-duotone ph-moon-stars"></i></span><span class="hp-lbl" id="hi-lbl-sleep">Wind</span>
           </button>
           <button class="home-pill hp-ground"  style="--a:240deg" onclick="homeNav('ground', 'nav-ground')">
-            <span class="hp-icon"><svg class="gnd-sym" viewBox="0 0 22 20" fill="currentColor"><path d="M11 12 L3.5 2.5 L18.5 2.5 Z"/><rect x="2" y="15" width="18" height="2.5" rx="1.25"/><rect x="7" y="12" width="8" height="1.5" rx="0.75"/></svg></span><span class="hp-lbl" id="hi-lbl-ground">Ground</span>
+            <span class="hp-icon"><i class="ph-duotone ph-anchor-simple"></i></span><span class="hp-lbl" id="hi-lbl-ground">Ground</span>
           </button>
           <button class="home-pill hp-crisis"  style="--a:300deg" onclick="homeNav('crisis', 'nav-crisis')">
-            <span class="hp-icon">📞</span><span class="hp-lbl" id="hi-lbl-crisis">Help</span>
+            <span class="hp-icon"><i class="ph-duotone ph-phone-call"></i></span><span class="hp-lbl" id="hi-lbl-crisis">Help</span>
           </button>
         </div>
 
@@ -1285,22 +1307,22 @@
       <!-- Mobile-only feature cards (2×3 grid) -->
       <div class="home-cards">
         <button class="hc-card hc-mood"    onclick="goTo('mood',    document.getElementById('nav-mood'))">
-          <span class="hc-icon">💚</span><span class="hc-lbl" id="hc-lbl-mood">Mood</span>
+          <span class="hc-icon"><i class="ph-duotone ph-smiley"></i></span><span class="hc-lbl" id="hc-lbl-mood">Mood</span>
         </button>
         <button class="hc-card hc-breathe" onclick="goTo('breathe', document.getElementById('nav-breathe'))">
-          <span class="hc-icon">🌀</span><span class="hc-lbl" id="hc-lbl-breathe">Breathe</span>
+          <span class="hc-icon"><i class="ph-duotone ph-waves"></i></span><span class="hc-lbl" id="hc-lbl-breathe">Breathe</span>
         </button>
         <button class="hc-card hc-affirm"  onclick="goTo('affirm',  document.getElementById('nav-affirm'))">
-          <span class="hc-icon">✨</span><span class="hc-lbl" id="hc-lbl-affirm">Affirm</span>
+          <span class="hc-icon"><i class="ph-duotone ph-sparkle"></i></span><span class="hc-lbl" id="hc-lbl-affirm">Affirm</span>
         </button>
         <button class="hc-card hc-sleep"   onclick="goTo('sleep',   document.getElementById('nav-sleep'))">
-          <span class="hc-icon">🌙</span><span class="hc-lbl" id="hc-lbl-sleep">Wind</span>
+          <span class="hc-icon"><i class="ph-duotone ph-moon-stars"></i></span><span class="hc-lbl" id="hc-lbl-sleep">Wind</span>
         </button>
         <button class="hc-card hc-ground"  onclick="goTo('ground',  document.getElementById('nav-ground'))">
-          <span class="hc-icon"><svg class="gnd-sym" viewBox="0 0 22 20" fill="currentColor"><path d="M11 12 L3.5 2.5 L18.5 2.5 Z"/><rect x="2" y="15" width="18" height="2.5" rx="1.25"/><rect x="7" y="12" width="8" height="1.5" rx="0.75"/></svg></span><span class="hc-lbl" id="hc-lbl-ground">Ground</span>
+          <span class="hc-icon"><i class="ph-duotone ph-anchor-simple"></i></span><span class="hc-lbl" id="hc-lbl-ground">Ground</span>
         </button>
         <button class="hc-card hc-crisis"  onclick="goTo('crisis',  document.getElementById('nav-crisis'))">
-          <span class="hc-icon">📞</span><span class="hc-lbl" id="hc-lbl-crisis">Help</span>
+          <span class="hc-icon"><i class="ph-duotone ph-phone-call"></i></span><span class="hc-lbl" id="hc-lbl-crisis">Help</span>
         </button>
       </div>
 
@@ -1665,25 +1687,25 @@
 <!-- ── Bottom Navigation ─────────────────────────────────── -->
 <nav class="bottom-nav">
   <button class="nav-btn active" id="nav-welcome" onclick="goTo('welcome',this)">
-    <span class="nav-icon">🏠</span><span class="nav-label" id="nav-lbl-home">Home</span>
+    <span class="nav-icon"><i class="ph-duotone ph-house-simple"></i></span><span class="nav-label" id="nav-lbl-home">Home</span>
   </button>
   <button class="nav-btn" id="nav-mood" onclick="goTo('mood',this)">
-    <span class="nav-icon">💚</span><span class="nav-label">Mood</span>
+    <span class="nav-icon"><i class="ph-duotone ph-smiley"></i></span><span class="nav-label">Mood</span>
   </button>
   <button class="nav-btn" id="nav-breathe" onclick="goTo('breathe',this)">
-    <span class="nav-icon">🌀</span><span class="nav-label">Breathe</span>
+    <span class="nav-icon"><i class="ph-duotone ph-waves"></i></span><span class="nav-label">Breathe</span>
   </button>
   <button class="nav-btn" id="nav-affirm" onclick="goTo('affirm',this)">
-    <span class="nav-icon">✨</span><span class="nav-label">Affirm</span>
+    <span class="nav-icon"><i class="ph-duotone ph-sparkle"></i></span><span class="nav-label">Affirm</span>
   </button>
   <button class="nav-btn" id="nav-sleep" onclick="goTo('sleep',this)">
-    <span class="nav-icon">🌙</span><span class="nav-label">Wind</span>
+    <span class="nav-icon"><i class="ph-duotone ph-moon-stars"></i></span><span class="nav-label">Wind</span>
   </button>
   <button class="nav-btn" id="nav-ground" onclick="goTo('ground',this)">
-    <span class="nav-icon"><svg class="gnd-sym" viewBox="0 0 22 20" fill="currentColor"><path d="M11 12 L3.5 2.5 L18.5 2.5 Z"/><rect x="2" y="15" width="18" height="2.5" rx="1.25"/><rect x="7" y="12" width="8" height="1.5" rx="0.75"/></svg></span><span class="nav-label">Ground</span>
+    <span class="nav-icon"><i class="ph-duotone ph-anchor-simple"></i></span><span class="nav-label">Ground</span>
   </button>
   <button class="nav-btn" id="nav-crisis" onclick="goTo('crisis',this)">
-    <span class="nav-icon">📞</span><span class="nav-label">Help</span>
+    <span class="nav-icon"><i class="ph-duotone ph-phone-call"></i></span><span class="nav-label">Help</span>
   </button>
 </nav>
 
@@ -2107,73 +2129,16 @@ function goTo(id, btnEl) {
 }
 
 /* ══════════════════════════════════════════════════════════
-   RIGHT COLUMN — CUSTOM TIP SVG ICONS
+   RIGHT COLUMN — PHOSPHOR DUOTONE TIP ICONS
 ══════════════════════════════════════════════════════════ */
-const TIP_SVGS = {
-  welcome: `<svg class="tip-svg" viewBox="0 0 48 54" fill="none">
-    <line x1="8" y1="46" x2="18" y2="16" stroke="rgba(29,158,117,0.4)" stroke-width="1"/>
-    <line x1="18" y1="16" x2="30" y2="40" stroke="rgba(29,158,117,0.4)" stroke-width="1"/>
-    <line x1="30" y1="40" x2="42" y2="12" stroke="rgba(29,158,117,0.4)" stroke-width="1"/>
-    <line x1="42" y1="12" x2="48" y2="32" stroke="rgba(29,158,117,0.4)" stroke-width="1"/>
-    <circle class="c-dot c-dot-1" cx="8"  cy="46" r="3"   fill="#1D9E75"/>
-    <circle class="c-dot c-dot-2" cx="18" cy="16" r="2.5" fill="#1D9E75"/>
-    <circle class="c-dot c-dot-3" cx="30" cy="40" r="3.5" fill="#1D9E75"/>
-    <circle class="c-dot c-dot-4" cx="42" cy="12" r="2"   fill="#1D9E75"/>
-    <circle class="c-dot c-dot-5" cx="48" cy="32" r="2.5" fill="#1D9E75"/>
-  </svg>`,
-
-  mood: `<svg class="tip-svg" viewBox="0 0 48 48" fill="none">
-    <g class="tip-lock-shackle">
-      <path d="M15 24 L15 17 C15 10.4 33 10.4 33 17 L33 24" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
-    </g>
-    <rect x="9" y="24" width="30" height="20" rx="5" stroke="#1D9E75" stroke-width="1.5"/>
-    <circle cx="24" cy="33" r="3" stroke="#1D9E75" stroke-width="1.5"/>
-    <line x1="24" y1="36" x2="24" y2="40" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
-  </svg>`,
-
-  breathe: `<svg class="tip-svg" viewBox="0 0 48 48" fill="none">
-    <circle class="tip-play-circle" cx="24" cy="24" r="18" stroke="#1D9E75" stroke-width="1.5"/>
-    <path d="M20 16 L34 24 L20 32 Z" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="rgba(29,158,117,0.15)"/>
-  </svg>`,
-
-  affirm: `<svg class="tip-svg" viewBox="0 0 48 48" fill="none">
-    <path d="M24 8 L24 40" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
-    <path class="tip-book-page" d="M24 10 C20 10 10 12 8 16 L8 38 C10 34 20 33 24 33 Z" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="rgba(29,158,117,0.08)"/>
-    <path d="M24 10 C28 10 38 12 40 16 L40 38 C38 34 28 33 24 33 Z" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="rgba(29,158,117,0.08)"/>
-  </svg>`,
-
-  sleep: `<svg class="tip-svg" viewBox="0 0 48 48" fill="none">
-    <line x1="11" y1="8"  x2="37" y2="8"  stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="11" y1="40" x2="37" y2="40" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M13 8 C13 8 24 14 24 24 C24 34 35 40 35 40" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
-    <path d="M35 8 C35 8 24 14 24 24 C24 34 13 40 13 40" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
-    <ellipse cx="24" cy="24" rx="5" ry="3" fill="rgba(29,158,117,0.15)" stroke="#1D9E75" stroke-width="1"/>
-    <circle class="tip-sand" cx="24" cy="11" r="2" fill="#1D9E75"/>
-  </svg>`,
-
-  ground: `<svg class="tip-svg" viewBox="0 0 48 48" fill="none">
-    <circle class="tip-dot-1" cx="24" cy="10" r="3.5" fill="#1D9E75"/>
-    <circle class="tip-dot-2" cx="38" cy="20" r="3.5" fill="#1D9E75"/>
-    <circle class="tip-dot-3" cx="33" cy="37" r="3.5" fill="#1D9E75"/>
-    <circle class="tip-dot-4" cx="15" cy="37" r="3.5" fill="#1D9E75"/>
-    <circle class="tip-dot-5" cx="10" cy="20" r="4.5" fill="#1D9E75"/>
-    <line x1="24" y1="10" x2="38" y2="20" stroke="rgba(29,158,117,0.3)" stroke-width="1"/>
-    <line x1="38" y1="20" x2="33" y2="37" stroke="rgba(29,158,117,0.3)" stroke-width="1"/>
-    <line x1="33" y1="37" x2="15" y2="37" stroke="rgba(29,158,117,0.3)" stroke-width="1"/>
-    <line x1="15" y1="37" x2="10" y2="20" stroke="rgba(29,158,117,0.3)" stroke-width="1"/>
-    <line x1="10" y1="20" x2="24" y2="10" stroke="rgba(29,158,117,0.3)" stroke-width="1"/>
-  </svg>`,
-
-  crisis: `<svg class="tip-svg" viewBox="0 0 48 48" fill="none">
-    <g class="tip-hands-left">
-      <path d="M4 26 C4 26 6 22 10 20 C13 19 15 20 16 22 L18 26 C19 28 18 30 16 30 L12 30 C10 30 8 30 6 28 Z" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="rgba(29,158,117,0.08)"/>
-      <line x1="16" y1="22" x2="20" y2="24" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
-    </g>
-    <g class="tip-hands-right">
-      <path d="M44 26 C44 26 42 22 38 20 C35 19 33 20 32 22 L30 26 C29 28 30 30 32 30 L36 30 C38 30 40 30 42 28 Z" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="rgba(29,158,117,0.08)"/>
-      <line x1="32" y1="22" x2="28" y2="24" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
-    </g>
-  </svg>`
+const TIP_ICONS = {
+  welcome: `<div class="tip-icon-wrap tip-anim-tap"><i class="ph-duotone ph-cursor-click"></i></div>`,
+  mood:    `<div class="tip-icon-wrap tip-anim-shield"><i class="ph-duotone ph-shield-check"></i></div>`,
+  breathe: `<div class="tip-icon-wrap tip-anim-spin"><i class="ph-duotone ph-play-circle"></i></div>`,
+  affirm:  `<div class="tip-icon-wrap tip-anim-float"><i class="ph-duotone ph-book-open-text"></i></div>`,
+  sleep:   `<div class="tip-icon-wrap tip-anim-flip"><i class="ph-duotone ph-hourglass-medium"></i></div>`,
+  ground:  `<div class="tip-icon-wrap tip-anim-bob"><i class="ph-duotone ph-anchor-simple"></i></div>`,
+  crisis:  `<div class="tip-icon-wrap tip-anim-heartbeat"><i class="ph-duotone ph-hand-heart"></i></div>`
 };
 
 function updateContextTip(screen) {
@@ -2187,7 +2152,7 @@ function updateContextTip(screen) {
 
   wrapEl.classList.add('ctx-tip-fade');
   setTimeout(() => {
-    iconEl.innerHTML = TIP_SVGS[screen] || TIP_SVGS.welcome;
+    iconEl.innerHTML = TIP_ICONS[screen] || TIP_ICONS.welcome;
     textEl.textContent = tip.text;
     wrapEl.classList.remove('ctx-tip-fade');
   }, 360);
@@ -2596,48 +2561,48 @@ function resetGnd() {
 }
 
 /* ══════════════════════════════════════════════════════════
-   HOME NAV ANIMATION — 4-STEP TRANSITION
+   HOME NAV ANIMATION — CINEMATIC 3-PHASE TRANSITION
 ══════════════════════════════════════════════════════════ */
 function homeNav(screen, navId) {
   const pill   = event.currentTarget;
   const navBtn = document.getElementById(navId);
   const rect   = pill.getBoundingClientRect();
-
-  // Pause orbit animation so pills hold their positions
   const spinner = document.querySelector('.orbit-spinner');
+
   if (spinner) spinner.style.animationPlayState = 'paused';
-
-  // STEP 1 (0–150ms): clicked pill scales up + brightens
-  pill.style.transition = 'transform 0.15s ease, filter 0.15s ease';
   pill.style.animationPlayState = 'paused';
-  pill.style.transform  = 'rotate(0deg) scale(1.1)';
-  pill.style.filter     = 'brightness(1.25)';
 
-  // STEP 2 (150–500ms): other pills arc toward their nav positions
-  setTimeout(() => {
-    const allPills = document.querySelectorAll('.home-pill');
-    allPills.forEach(p => {
-      if (p === pill) return;
-      const oc = p.getAttribute('onclick') || '';
-      const m  = oc.match(/'nav-([\w-]+)'/);
-      if (!m) return;
-      const pNav = document.getElementById('nav-' + m[1]);
-      if (!pNav) return;
-      const pRect = p.getBoundingClientRect();
-      const nRect = pNav.getBoundingClientRect();
-      const dx = (nRect.left + nRect.width  / 2) - (pRect.left + pRect.width  / 2);
-      const dy = (nRect.top  + nRect.height / 2) - (pRect.top  + pRect.height / 2);
-      p.style.animationPlayState = 'paused';
-      p.style.transition = 'transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease';
-      p.style.transform  = `rotate(0deg) translate(${dx}px,${dy}px) scale(0.5)`;
-      p.style.opacity    = '0';
+  /* Phase 1 (0–200ms): clicked pill springs up */
+  pill.style.transition = 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1), filter 0.2s ease';
+  pill.style.transform  = 'scale(1.15)';
+  pill.style.filter     = 'brightness(1.35) drop-shadow(0 0 18px rgba(29,158,117,0.9))';
+
+  /* Other pills arc toward their navbar positions */
+  const allPills = document.querySelectorAll('.home-pill');
+  allPills.forEach(p => {
+    if (p === pill) return;
+    p.style.animationPlayState = 'paused';
+    const oc = p.getAttribute('onclick') || '';
+    const m  = oc.match(/'nav-([\w-]+)'/);
+    if (!m) return;
+    const pNav = document.getElementById('nav-' + m[1]);
+    if (!pNav) return;
+    const pRect = p.getBoundingClientRect();
+    const nRect = pNav.getBoundingClientRect();
+    const dx = (nRect.left + nRect.width  / 2) - (pRect.left + pRect.width  / 2);
+    const dy = (nRect.top  + nRect.height / 2) - (pRect.top  + pRect.height / 2);
+    requestAnimationFrame(() => {
+      p.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease';
+      p.style.transform  = `translate(${dx}px,${dy}px) scale(0.55)`;
+      p.style.opacity    = '0.5';
     });
-  }, 150);
+  });
 
-  // STEP 3 (200ms): ink-drop flood from pill center
+  /* Phase 2 (200ms): flood overlay bursts from pill center */
   const fx = ((rect.left + rect.width  / 2) / window.innerWidth  * 100).toFixed(1) + '%';
   const fy = ((rect.top  + rect.height / 2) / window.innerHeight * 100).toFixed(1) + '%';
   setTimeout(() => {
+    allPills.forEach(p => { if (p !== pill) p.style.opacity = '0'; });
     const overlay = document.getElementById('flood-overlay');
     overlay.style.setProperty('--fx', fx);
     overlay.style.setProperty('--fy', fy);
@@ -2645,18 +2610,31 @@ function homeNav(screen, navId) {
     overlay.classList.add('flooding');
   }, 200);
 
-  // STEP 4 (800ms): navigate, reset everything
+  /* Phase 3 (500ms): navigate + screen slides in from below */
   setTimeout(() => {
     goTo(screen, navBtn);
-    // Reset flood overlay
+    const scr = document.getElementById('screen-' + screen);
+    if (scr) {
+      scr.style.transition = 'none';
+      scr.style.opacity    = '0';
+      scr.style.transform  = 'translateY(24px)';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        scr.style.transition = 'opacity 0.3s cubic-bezier(0,0,0.2,1), transform 0.3s cubic-bezier(0,0,0.2,1)';
+        scr.style.opacity    = '1';
+        scr.style.transform  = 'translateY(0)';
+      }));
+    }
+  }, 500);
+
+  /* Cleanup at 800ms */
+  setTimeout(() => {
     const overlay = document.getElementById('flood-overlay');
     overlay.style.transition = 'none';
     overlay.classList.remove('flooding');
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      overlay.style.transition = '';
-    }));
-    // Reset pill styles so orbit can resume
-    document.querySelectorAll('.home-pill').forEach(p => {
+    requestAnimationFrame(() => requestAnimationFrame(() => { overlay.style.transition = ''; }));
+    const scr = document.getElementById('screen-' + screen);
+    if (scr) { scr.style.transition = ''; scr.style.opacity = ''; scr.style.transform = ''; }
+    allPills.forEach(p => {
       p.style.transition         = '';
       p.style.transform          = '';
       p.style.opacity            = '';
