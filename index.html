@@ -663,6 +663,59 @@
       line-height: 1.5;
       animation: fadeUp 0.4s ease;
     }
+
+    /* Pre-start instruction */
+    .b-prestart {
+      text-align: center;
+      font-size: 0.9375rem; font-weight: 500;
+      color: var(--muted); margin-bottom: 0.35rem;
+      letter-spacing: 0.01em;
+    }
+
+    /* Start button pulse (before exercise begins) */
+    @keyframes startBtnPulse {
+      0%,100% { box-shadow: 0 4px 22px rgba(45,106,79,0.48); transform: scale(1); }
+      50%      { box-shadow: 0 6px 44px rgba(45,106,79,0.78), 0 0 55px rgba(82,183,136,0.32); transform: scale(1.025); }
+    }
+    .btn-pulse {
+      animation: startBtnPulse 2.5s ease-in-out infinite !important;
+      font-size: 1rem !important;
+      padding: 0.95rem 1rem !important;
+    }
+
+    /* Cycle feedback text */
+    .b-cycles {
+      font-size: 0.75rem; color: var(--muted);
+      text-align: center; min-height: 1.1rem;
+      transition: color 0.3s ease;
+    }
+
+    /* Welcome flow overlay */
+    .welcome-flow {
+      position: fixed; inset: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5rem;
+      background: rgba(8,12,24,0.97);
+      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+      transition: opacity 0.4s ease;
+    }
+    .wf-card {
+      width: 100%; max-width: 390px;
+      padding: 2.75rem 2rem;
+      border-radius: 28px; text-align: center;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(82,183,136,0.28);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 0 60px rgba(45,106,79,0.22), inset 0 1px 0 rgba(255,255,255,0.06);
+      animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes wfFadeOut {
+      to { opacity: 0; transform: translateY(-12px); }
+    }
+    .wf-fade-out { animation: wfFadeOut 0.3s ease forwards; }
+    .wf-icon  { font-size: 2.75rem; margin-bottom: 1.25rem; }
+    .wf-title { font-size: 1.5rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.9rem; }
+    .wf-body  { font-size: 0.9375rem; color: var(--muted); line-height: 1.72; }
   </style>
 </head>
 <body>
@@ -704,7 +757,7 @@
         <div class="w-card-desc">Evening routine for better sleep</div>
       </button>
       <button class="w-card wc-c" onclick="goTo('crisis')">
-        <div class="w-card-icon">🤝</div>
+        <div class="w-card-icon">📞</div>
         <div class="w-card-title">Crisis Help</div>
         <div class="w-card-desc">You are not alone. Reach out.</div>
       </button>
@@ -716,7 +769,7 @@
     <div class="page-head">
       <div class="page-head-text">
         <h2 class="page-title">How are you feeling?</h2>
-        <p class="page-sub">Tap your mood to get started</p>
+        <p class="page-sub">Tap how you're feeling right now</p>
       </div>
       <button class="page-back" onclick="focusMentyB('back-tooltip-global')">Back to Menty-B 💚</button>
     </div>
@@ -752,7 +805,7 @@
     <div class="page-head">
       <div class="page-head-text">
         <h2 class="page-title">Breathing</h2>
-        <p class="page-sub">Choose a technique and breathe with me</p>
+        <p class="page-sub">Choose a technique, then press Start</p>
       </div>
       <button class="page-back" onclick="focusMentyB('back-tooltip-global')">Back to Menty-B 💚</button>
     </div>
@@ -776,6 +829,7 @@
       </div>
     </div>
 
+    <div class="b-prestart" id="b-prestart">Press Start and follow the circle</div>
     <div class="circle-area">
       <div class="svg-wrap">
         <svg viewBox="0 0 230 230" xmlns="http://www.w3.org/2000/svg">
@@ -814,11 +868,11 @@
           <div class="b-count" id="b-count">—</div>
         </div>
       </div>
-      <div class="b-cycles" id="b-cycles">Cycle 0</div>
+      <div class="b-cycles" id="b-cycles"></div>
     </div>
 
     <div class="breathe-ctrl">
-      <button class="btn btn-primary" id="b-btn" onclick="toggleBreathe()">Start</button>
+      <button class="btn btn-primary btn-pulse" id="b-btn" onclick="toggleBreathe()">Start</button>
       <button class="btn btn-ghost"              onclick="resetBreathe()">Reset</button>
     </div>
     <div class="b-tip" id="b-tip">Breathe in through your nose, out through your mouth.<br>Complete 3 cycles — then check back in with Menty-B.</div>
@@ -855,7 +909,7 @@
     <div class="page-head">
       <div class="page-head-text">
         <h2 class="page-title">Affirmations</h2>
-        <p class="page-sub">A gentle reminder just for you</p>
+        <p class="page-sub">Pick a category and read slowly</p>
       </div>
       <button class="page-back" onclick="focusMentyB('back-tooltip-global')">Back to Menty-B 💚</button>
     </div>
@@ -879,7 +933,7 @@
     <div class="page-head">
       <div class="page-head-text">
         <h2 class="page-title">Wind-down</h2>
-        <p class="page-sub">Work through these steps before bed</p>
+        <p class="page-sub">Work through each step at your own pace</p>
       </div>
       <button class="page-back" onclick="focusMentyB('back-tooltip-global')">Back to Menty-B 💚</button>
     </div>
@@ -945,9 +999,12 @@
     <div class="page-head">
       <div class="page-head-text">
         <h2 class="page-title">Crisis Help</h2>
+        <p class="page-sub">You are not alone. Help is one tap away.</p>
       </div>
       <button class="page-back" onclick="focusMentyB('back-tooltip-global')">Back to Menty-B 💚</button>
     </div>
+
+    <p style="font-size:0.875rem;color:var(--muted);line-height:1.65;margin-bottom:1.25rem">These are crisis resources if you need to talk to someone right now. You are not alone. Help is one tap away.</p>
 
     <div class="crisis-banner">
       <div class="cb-title">You are not alone</div>
@@ -955,7 +1012,7 @@
     </div>
 
     <div class="crisis-sec">
-      <div class="c-sec-title">🇫🇷 France — Gratuit 24h/24</div>
+      <div class="c-sec-title">🇫🇷 France, free 24h</div>
       <a class="crisis-card" href="tel:3114">
         <div><div class="c-name">Prévention du Suicide</div><div class="c-desc">Professionnels de santé, confidentiel</div></div>
         <div class="c-num">3114</div>
@@ -973,7 +1030,7 @@
     <div class="crisis-sec">
       <div class="c-sec-title">🌍 International</div>
       <a class="crisis-card" href="tel:988">
-        <div><div class="c-name">988 Crisis Lifeline</div><div class="c-desc">United States — call or text</div></div>
+        <div><div class="c-name">988 Crisis Lifeline</div><div class="c-desc">United States, call or text</div></div>
         <div class="c-num">988</div>
       </a>
       <a class="crisis-card" href="sms:741741&body=HOME">
@@ -981,19 +1038,19 @@
         <div class="c-num">741741</div>
       </a>
       <a class="crisis-card" href="https://findahelpline.com" target="_blank" rel="noopener">
-        <div><div class="c-name">Find a Helpline</div><div class="c-desc">findahelpline.com — worldwide directory</div></div>
+        <div><div class="c-name">Find a helpline in your country</div><div class="c-desc">findahelpline.com</div></div>
         <div class="c-num" style="font-size:0.75rem">→ Web</div>
       </a>
     </div>
 
-    <div class="ground-lbl">Immediate grounding — try this now</div>
+    <div class="ground-lbl">Immediate grounding, try this now</div>
     <div id="ground-list"></div>
     <button class="btn btn-primary" id="ground-btn" onclick="doGround()">Start 5-4-3-2-1 grounding</button>
   </div>
 
-  <!-- Global back tooltip (shown when opener is unavailable) -->
-  <div class="back-tooltip" id="back-tooltip-global" style="display:none;position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:300;background:rgba(10,15,30,0.92);border:1px solid rgba(82,183,136,0.35);border-radius:12px;padding:0.65rem 1.1rem;white-space:nowrap;backdrop-filter:blur(16px)">
-    Open your Menty-B tab to continue 💚
+  <!-- Global back banner (shown when opener is unavailable) -->
+  <div id="back-tooltip-global" style="display:none;position:fixed;bottom:92px;left:50%;transform:translateX(-50%);z-index:300;background:rgba(10,15,30,0.94);border:1px solid rgba(82,183,136,0.4);border-radius:14px;padding:0.75rem 1.25rem;white-space:nowrap;backdrop-filter:blur(18px);font-size:0.8125rem;color:var(--sage-pale);animation:fadeUp 0.35s ease;box-shadow:0 4px 24px rgba(0,0,0,0.4)">
+    Switch back to your Menty-B tab to continue 💚
   </div>
 </div><!-- /.app -->
 
@@ -1015,10 +1072,26 @@
     <span class="nav-icon">🌙</span><span class="nav-label">Wind</span>
   </button>
   <button class="nav-btn" id="nav-crisis" onclick="goTo('crisis',this)">
-    <span class="nav-icon">🤝</span><span class="nav-label">Help</span>
+    <span class="nav-icon">📞</span><span class="nav-label">Help</span>
   </button>
 </nav>
 
+
+<!-- ── Breathing Welcome Flow ────────────────────────────── -->
+<div class="welcome-flow" id="welcome-flow" style="display:none">
+  <div class="wf-card" id="wf-step1">
+    <div class="wf-icon">💚</div>
+    <h2 class="wf-title">You're in the right place.</h2>
+    <p class="wf-body">Menty-B sent you here. Take a breath.<br>We'll do this together.</p>
+    <button class="btn btn-primary" onclick="wfAdvance(2)" style="margin-top:1.5rem">I'm ready</button>
+  </div>
+  <div class="wf-card" id="wf-step2" style="display:none">
+    <div class="wf-icon" id="wf2-icon"></div>
+    <h2 class="wf-title" id="wf2-title"></h2>
+    <p class="wf-body" id="wf2-body"></p>
+    <button class="btn btn-primary" onclick="wfAdvance(3)" style="margin-top:1.5rem">Let's begin</button>
+  </div>
+</div>
 
 <script>
 /* ══════════════════════════════════════════════════════════
@@ -1049,6 +1122,13 @@ const GROUND = [
   { n:'2 things you can SMELL', c:'Even a faint or familiar scent counts. Take it in slowly.' },
   { n:'1 thing you can TASTE',  c:'Notice what is already in your mouth. Be fully present.' }
 ];
+
+const WF_COPY = {
+  box:       { icon: '🌊', title: 'Box Breathing',      body: 'In for 4, hold for 4, out for 4, hold for 4. Slow and steady. Just follow the circle.' },
+  '478':     { icon: '🌿', title: '4-7-8 Breathing',    body: 'Breathe in for 4, hold for 7, breathe out for 8. Just follow the circle.' },
+  calm:      { icon: '🍃', title: 'Calm Breathing',     body: 'In for 5, out for 7. The longer exhale helps your body relax.' },
+  resonance: { icon: '〰️', title: 'Resonance Breathing', body: 'In for 6, out for 6. A slow, steady rhythm for your nervous system.' }
+};
 
 /* ══════════════════════════════════════════════════════════
    STATE
@@ -1168,14 +1248,28 @@ function setBreathe(el, mode) {
 }
 
 function toggleBreathe() {
+  const btn = document.getElementById('b-btn');
   if (breathOn) {
     breathOn = false;
     clearTimers();
-    document.getElementById('b-btn').textContent = 'Resume';
+    // Freeze SVG at current computed position so animation visually stops
+    const orb  = document.getElementById('orb');
+    const halo = document.getElementById('orb-halo');
+    const ring = document.getElementById('progress-ring');
+    orb.style.transition  = 'none';
+    orb.style.transform   = getComputedStyle(orb).transform;
+    halo.style.transition = 'none';
+    halo.style.transform  = getComputedStyle(halo).transform;
+    ring.style.transition = 'none';
+    ring.style.strokeDashoffset = getComputedStyle(ring).strokeDashoffset;
+    btn.textContent = 'Resume';
+    btn.classList.remove('btn-pulse');
     syncBg('idle');
   } else {
     breathOn = true;
-    document.getElementById('b-btn').textContent = 'Pause';
+    btn.textContent = 'Pause';
+    btn.classList.remove('btn-pulse');
+    document.getElementById('b-prestart').style.display = 'none';
     runPhase(breathPhaseIdx);
   }
 }
@@ -1183,14 +1277,18 @@ function toggleBreathe() {
 function resetBreathe() {
   breathOn = false; breathCycles = 0; breathPhaseIdx = 0;
   clearTimers();
-  document.getElementById('b-btn').textContent   = 'Start';
-  document.getElementById('b-phase').textContent = 'Ready';
-  document.getElementById('b-count').textContent = '—';
-  document.getElementById('b-cycles').textContent = 'Cycle 0';
+  const btn = document.getElementById('b-btn');
+  btn.textContent = 'Start';
+  btn.classList.add('btn-pulse');
+  btn.style.display = '';
+  document.getElementById('b-phase').textContent  = 'Ready';
+  document.getElementById('b-count').textContent  = '—';
+  document.getElementById('b-cycles').textContent = '';
+  document.getElementById('b-cycles').style.color = '';
   document.getElementById('b-complete').style.display = 'none';
-  document.getElementById('b-btn').style.display  = '';
   document.querySelector('.breathe-ctrl .btn-ghost').style.display = '';
   document.getElementById('b-tip').style.display  = '';
+  document.getElementById('b-prestart').style.display = '';
   setOrb(1, '#52b788', 0);
   setRing(CIRC, 0);
   syncBg('idle');
@@ -1267,11 +1365,20 @@ function runPhase(idx) {
     const next = idx + 1;
     if (next >= mode.phases.length) {
       breathCycles++;
-      document.getElementById('b-cycles').textContent = `Cycle ${breathCycles}`;
+      const cyclesEl = document.getElementById('b-cycles');
+      cyclesEl.style.color = 'var(--sage-pale)';
+      cyclesEl.textContent = 'Cycle complete. Nice work. ✓';
       if (breathCycles >= 3) {
-        showBreathComplete();
+        // Brief pause before showing completion card
+        setTimeout(showBreathComplete, 2000);
       } else {
         runPhase(0);
+        setTimeout(() => {
+          if (breathOn) { // only update if still running
+            cyclesEl.style.color = '';
+            cyclesEl.textContent = `Cycles completed: ${breathCycles}`;
+          }
+        }, 2000);
       }
     } else {
       runPhase(next);
@@ -1423,6 +1530,38 @@ function focusMentyB(tooltipId) {
 }
 
 /* ══════════════════════════════════════════════════════════
+   WELCOME FLOW
+══════════════════════════════════════════════════════════ */
+function wfShow(mode) {
+  const c = WF_COPY[mode];
+  if (!c) return;
+  document.getElementById('wf2-icon').textContent  = c.icon;
+  document.getElementById('wf2-title').textContent = c.title;
+  document.getElementById('wf2-body').textContent  = c.body;
+  document.getElementById('welcome-flow').style.display = 'flex';
+}
+
+function wfAdvance(step) {
+  if (step === 2) {
+    const s1 = document.getElementById('wf-step1');
+    s1.style.opacity = '0';
+    s1.style.transition = 'opacity 0.3s ease';
+    setTimeout(() => {
+      s1.style.display = 'none';
+      const s2 = document.getElementById('wf-step2');
+      s2.style.display = 'block';
+      s2.style.opacity = '0';
+      s2.style.transition = 'opacity 0.3s ease';
+      requestAnimationFrame(() => { s2.style.opacity = '1'; });
+    }, 300);
+  } else if (step === 3) {
+    const flow = document.getElementById('welcome-flow');
+    flow.style.opacity = '0';
+    setTimeout(() => { flow.style.display = 'none'; }, 400);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
    URL PARAMETER INIT
 ══════════════════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
@@ -1439,6 +1578,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const banner = document.getElementById('mode-banner');
     banner.textContent   = BANNERS[mode] || '';
     banner.style.display = 'block';
+    wfShow(mode);
   }
 
   // ?screen= — deep links to any screen
