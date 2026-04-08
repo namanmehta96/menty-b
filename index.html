@@ -629,34 +629,34 @@
     }
 
     /* ═══════════════════════════════════════════════════════
-       NAVBAR & PILL HOVER ANIMATIONS
+       NAVBAR & PILL HOVER ANIMATIONS  (no rotation ever)
     ═══════════════════════════════════════════════════════ */
-    @keyframes navHouseBounce { 0%,100%{transform:translateY(0)} 45%{transform:translateY(-4px)} }
-    @keyframes navSmileyPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.25)} }
-    @keyframes navWaveShift   { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-3px)} 50%{transform:translateX(3px)} 80%{transform:translateX(-3px)} }
-    @keyframes navStarGlitter { 0%,100%{transform:scale(1)} 25%{transform:scale(1.4)} 60%{transform:scale(0.8)} 85%{transform:scale(1.15)} }
-    @keyframes navMoonRock    { 0%,100%{transform:rotate(0deg)} 30%{transform:rotate(-8deg)} 70%{transform:rotate(8deg)} }
-    @keyframes navAnchorDrop  { 0%,100%{transform:translateY(0)} 35%{transform:translateY(4px)} 65%{transform:translateY(1px)} }
-    @keyframes navPhoneRing   { 0%,100%{transform:rotate(0deg)} 10%{transform:rotate(-12deg)} 25%{transform:rotate(12deg)} 40%{transform:rotate(-12deg)} 55%{transform:rotate(12deg)} 70%{transform:rotate(-12deg)} 85%{transform:rotate(12deg)} }
+    @keyframes navHouseBounce { 0%,100%{transform:translateY(0)}  50%{transform:translateY(-3px)} }
+    @keyframes navSmileyPulse { 0%,100%{transform:scale(1)}       50%{transform:scale(1.2)} }
+    @keyframes navWaveShift   { 0%,100%{transform:translateX(0)}  25%{transform:translateX(-3px)} 75%{transform:translateX(3px)} }
+    @keyframes navStarGlitter { 0%,100%{opacity:1}                50%{opacity:0.6} }
+    @keyframes navMoonScale   { 0%,100%{transform:scale(1)}       50%{transform:scale(1.15)} }
+    @keyframes navAnchorDrop  { 0%,100%{transform:translateY(0)}  50%{transform:translateY(3px)} }
+    @keyframes navPhoneScale  { 0%,100%{transform:scale(1)}       50%{transform:scale(1.2)} }
 
     /* Navbar hover — animate the <i> inside .nav-icon */
     .nav-btn:hover .nav-icon i { color: #1D9E75; filter: drop-shadow(0 0 14px rgba(29,158,117,0.8)); }
-    #nav-welcome:hover .nav-icon i { animation: navHouseBounce 0.35s ease both; }
-    #nav-mood:hover    .nav-icon i { animation: navSmileyPulse 0.35s ease both; }
+    #nav-welcome:hover .nav-icon i { animation: navHouseBounce 0.4s ease both; }
+    #nav-mood:hover    .nav-icon i { animation: navSmileyPulse 0.4s ease both; }
     #nav-breathe:hover .nav-icon i { animation: navWaveShift   0.5s ease-in-out both; }
-    #nav-affirm:hover  .nav-icon i { animation: navStarGlitter 1.2s ease both; }
-    #nav-sleep:hover   .nav-icon i { animation: navMoonRock    0.45s ease both; }
+    #nav-affirm:hover  .nav-icon i { animation: navStarGlitter 0.6s ease both; }
+    #nav-sleep:hover   .nav-icon i { animation: navMoonScale   0.4s ease both; }
     #nav-ground:hover  .nav-icon i { animation: navAnchorDrop  0.4s ease both; }
-    #nav-crisis:hover  .nav-icon i { animation: navPhoneRing   0.65s ease both; }
+    #nav-crisis:hover  .nav-icon i { animation: navPhoneScale  0.4s ease both; }
 
-    /* Orbit pill hover — scale pill + animate icon */
-    .home-pill:hover, .home-pill:active { transform: scale(1.05) !important; }
-    .hp-mood:hover    .hp-icon i { animation: navSmileyPulse 0.35s ease both; }
+    /* Orbit pill hover — scale pill (CSS scale property, independent of transform animation) */
+    .home-pill:hover, .home-pill:active { scale: 1.05; border-color: rgba(29,158,117,0.6); }
+    .hp-mood:hover    .hp-icon i { animation: navSmileyPulse 0.4s ease both; }
     .hp-breathe:hover .hp-icon i { animation: navWaveShift   0.5s ease-in-out both; }
-    .hp-affirm:hover  .hp-icon i { animation: navStarGlitter 1.2s ease both; }
-    .hp-sleep:hover   .hp-icon i { animation: navMoonRock    0.45s ease both; }
+    .hp-affirm:hover  .hp-icon i { animation: navStarGlitter 0.6s ease both; }
+    .hp-sleep:hover   .hp-icon i { animation: navMoonScale   0.4s ease both; }
     .hp-ground:hover  .hp-icon i { animation: navAnchorDrop  0.4s ease both; }
-    .hp-crisis:hover  .hp-icon i { animation: navPhoneRing   0.65s ease both; }
+    .hp-crisis:hover  .hp-icon i { animation: navPhoneScale  0.4s ease both; }
     .home-pill:hover .hp-icon i  { filter: drop-shadow(0 0 8px rgba(29,158,117,0.7)); color: #74c69d; }
 
     /* ═══════════════════════════════════════════════════════
@@ -689,6 +689,22 @@
     .tip-anim-flip      i { animation: tipFlipAnim      3s ease-in-out infinite; }
     .tip-anim-bob       i { animation: tipBobAnim       2s ease-in-out infinite; }
     .tip-anim-heartbeat i { animation: tipHeartbeatAnim 2.5s ease-in-out infinite; }
+
+    /* Breathe ripple SVG */
+    @keyframes ripplePulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+    .tip-ripple-svg { display:block; }
+    .tip-ripple-svg circle { transform-box:fill-box; transform-origin:center; }
+    .tip-ripple-svg .rc1 { animation: ripplePulse 3s ease-in-out infinite 0s; }
+    .tip-ripple-svg .rc2 { animation: ripplePulse 3s ease-in-out infinite 0.4s; }
+    .tip-ripple-svg .rc3 { animation: ripplePulse 3s ease-in-out infinite 0.8s; }
+
+    /* Ground 5-dots SVG */
+    @keyframes dotSeq { 0%,100%{opacity:0.2} 10%{opacity:1} }
+    .tip-dots-svg .gd1 { animation: dotSeq 2.5s ease-in-out infinite 0s; }
+    .tip-dots-svg .gd2 { animation: dotSeq 2.5s ease-in-out infinite 0.3s; }
+    .tip-dots-svg .gd3 { animation: dotSeq 2.5s ease-in-out infinite 0.6s; }
+    .tip-dots-svg .gd4 { animation: dotSeq 2.5s ease-in-out infinite 0.9s; }
+    .tip-dots-svg .gd5 { animation: dotSeq 2.5s ease-in-out infinite 1.2s; }
 
     /* ═══════════════════════════════════════════════════════
        MISC UTILS
@@ -892,7 +908,7 @@
       cursor: pointer; font-family: 'Montserrat', sans-serif;
       color: var(--muted);
       transition: background 0.25s ease, border-color 0.25s ease,
-                  box-shadow 0.25s ease, color 0.25s ease;
+                  box-shadow 0.25s ease, color 0.25s ease, scale 0.2s ease;
       backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
       animation: orbitCounterSpin 60s linear infinite;
       transform-origin: center center;
@@ -1179,9 +1195,13 @@
     .gnd-intro {
       text-align: center; padding: 1rem 0 0.5rem;
     }
-    .gnd-intro-icon { font-size: 3.25rem; margin-bottom: 1rem; display: flex; justify-content: center; }
-    @keyframes anchorBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
-    .anchor-svg { width: 64px; height: 64px; animation: anchorBob 2s ease-in-out infinite; }
+    .gnd-intro-icon { margin-bottom: 1rem; display: flex; justify-content: center; }
+    @keyframes anchorBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+    .gnd-anchor-icon {
+      font-size: 64px; color: #1D9E75; display: block; line-height: 1;
+      filter: drop-shadow(0 0 12px rgba(29,158,117,0.5));
+      animation: anchorBob 2.5s ease-in-out infinite;
+    }
     .gnd-intro-body {
       font-size: 0.9375rem; color: var(--muted); line-height: 1.72;
       margin-bottom: 1.5rem;
@@ -1628,14 +1648,7 @@
 
     <div class="gnd-intro" id="gnd-intro">
       <div class="gnd-intro-icon">
-        <svg class="anchor-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="32" cy="16" r="6" stroke="#1D9E75" stroke-width="2" stroke-linecap="round"/>
-          <line x1="32" y1="22" x2="32" y2="52" stroke="#1D9E75" stroke-width="2" stroke-linecap="round"/>
-          <path d="M16 32 C16 32 12 34 12 42 C12 50 20 54 32 54 C44 54 52 50 52 42 C52 34 48 32 48 32" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" fill="none"/>
-          <path d="M22 52 L12 48" stroke="#1D9E75" stroke-width="2" stroke-linecap="round"/>
-          <path d="M42 52 L52 48" stroke="#1D9E75" stroke-width="2" stroke-linecap="round"/>
-          <line x1="20" y1="32" x2="44" y2="32" stroke="#1D9E75" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+        <i class="ph-duotone ph-anchor-simple gnd-anchor-icon"></i>
       </div>
       <p class="gnd-intro-body">The 5-4-3-2-1 technique brings you back to<br>your senses and out of your head.</p>
       <button class="btn btn-primary btn-pulse" id="gnd-start-btn" onclick="gndStart()">Begin grounding</button>
@@ -2134,10 +2147,10 @@ function goTo(id, btnEl) {
 const TIP_ICONS = {
   welcome: `<div class="tip-icon-wrap tip-anim-tap"><i class="ph-duotone ph-cursor-click"></i></div>`,
   mood:    `<div class="tip-icon-wrap tip-anim-shield"><i class="ph-duotone ph-shield-check"></i></div>`,
-  breathe: `<div class="tip-icon-wrap tip-anim-spin"><i class="ph-duotone ph-play-circle"></i></div>`,
+  breathe: `<div class="tip-icon-wrap"><svg class="tip-ripple-svg" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="rc1" cx="24" cy="24" r="6" stroke="#1D9E75" stroke-width="1.5"/><circle class="rc2" cx="24" cy="24" r="13" stroke="#1D9E75" stroke-width="1.5" opacity="0.6"/><circle class="rc3" cx="24" cy="24" r="20" stroke="#1D9E75" stroke-width="1.5" opacity="0.3"/></svg></div>`,
   affirm:  `<div class="tip-icon-wrap tip-anim-float"><i class="ph-duotone ph-book-open-text"></i></div>`,
   sleep:   `<div class="tip-icon-wrap tip-anim-flip"><i class="ph-duotone ph-hourglass-medium"></i></div>`,
-  ground:  `<div class="tip-icon-wrap tip-anim-bob"><i class="ph-duotone ph-anchor-simple"></i></div>`,
+  ground:  `<div class="tip-icon-wrap"><svg class="tip-dots-svg" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle class="gd1" cx="24" cy="10" r="3.5" fill="#1D9E75"/><circle class="gd2" cx="38" cy="19" r="3.5" fill="#1D9E75"/><circle class="gd3" cx="33" cy="35" r="3.5" fill="#1D9E75"/><circle class="gd4" cx="15" cy="35" r="3.5" fill="#1D9E75"/><circle class="gd5" cx="10" cy="19" r="3.5" fill="#1D9E75"/></svg></div>`,
   crisis:  `<div class="tip-icon-wrap tip-anim-heartbeat"><i class="ph-duotone ph-hand-heart"></i></div>`
 };
 
@@ -2564,9 +2577,9 @@ function resetGnd() {
    HOME NAV ANIMATION — CINEMATIC 3-PHASE TRANSITION
 ══════════════════════════════════════════════════════════ */
 function homeNav(screen, navId) {
-  const pill   = event.currentTarget;
-  const navBtn = document.getElementById(navId);
-  const rect   = pill.getBoundingClientRect();
+  const pill    = event.currentTarget;
+  const navBtn  = document.getElementById(navId);
+  const rect    = pill.getBoundingClientRect();
   const spinner = document.querySelector('.orbit-spinner');
 
   if (spinner) spinner.style.animationPlayState = 'paused';
@@ -2577,32 +2590,61 @@ function homeNav(screen, navId) {
   pill.style.transform  = 'scale(1.15)';
   pill.style.filter     = 'brightness(1.35) drop-shadow(0 0 18px rgba(29,158,117,0.9))';
 
-  /* Other pills arc toward their navbar positions */
+  /* Other pills: snapshot screen position, create fixed clones, fly DOWN to navbar.
+     We clone instead of transforming originals to avoid coordinate-system rotation
+     from the orbitCounterSpin animation warping the translate direction. */
   const allPills = document.querySelectorAll('.home-pill');
+  const clones   = [];
+
   allPills.forEach(p => {
     if (p === pill) return;
-    p.style.animationPlayState = 'paused';
     const oc = p.getAttribute('onclick') || '';
     const m  = oc.match(/'nav-([\w-]+)'/);
     if (!m) return;
     const pNav = document.getElementById('nav-' + m[1]);
     if (!pNav) return;
+
     const pRect = p.getBoundingClientRect();
     const nRect = pNav.getBoundingClientRect();
     const dx = (nRect.left + nRect.width  / 2) - (pRect.left + pRect.width  / 2);
     const dy = (nRect.top  + nRect.height / 2) - (pRect.top  + pRect.height / 2);
+
+    /* Hide original immediately */
+    p.style.animationPlayState = 'paused';
+    p.style.opacity = '0';
+
+    /* Clone at exact screen position (fixed), no animation baggage */
+    const clone = p.cloneNode(true);
+    clone.removeAttribute('onclick');
+    clone.style.cssText = [
+      'position:fixed',
+      `top:${pRect.top}px`,
+      `left:${pRect.left}px`,
+      `width:${pRect.width}px`,
+      `height:${pRect.height}px`,
+      'margin:0',
+      'animation:none',
+      'transform:none',
+      'opacity:1',
+      'z-index:9998',
+      'pointer-events:none',
+      'transition:none'
+    ].join(';');
+    document.body.appendChild(clone);
+    clones.push(clone);
+
+    /* Next frame: animate clone DOWN to navbar */
     requestAnimationFrame(() => {
-      p.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease';
-      p.style.transform  = `translate(${dx}px,${dy}px) scale(0.55)`;
-      p.style.opacity    = '0.5';
+      clone.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.45s ease';
+      clone.style.transform  = `translate(${dx}px,${dy}px) scale(0.35)`;
+      clone.style.opacity    = '0';
     });
   });
 
-  /* Phase 2 (200ms): flood overlay bursts from pill center */
+  /* Phase 2 (200ms): flood overlay from pill center */
   const fx = ((rect.left + rect.width  / 2) / window.innerWidth  * 100).toFixed(1) + '%';
   const fy = ((rect.top  + rect.height / 2) / window.innerHeight * 100).toFixed(1) + '%';
   setTimeout(() => {
-    allPills.forEach(p => { if (p !== pill) p.style.opacity = '0'; });
     const overlay = document.getElementById('flood-overlay');
     overlay.style.setProperty('--fx', fx);
     overlay.style.setProperty('--fy', fy);
@@ -2617,9 +2659,9 @@ function homeNav(screen, navId) {
     if (scr) {
       scr.style.transition = 'none';
       scr.style.opacity    = '0';
-      scr.style.transform  = 'translateY(24px)';
+      scr.style.transform  = 'translateY(20px)';
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        scr.style.transition = 'opacity 0.3s cubic-bezier(0,0,0.2,1), transform 0.3s cubic-bezier(0,0,0.2,1)';
+        scr.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
         scr.style.opacity    = '1';
         scr.style.transform  = 'translateY(0)';
       }));
@@ -2628,6 +2670,7 @@ function homeNav(screen, navId) {
 
   /* Cleanup at 800ms */
   setTimeout(() => {
+    clones.forEach(c => c.parentNode && c.parentNode.removeChild(c));
     const overlay = document.getElementById('flood-overlay');
     overlay.style.transition = 'none';
     overlay.classList.remove('flooding');
