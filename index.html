@@ -765,13 +765,38 @@
     }
     .back-link:hover { color: var(--sage-pale); text-decoration-color: var(--sage-pale); }
 
-    /* Back tooltip */
+    /* Back tooltip (inline variants — hidden until shown via JS) */
     .back-tooltip {
       margin-top: 0.65rem;
       font-size: 0.8125rem;
       color: var(--sage-pale);
       line-height: 1.5;
-      animation: fadeUp 0.4s ease;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Global back tooltip — fixed, pre-positioned, never flashes */
+    #back-tooltip-global {
+      position: fixed;
+      bottom: 92px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 300;
+      background: rgba(10,15,30,0.94);
+      border: 1px solid rgba(82,183,136,0.4);
+      border-radius: 14px;
+      padding: 0.75rem 1.25rem;
+      white-space: nowrap;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      font-size: 0.8125rem;
+      color: var(--sage-pale);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
     }
 
     /* Pre-start instruction */
@@ -1488,7 +1513,7 @@
         </button>
       </div>
       <button class="back-link" onclick="focusMentyB('back-tooltip-b')">All done for now? Switch back to your Menty-B tab 💚</button>
-      <div class="back-tooltip" id="back-tooltip-b" style="display:none">Open your Menty-B tab to continue 💚</div>
+      <div class="back-tooltip" id="back-tooltip-b">Open your Menty-B tab to continue 💚</div>
     </div>
   </div>
 
@@ -1578,7 +1603,7 @@
         </button>
       </div>
       <button class="back-link" onclick="focusMentyB('back-tooltip-s')">All done for now? Switch back to your Menty-B tab 💚</button>
-      <div class="back-tooltip" id="back-tooltip-s" style="display:none">Open your Menty-B tab to continue 💚</div>
+      <div class="back-tooltip" id="back-tooltip-s">Open your Menty-B tab to continue 💚</div>
     </div>
   </div>
 
@@ -1687,12 +1712,12 @@
         </button>
       </div>
       <button class="back-link" onclick="focusMentyB('back-tooltip-gnd')">All done for now? Switch back to your Menty-B tab 💚</button>
-      <div class="back-tooltip" id="back-tooltip-gnd" style="display:none">Open your Menty-B tab to continue 💚</div>
+      <div class="back-tooltip" id="back-tooltip-gnd">Open your Menty-B tab to continue 💚</div>
     </div>
   </div>
 
   <!-- Global back banner (shown when opener is unavailable) -->
-  <div id="back-tooltip-global" style="display:none;position:fixed;bottom:92px;left:50%;transform:translateX(-50%);z-index:300;background:rgba(10,15,30,0.94);border:1px solid rgba(82,183,136,0.4);border-radius:14px;padding:0.75rem 1.25rem;white-space:nowrap;backdrop-filter:blur(18px);font-size:0.8125rem;color:var(--sage-pale);animation:fadeUp 0.35s ease;box-shadow:0 4px 24px rgba(0,0,0,0.4)">
+  <div id="back-tooltip-global">
     Switch back to your Menty-B tab to continue 💚
   </div>
 </div><!-- /.app -->
@@ -2862,13 +2887,42 @@ function haptic(pattern) {
 /* ══════════════════════════════════════════════════════════
    BACK TO MENTY-B
 ══════════════════════════════════════════════════════════ */
+let _tooltipTimer = null;
+
 function focusMentyB(tooltipId) {
+  /* If a parent tab is available, focus it and return */
   if (window.opener && !window.opener.closed) {
     window.opener.focus();
-  } else {
-    const el = document.getElementById(tooltipId || 'back-tooltip-global');
-    if (el) el.style.display = 'block';
+    return;
   }
+
+  /* Always use the global fixed tooltip — pre-positioned in CSS,
+     no display change so no position flash */
+  const tooltip = document.getElementById('back-tooltip-global');
+  if (!tooltip) return;
+
+  /* Cancel any in-progress timer so rapid clicks restart cleanly */
+  clearTimeout(_tooltipTimer);
+  tooltip.style.transition = 'opacity 0.3s ease';
+  tooltip.style.visibility = 'visible';
+  tooltip.style.opacity    = '0';
+
+  /* Fade in */
+  requestAnimationFrame(() => {
+    tooltip.style.opacity = '1';
+
+    /* After 3s visible, fade out */
+    _tooltipTimer = setTimeout(() => {
+      tooltip.style.transition = 'opacity 0.5s ease';
+      tooltip.style.opacity    = '0';
+
+      /* Hide after fade-out completes */
+      setTimeout(() => {
+        tooltip.style.visibility = 'hidden';
+        tooltip.style.transition = 'opacity 0.3s ease';
+      }, 500);
+    }, 3000);
+  });
 }
 
 /* ══════════════════════════════════════════════════════════
