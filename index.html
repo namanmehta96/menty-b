@@ -2145,31 +2145,56 @@ function goTo(id, btnEl) {
   updateContextTip(id);
 }
 
-/* Reset all orbit pills to their original state (no inline styles)
-   and resume the spin animation, with a gentle fade-in. */
-function _resetOrbit() {
+/* ── Orbit reset ────────────────────────────────────────────
+   animated=true  : fade pills in (used when returning home)
+   animated=false : instant silent reset (used after flight ends
+                    while on another screen)
+
+   Cancels any pending _doPillFlight cleanup first, so a stale
+   800ms timeout can never overwrite the restored state. */
+let _flightCleanupId = null;   // handle for the active cleanup timeout
+
+function _resetOrbit(animated = true) {
+  /* Cancel any scheduled cleanup before it can clobber our work */
+  if (_flightCleanupId !== null) {
+    clearTimeout(_flightCleanupId);
+    _flightCleanupId = null;
+  }
+
   const spinner  = document.querySelector('.orbit-spinner');
   const allPills = document.querySelectorAll('.home-pill');
 
-  /* Kill any lingering fixed clones from a previous homeNav */
+  /* Remove any fixed-position clones appended to <body> */
   document.querySelectorAll('body > .home-pill').forEach(c => c.remove());
 
-  /* Snap pills invisible, clear all inline styles */
-  allPills.forEach(p => {
-    p.style.cssText = 'opacity:0';          // clear everything except opacity
-  });
+  /* Hard-clear EVERY inline style on every pill (removeAttribute is
+     more reliable than cssText for a complete reset) */
+  allPills.forEach(p => p.removeAttribute('style'));
+
+  /* Also clear any stale flood overlay */
+  const overlay = document.getElementById('flood-overlay');
+  if (overlay) {
+    overlay.style.transition = 'none';
+    overlay.classList.remove('flooding');
+    requestAnimationFrame(() => requestAnimationFrame(() => { overlay.style.transition = ''; }));
+  }
 
   /* Resume spinner */
   if (spinner) spinner.style.animationPlayState = '';
 
-  /* Fade pills back in on next frame */
+  if (!animated) return;   // silent reset — done
+
+  /* Animated path: snap to invisible, force layout, then fade in */
+  allPills.forEach(p => { p.style.opacity = '0'; });
+  allPills[0] && allPills[0].getBoundingClientRect(); // force reflow
+
   requestAnimationFrame(() => {
     allPills.forEach(p => {
       p.style.transition = 'opacity 0.3s ease';
       p.style.opacity    = '1';
     });
     setTimeout(() => {
-      allPills.forEach(p => { p.style.transition = ''; p.style.opacity = ''; });
+      allPills.forEach(p => p.removeAttribute('style')); // fully clean after fade
     }, 320);
   });
 }
@@ -2730,24 +2755,15 @@ function _doPillFlight(screen, navId, excludePill, originRect) {
     }
   }, 500);
 
-  /* Cleanup at 800ms */
-  setTimeout(() => {
+  /* Cleanup at 800ms — stored so _resetOrbit() can cancel it first */
+  _flightCleanupId = setTimeout(() => {
+    _flightCleanupId = null;
     clones.forEach(c => c.parentNode && c.parentNode.removeChild(c));
-    const overlay = document.getElementById('flood-overlay');
-    overlay.style.transition = 'none';
-    overlay.classList.remove('flooding');
-    requestAnimationFrame(() => requestAnimationFrame(() => { overlay.style.transition = ''; }));
+    /* Clean the target screen's transition styles */
     const scr = document.getElementById('screen-' + screen);
     if (scr) { scr.style.transition = ''; scr.style.opacity = ''; scr.style.transform = ''; }
-    document.querySelectorAll('.home-pill').forEach(p => {
-      p.style.transition         = '';
-      p.style.transform          = '';
-      p.style.scale              = '';
-      p.style.opacity            = '';
-      p.style.filter             = '';
-      p.style.animationPlayState = '';
-    });
-    if (spinner) spinner.style.animationPlayState = '';
+    /* Silent orbit reset — pills are clean for when the user comes back home */
+    _resetOrbit(false);
   }, 800);
 }
 
@@ -3102,6 +3118,9 @@ function wfAdvance(step) {
    URL PARAMETER INIT
 ══════════════════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
+  /* Ensure orbit pills start in a perfectly clean state */
+  _resetOrbit(false);
+
   // Load saved language preference first
   const savedLang = localStorage.getItem('menty-lang');
   if (savedLang && STRINGS[savedLang]) {
