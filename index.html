@@ -2146,13 +2146,29 @@ function goTo(id, btnEl) {
 }
 
 /* ── Orbit reset ────────────────────────────────────────────
+   Clears only the properties set by animation code.
+   NEVER calls removeAttribute('style') — each pill has
+   style="--a:Ndeg" in HTML which positions it in the orbit;
+   removing the whole style attribute destroys that value.
+
    animated=true  : fade pills in (used when returning home)
-   animated=false : instant silent reset (used after flight ends
+   animated=false : instant silent reset (after flight ends
                     while on another screen)
 
    Cancels any pending _doPillFlight cleanup first, so a stale
    800ms timeout can never overwrite the restored state. */
-let _flightCleanupId = null;   // handle for the active cleanup timeout
+let _flightCleanupId = null;
+
+function _pillShow(p) {
+  p.style.opacity            = '1';
+  p.style.visibility         = 'visible';
+  p.style.display            = 'flex';
+  p.style.transform          = '';
+  p.style.transition         = '';
+  p.style.scale              = '';
+  p.style.filter             = '';
+  p.style.animationPlayState = '';
+}
 
 function _resetOrbit(animated = true) {
   /* Cancel any scheduled cleanup before it can clobber our work */
@@ -2167,9 +2183,8 @@ function _resetOrbit(animated = true) {
   /* Remove any fixed-position clones appended to <body> */
   document.querySelectorAll('body > .home-pill').forEach(c => c.remove());
 
-  /* Hard-clear EVERY inline style on every pill (removeAttribute is
-     more reliable than cssText for a complete reset) */
-  allPills.forEach(p => p.removeAttribute('style'));
+  /* Clear only animation-set properties — preserve --a custom property */
+  allPills.forEach(p => _pillShow(p));
 
   /* Also clear any stale flood overlay */
   const overlay = document.getElementById('flood-overlay');
@@ -2184,7 +2199,7 @@ function _resetOrbit(animated = true) {
 
   if (!animated) return;   // silent reset — done
 
-  /* Animated path: snap to invisible, force layout, then fade in */
+  /* Animated path: snap invisible, force reflow, then fade in */
   allPills.forEach(p => { p.style.opacity = '0'; });
   allPills[0] && allPills[0].getBoundingClientRect(); // force reflow
 
@@ -2194,7 +2209,7 @@ function _resetOrbit(animated = true) {
       p.style.opacity    = '1';
     });
     setTimeout(() => {
-      allPills.forEach(p => p.removeAttribute('style')); // fully clean after fade
+      allPills.forEach(p => _pillShow(p)); // fully clean after fade
     }, 320);
   });
 }
@@ -3118,8 +3133,13 @@ function wfAdvance(step) {
    URL PARAMETER INIT
 ══════════════════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
-  /* Ensure orbit pills start in a perfectly clean state */
+  /* Ensure orbit pills start fully visible */
   _resetOrbit(false);
+  document.querySelectorAll('.home-pill').forEach(p => {
+    p.style.opacity    = '1';
+    p.style.visibility = 'visible';
+    p.style.display    = 'flex';
+  });
 
   // Load saved language preference first
   const savedLang = localStorage.getItem('menty-lang');
