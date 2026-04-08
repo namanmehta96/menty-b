@@ -1318,7 +1318,7 @@
         </div>
 
         <!-- Central orb — outside the spinner so it stays still -->
-        <div class="home-center-orb" onclick="homeNav('mood','nav-mood')">
+        <div class="home-center-orb" onclick="orbPulse('mood','nav-mood')">
           <div class="home-center-inner"></div>
           <div class="home-center-label" id="home-orb-label">How are you feeling?</div>
         </div>
@@ -2138,7 +2138,40 @@ function goTo(id, btnEl) {
   if (id === 'affirm') showAffirm();
   if (id === 'ground') resetGnd();
 
+  /* When returning to the home screen, fully reset orbit so pills
+     are never stuck in animated-down positions */
+  if (id === 'welcome') _resetOrbit();
+
   updateContextTip(id);
+}
+
+/* Reset all orbit pills to their original state (no inline styles)
+   and resume the spin animation, with a gentle fade-in. */
+function _resetOrbit() {
+  const spinner  = document.querySelector('.orbit-spinner');
+  const allPills = document.querySelectorAll('.home-pill');
+
+  /* Kill any lingering fixed clones from a previous homeNav */
+  document.querySelectorAll('body > .home-pill').forEach(c => c.remove());
+
+  /* Snap pills invisible, clear all inline styles */
+  allPills.forEach(p => {
+    p.style.cssText = 'opacity:0';          // clear everything except opacity
+  });
+
+  /* Resume spinner */
+  if (spinner) spinner.style.animationPlayState = '';
+
+  /* Fade pills back in on next frame */
+  requestAnimationFrame(() => {
+    allPills.forEach(p => {
+      p.style.transition = 'opacity 0.3s ease';
+      p.style.opacity    = '1';
+    });
+    setTimeout(() => {
+      allPills.forEach(p => { p.style.transition = ''; p.style.opacity = ''; });
+    }, 320);
+  });
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -2576,28 +2609,65 @@ function resetGnd() {
 /* ══════════════════════════════════════════════════════════
    HOME NAV ANIMATION — CINEMATIC 3-PHASE TRANSITION
 ══════════════════════════════════════════════════════════ */
-function homeNav(screen, navId) {
-  const pill    = event.currentTarget;
-  const navBtn  = document.getElementById(navId);
-  const rect    = pill.getBoundingClientRect();
-  const spinner = document.querySelector('.orbit-spinner');
 
+/* Orb click: pulse in place (scale property only — never touches
+   transform:translate(-50%,-50%) so orb never shifts position),
+   then launch the pill-flight animation after the pulse. */
+function orbPulse(screen, navId) {
+  const orb = document.querySelector('.home-center-orb');
+  if (!orb || orb.dataset.pulsing) return;
+  orb.dataset.pulsing = '1';
+
+  /* Pulse via CSS scale property — independent of transform centering */
+  orb.style.transition  = 'scale 0.2s ease-out, box-shadow 0.2s ease-out';
+  orb.style.scale       = '1.12';
+  orb.style.boxShadow   = '0 0 90px rgba(45,106,79,0.85), 0 0 0 20px rgba(82,183,136,0.18), inset 0 1px 0 rgba(255,255,255,0.14)';
+
+  setTimeout(() => {
+    orb.style.scale     = '1';
+    orb.style.boxShadow = '';
+  }, 200);
+
+  setTimeout(() => {
+    orb.style.transition = '';
+    orb.style.scale      = '';
+    delete orb.dataset.pulsing;
+    /* After pulse, fly pills to navbar and navigate */
+    const orbRect = orb.getBoundingClientRect();
+    _doPillFlight(screen, navId, null, orbRect);
+  }, 400);
+}
+
+function homeNav(screen, navId) {
+  const pill = event.currentTarget;
+  const rect = pill.getBoundingClientRect();
+
+  /* Pause spinner & spring the clicked pill up (scale property — safe,
+     doesn't interfere with any transform centering on other elements) */
+  const spinner = document.querySelector('.orbit-spinner');
   if (spinner) spinner.style.animationPlayState = 'paused';
   pill.style.animationPlayState = 'paused';
-
-  /* Phase 1 (0–200ms): clicked pill springs up */
-  pill.style.transition = 'transform 0.2s cubic-bezier(0.34,1.56,0.64,1), filter 0.2s ease';
-  pill.style.transform  = 'scale(1.15)';
+  pill.style.transition = 'scale 0.2s cubic-bezier(0.34,1.56,0.64,1), filter 0.2s ease';
+  pill.style.scale      = '1.15';
   pill.style.filter     = 'brightness(1.35) drop-shadow(0 0 18px rgba(29,158,117,0.9))';
 
-  /* Other pills: snapshot screen position, create fixed clones, fly DOWN to navbar.
-     We clone instead of transforming originals to avoid coordinate-system rotation
-     from the orbitCounterSpin animation warping the translate direction. */
+  _doPillFlight(screen, navId, pill, rect);
+}
+
+/* Shared flight engine — called by both homeNav (pill click) and
+   orbPulse (orb click).  excludePill is the clicked pill or null.
+   originRect is used for the flood-overlay origin point. */
+function _doPillFlight(screen, navId, excludePill, originRect) {
+  const navBtn  = document.getElementById(navId);
+  const spinner = document.querySelector('.orbit-spinner');
+  if (spinner) spinner.style.animationPlayState = 'paused';
+
+  /* Snapshot every pill, create fixed clones, fly DOWN to their navbar icon */
   const allPills = document.querySelectorAll('.home-pill');
   const clones   = [];
 
   allPills.forEach(p => {
-    if (p === pill) return;
+    if (p === excludePill) return;
     const oc = p.getAttribute('onclick') || '';
     const m  = oc.match(/'nav-([\w-]+)'/);
     if (!m) return;
@@ -2609,31 +2679,21 @@ function homeNav(screen, navId) {
     const dx = (nRect.left + nRect.width  / 2) - (pRect.left + pRect.width  / 2);
     const dy = (nRect.top  + nRect.height / 2) - (pRect.top  + pRect.height / 2);
 
-    /* Hide original immediately */
     p.style.animationPlayState = 'paused';
     p.style.opacity = '0';
 
-    /* Clone at exact screen position (fixed), no animation baggage */
     const clone = p.cloneNode(true);
     clone.removeAttribute('onclick');
     clone.style.cssText = [
       'position:fixed',
-      `top:${pRect.top}px`,
-      `left:${pRect.left}px`,
-      `width:${pRect.width}px`,
-      `height:${pRect.height}px`,
-      'margin:0',
-      'animation:none',
-      'transform:none',
-      'opacity:1',
-      'z-index:9998',
-      'pointer-events:none',
-      'transition:none'
+      `top:${pRect.top}px`, `left:${pRect.left}px`,
+      `width:${pRect.width}px`, `height:${pRect.height}px`,
+      'margin:0', 'animation:none', 'transform:none',
+      'opacity:1', 'z-index:9998', 'pointer-events:none', 'transition:none'
     ].join(';');
     document.body.appendChild(clone);
     clones.push(clone);
 
-    /* Next frame: animate clone DOWN to navbar */
     requestAnimationFrame(() => {
       clone.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.45s ease';
       clone.style.transform  = `translate(${dx}px,${dy}px) scale(0.35)`;
@@ -2641,18 +2701,20 @@ function homeNav(screen, navId) {
     });
   });
 
-  /* Phase 2 (200ms): flood overlay from pill center */
-  const fx = ((rect.left + rect.width  / 2) / window.innerWidth  * 100).toFixed(1) + '%';
-  const fy = ((rect.top  + rect.height / 2) / window.innerHeight * 100).toFixed(1) + '%';
-  setTimeout(() => {
-    const overlay = document.getElementById('flood-overlay');
-    overlay.style.setProperty('--fx', fx);
-    overlay.style.setProperty('--fy', fy);
-    overlay.getBoundingClientRect();
-    overlay.classList.add('flooding');
-  }, 200);
+  /* Flood overlay at 200ms from origin point */
+  if (originRect) {
+    const fx = ((originRect.left + originRect.width  / 2) / window.innerWidth  * 100).toFixed(1) + '%';
+    const fy = ((originRect.top  + originRect.height / 2) / window.innerHeight * 100).toFixed(1) + '%';
+    setTimeout(() => {
+      const overlay = document.getElementById('flood-overlay');
+      overlay.style.setProperty('--fx', fx);
+      overlay.style.setProperty('--fy', fy);
+      overlay.getBoundingClientRect();
+      overlay.classList.add('flooding');
+    }, 200);
+  }
 
-  /* Phase 3 (500ms): navigate + screen slides in from below */
+  /* Navigate at 500ms + screen slides in from below */
   setTimeout(() => {
     goTo(screen, navBtn);
     const scr = document.getElementById('screen-' + screen);
@@ -2677,9 +2739,10 @@ function homeNav(screen, navId) {
     requestAnimationFrame(() => requestAnimationFrame(() => { overlay.style.transition = ''; }));
     const scr = document.getElementById('screen-' + screen);
     if (scr) { scr.style.transition = ''; scr.style.opacity = ''; scr.style.transform = ''; }
-    allPills.forEach(p => {
+    document.querySelectorAll('.home-pill').forEach(p => {
       p.style.transition         = '';
       p.style.transform          = '';
+      p.style.scale              = '';
       p.style.opacity            = '';
       p.style.filter             = '';
       p.style.animationPlayState = '';
