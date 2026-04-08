@@ -776,26 +776,25 @@
       transition: opacity 0.3s ease;
     }
 
-    /* Global back tooltip — fixed, pre-positioned, never flashes */
+    /* Global back tooltip — fixed, pre-positioned, never flashes.
+       No backdrop-filter: it forces a separate compositing layer
+       that causes border and text to paint at different times. */
     #back-tooltip-global {
       position: fixed;
       bottom: 92px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 300;
-      background: rgba(10,15,30,0.94);
-      border: 1px solid rgba(82,183,136,0.4);
-      border-radius: 14px;
-      padding: 0.75rem 1.25rem;
+      background: rgba(10,15,30,0.85);
+      border: 1px solid rgba(29,158,117,0.4);
+      border-radius: 99px;
+      padding: 10px 20px;
       white-space: nowrap;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      font-size: 0.8125rem;
-      color: var(--sage-pale);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.4s ease;
       pointer-events: none;
     }
 
@@ -2903,15 +2902,18 @@ function focusMentyB(tooltipId) {
 
   /* Cancel any in-progress timer so rapid clicks restart cleanly */
   clearTimeout(_tooltipTimer);
-  tooltip.style.transition = 'opacity 0.3s ease';
+
+  /* Reset to invisible — no inline transition override so the CSS
+     transition (0.4s) is used for both fade-in and snap-to-zero */
+  tooltip.style.transition = '';
   tooltip.style.visibility = 'visible';
   tooltip.style.opacity    = '0';
 
-  /* Fade in */
-  requestAnimationFrame(() => {
+  /* Fade in — let the browser see opacity:0 first, then set 1 */
+  requestAnimationFrame(() => requestAnimationFrame(() => {
     tooltip.style.opacity = '1';
 
-    /* After 3s visible, fade out */
+    /* After 3s visible, fade out over 500ms */
     _tooltipTimer = setTimeout(() => {
       tooltip.style.transition = 'opacity 0.5s ease';
       tooltip.style.opacity    = '0';
@@ -2919,10 +2921,10 @@ function focusMentyB(tooltipId) {
       /* Hide after fade-out completes */
       setTimeout(() => {
         tooltip.style.visibility = 'hidden';
-        tooltip.style.transition = 'opacity 0.3s ease';
+        tooltip.style.transition = '';
       }, 500);
     }, 3000);
-  });
+  }));
 }
 
 /* ══════════════════════════════════════════════════════════
